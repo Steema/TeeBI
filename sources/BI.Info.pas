@@ -176,7 +176,7 @@ class function TDataInfo.Sizes(const AData: TDataItem): TDataSizes;
       end;
 
       for t:=0 to AData.Items.Count-1 do
-          Process(AData[t]);
+          Process(AData.Items[t]);
     end;
   end;
 
