@@ -72,7 +72,7 @@ uses
 function TSynZipCompression.Compress(const AStream: TStream;
   const AName: String): TMemoryStream;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: Empty SynZip compressed stream');
   end;

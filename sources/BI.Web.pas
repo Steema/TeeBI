@@ -472,7 +472,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TBIWebClient.TryErrorAsString(const AStream:TStream);
+procedure TBIWebClient.TryErrorAsString(const AStream:TStream); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 
   function StreamToString(const AStream:TStream):String;
   var tmp : TStringStream;

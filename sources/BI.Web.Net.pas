@@ -163,7 +163,7 @@ begin
   {$ENDIF}
 end;
 
-class function TBIHttpClient.FTP(const ADef:TDataDefinition): TBIFtp;
+class function TBIHttpClient.FTP(const ADef:TDataDefinition): TBIFtp; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.Create('FTP protocol not supported');
 end;

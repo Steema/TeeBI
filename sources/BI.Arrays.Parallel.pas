@@ -84,7 +84,7 @@ uses
 
 { TParallelArray }
 
-class procedure TParallelArray.DoRaise;
+class procedure TParallelArray.DoRaise; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.Create('Error: ParallelSort Threads must be >= 0');
 end;

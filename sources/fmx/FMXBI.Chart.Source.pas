@@ -180,7 +180,7 @@ var
     end;
   end;
 
-  procedure DoErrorMandatory;
+  procedure DoErrorMandatory; {$IF CompilerVersion>=37}noreturn;{$ENDIF}
   begin
     raise EBIException.Create('Error: Missing ValueSource in Series ValueList: '+Series.MandatoryValueList.Name);
   end;

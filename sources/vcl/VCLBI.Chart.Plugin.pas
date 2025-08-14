@@ -36,16 +36,21 @@ uses
   VCLTee.TeeGDIPlus,
   VCLTee.TeEngine, VCLTee.Chart
   {$ENDIF}
-
-  {$IFDEF FPC}
-  {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
-  {$ELSE}
-
-  {$IF TeeMsg_TeeChartPalette='TeeChart'}
-  {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
-  {$ENDIF}
-  {$ENDIF}
   ;
+
+  {$IFNDEF NOTEEPRO}
+
+    {$IFDEF FPC}
+      {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
+    {$ELSE}
+
+      {$IF TeeMsg_TeeChartPalette='TeeChart'}
+        {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
+      {$ENDIF}
+
+    {$ENDIF}
+
+  {$ENDIF}
 
 // XE6 dcc32 BUG, workaround not available
 {$IF Declared(CompilerVersion)}
@@ -623,7 +628,7 @@ class function TChartData.From(const AData:TDataItem;
                                const AOwner:TComponent;
                                const AClass:TChartSeriesClass=nil):TChartSeries;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: Cannot determine Series class from Data'+AData.Name);
   end;

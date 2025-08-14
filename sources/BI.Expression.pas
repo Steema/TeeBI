@@ -1343,7 +1343,7 @@ Constructor TArrayExpression.Create(const AValues: array of TData);
 
   function FromItem(const Index:Integer):TExpression;
 
-    procedure DoError;
+    procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
     begin
       raise Exception.Create('Cannot interpret array item at index: '+IntToStr(Index));
     end;
@@ -1795,7 +1795,7 @@ end;
 {$IFDEF FPC}
 function TExpression.DoError(const APos:Integer; const AMessage:String):Boolean;
 {$ELSE}
-class function TExpression.DoError(const APos:Integer; const AMessage:String):Boolean;
+class function TExpression.DoError(const APos:Integer; const AMessage:String):Boolean; {$IF CompilerVersion>=37}noreturn;{$ENDIF}
 {$ENDIF}
 begin
   raise EExpressionParse.Create(APos,AMessage);
@@ -2941,7 +2941,7 @@ end;
 
 function TTextOperandExpression.Value: TData;
 
-  procedure DoErrorParams;
+  procedure DoErrorParams; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise Exception.Create('Error: '+Operand.ToString+
           ' function wrong number of parameters ('+IntToStr(Operand.ParameterCount)+')');

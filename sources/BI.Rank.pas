@@ -87,7 +87,7 @@ class function TDataRank.From(const AData: TDataItem;
                               const AValue: TDataItem;
                               const Ascending:Boolean): TDataItem;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: TDataRank Value is not assigned');
   end;

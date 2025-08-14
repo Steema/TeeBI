@@ -223,7 +223,7 @@ end;
 
 class function TExportData.GetExportFormat(const AFile:String):TBIExport;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: Cannot save data to file: '+AFile+' Extension not supported')
   end;

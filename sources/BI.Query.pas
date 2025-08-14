@@ -1121,7 +1121,7 @@ begin
   TGroupByAccess(result.GroupBy).Source:=result.GroupBy.Expression; // TDataItemExpression.Create(AData);
 end;
 
-procedure ErrorDataNil(const AMessage:String);
+procedure ErrorDataNil(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.Create('Error: Data is nil at: '+AMessage);
 end;

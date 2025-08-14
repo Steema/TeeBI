@@ -936,7 +936,7 @@ end;
 
 procedure TMeasuresHelper.Exchange(const A, B: Integer);
 
-  procedure DoError(const Index:Integer);
+  procedure DoError(const Index:Integer); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.CreateFmt(BIMsg_Summary_SwapMeasure,[Index]);
   end;
@@ -1085,7 +1085,7 @@ end;
 
 procedure TGroupBysHelper.Exchange(const A, B: Integer);
 
-  procedure DoError(const Index:Integer);
+  procedure DoError(const Index:Integer); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.CreateFmt(BIMsg_Summary_SwapGroupBy,[Index]);
   end;
@@ -3935,7 +3935,7 @@ begin
   result:=result+')';
 end;
 
-function TRowFunction.Value: TData;
+function TRowFunction.Value: TData; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   {$IFDEF FPC}
   result:=TExpression.Null;

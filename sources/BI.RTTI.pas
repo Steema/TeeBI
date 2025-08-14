@@ -667,7 +667,7 @@ begin
 end;
 
 // This is a methods instead of a local proc, to skip compiler UStrArrayClr at Get
-procedure TTypeProvider<T>.GetError(const AIndex:TInteger);
+procedure TTypeProvider<T>.GetError(const AIndex:TInteger); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.Create('Error: TTypeProvider Get range error: '+IntToStr(AIndex));
 end;

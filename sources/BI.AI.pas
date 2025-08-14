@@ -74,7 +74,7 @@ uses
 
 { TBIAI }
 
-procedure DoError(const AMessage:String);
+procedure DoError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIAI.Create(AMessage);
 end;

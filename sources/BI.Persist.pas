@@ -954,7 +954,7 @@ begin
   ReadTimes(History.Times);
 end;
 
-procedure VersionError(const Old:Integer);
+procedure VersionError(const Old:Integer); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBILoadVersionException.CreateVersion(Old);
 end;

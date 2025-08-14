@@ -1703,7 +1703,7 @@ procedure TBITextSource.SetColumn(const Col:TDataItem; const ARow:TInteger; cons
       TrySingle;
   end;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error at SetColumn: Data: '+Col.Name+' Kind is Unknown');
   end;

@@ -1029,7 +1029,7 @@ function TBIDataset.CreateLink(const ADataSet:TBIDataSet):TMasterDataLink;
        result:=DetailColumns(Data.Items,ADataset.Data);
   end;
 
-  procedure DoError(const AMessage:String);
+  procedure DoError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create(AMessage);
   end;
@@ -1039,7 +1039,13 @@ var tmpDS : TDataSource;
     tmpMasters,
     tmpDetails : TDataArray;
 begin
+  {$IFDEF FPC}
   result:=nil;
+  {$ELSE}
+  {$IF CompilerVersion<37}
+  result:=nil;
+  {$ENDIF}
+  {$ENDIF}
 
   if Data=nil then
      DoError(BIMsg_Dataset_NoData)

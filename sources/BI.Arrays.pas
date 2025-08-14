@@ -685,7 +685,7 @@ uses
  {$ENDIF}
 {$ENDIF}
 
-procedure DifferentArrayLength;
+procedure DifferentArrayLength; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.Create(BIMsg_DifferentArrayLength);
 end;

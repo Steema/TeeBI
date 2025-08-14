@@ -438,7 +438,7 @@ end;
 
 procedure TDataHops.TraverseExpression(const Item:TExpression);
 
-  procedure CannotAccessData(const AData:TDataItem);
+  procedure CannotAccessData(const AData:TDataItem); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.CreateFmt(BIMsg_CannotAccessData,[AData.Name,Main.Name]);
   end;
@@ -2325,7 +2325,7 @@ begin
   result:=Operand.ToString+'('+Expression.ToString+')';
 end;
 
-function TColumnFunction.Value: TData;
+function TColumnFunction.Value: TData; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   {$IFDEF FPC}
   result:=TExpression.Null;
@@ -2416,7 +2416,7 @@ begin
      result:=nil;
 end;
 
-function TMovingAverageColumn.Value: TData;
+function TMovingAverageColumn.Value: TData; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   {$IFDEF FPC}
   result:=TExpression.Null;

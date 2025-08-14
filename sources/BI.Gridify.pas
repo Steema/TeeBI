@@ -125,7 +125,7 @@ class procedure TGridify.Calculate(const ADest:TDataItem;
     end;
   end;
 
-  procedure DoRaise(const AMessage:String);
+  procedure DoRaise(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: '+AMessage);
   end;

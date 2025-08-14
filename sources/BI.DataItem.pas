@@ -1817,7 +1817,7 @@ end;
 
 function TIndexHelper.IndexOfRow(const ARow:TLoopInteger):TInteger;
 
-  procedure DoError(const AMessage:String);
+  procedure DoError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create(AMessage);
   end;
@@ -2380,7 +2380,7 @@ begin
      //   DuplicateError(AData.Name);
 end;
 
-procedure TDataItems.DuplicateError(const AName:String);
+procedure TDataItems.DuplicateError(const AName:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
 begin
   raise EBIException.CreateFmt(BIMsg_DuplicatedItem,[AName]);
 end;

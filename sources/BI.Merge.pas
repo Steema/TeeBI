@@ -169,7 +169,7 @@ end;
 // Removes data in ADest that is also in ASource
 class procedure TDataMerge.Subtract(const ADest,ASource: TDataItem);
 
-  procedure NotCompatible;
+  procedure NotCompatible; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.CreateFmt(BIMsg_NotCompatible,
                                 [ADest.Name,ASource.Name]);

@@ -43,7 +43,7 @@ uses
 function TSnappyCompression.Compress(const AStream: TStream;
   const AName: String): TMemoryStream;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error compressing stream using Snappy');
   end;
@@ -87,7 +87,7 @@ end;
 function TSnappyCompression.DeCompress(const AStream: TStream;
   const AName: String): TMemoryStream;
 
-  procedure DoError;
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error compressing stream using Snappy');
   end;
