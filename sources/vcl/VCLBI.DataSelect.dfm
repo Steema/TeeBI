@@ -23,7 +23,6 @@ object DataSelector: TDataSelector
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
-    ExplicitTop = 2
     object TabSource: TTabSheet
       Caption = 'Source'
       ImageIndex = 2

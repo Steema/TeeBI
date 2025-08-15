@@ -181,7 +181,6 @@ var Source : TDataArray;
        Add(AQuery.Measures[t].Data);
   end;
 
-var tmp : TDataProvider;
 begin
   Source:=nil;
 
