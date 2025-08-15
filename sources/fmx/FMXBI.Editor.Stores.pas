@@ -172,6 +172,29 @@ type
   TDataEditorAccess=class(TDataEditor);
 
 procedure TStoreEditor.LBStoresChange(Sender: TObject);
+
+  procedure SetupWebTab(const APath:String);
+  begin
+    TabControl1.ActiveTab:=TabWeb;
+
+    if IWebEditor=nil then
+    begin
+      IWebEditor:=TDataEditor.Create(Self);
+      IWebEditor.LayoutWebData.Visible:=False;
+
+      while IWebEditor.ChildrenCount>0 do
+            IWebEditor.Children[0].Parent:=TabWeb;
+
+      IWebEditor.OnChangeWeb:=ChangeWeb;
+    end
+    else
+      TDataEditorAccess(IWebEditor).ClearWeb;
+
+    TDataEditorAccess(IWebEditor).SetWebPath(APath);
+
+    IWebEditor.EWebServer.SetFocus;
+  end;
+
 var tmpPath : String;
 begin
   LabelEmpty.Visible:=LBStores.Count=0;
@@ -205,26 +228,7 @@ begin
       EFolder.SetFocus;
     end
     else
-    begin
-      TabControl1.ActiveTab:=TabWeb;
-
-      if IWebEditor=nil then
-      begin
-        IWebEditor:=TDataEditor.Create(Self);
-        IWebEditor.LayoutWebData.Visible:=False;
-
-        while IWebEditor.ChildrenCount>0 do
-              IWebEditor.Children[0].Parent:=TabWeb;
-
-        IWebEditor.OnChangeWeb:=ChangeWeb;
-      end
-      else
-        TDataEditorAccess(IWebEditor).ClearWeb;
-
-      TDataEditorAccess(IWebEditor).SetWebPath(tmpPath);
-
-      IWebEditor.EWebServer.SetFocus;
-    end;
+      SetupWebTab(tmpPath);
 
     CBDefault.IsChecked:=SameText(Store,TStore.DefaultName);
     CBDefault.Enabled:=not CBDefault.IsChecked;

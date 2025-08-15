@@ -177,10 +177,12 @@ object StoreEditor: TStoreEditor
     Left = 304
     Top = 224
     object MenuItem1: TMenuItem
+      AutoTranslate = False
       Text = 'Folder'
       OnClick = MenuItem1Click
     end
     object MenuItem2: TMenuItem
+      AutoTranslate = False
       Text = 'BI Web'
       OnClick = MenuItem2Click
     end
@@ -192,5 +194,6 @@ object StoreEditor: TStoreEditor
     Size.Height = 17.000000000000000000
     Size.PlatformDefault = False
     Text = 'Click the Add button to create a new Store'
+    TabOrder = 4
   end
 end
