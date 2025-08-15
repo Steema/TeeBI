@@ -742,13 +742,13 @@ procedure TBIFMXGrid.TPrivateGrid.InternalDrawCell(Sender: TObject; const Canvas
     Old:=Canvas.Fill.Color;
     Canvas.Fill.Color:=AColor;
 
-    tmp:=Bounds;
+    tmp:=Column.Padding.MarginRect(Bounds);
 
-    if TGridOption.ColLines in Options then
+    {if TGridOption.ColLines in Options then
        tmp.Left:=tmp.Left+1;
 
     if TGridOption.RowLines in Options then
-       tmp.Bottom:=tmp.Bottom-1;
+       tmp.Bottom:=tmp.Bottom-1;}
 
     Canvas.FillRect(tmp,0,0,AllCorners,1,Canvas.Fill);
     Canvas.Fill.Color:=Old;
