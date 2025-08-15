@@ -230,7 +230,13 @@ class function TExportData.GetExportFormat(const AFile:String):TBIExport;
 
 var tmp : TBIExportClass;
 begin
+  {$IFDEF FPC}
   result:=nil;
+  {$ELSE}
+  {$IF CompilerVersion<37}
+  result:=nil;
+  {$ENDIF}
+  {$ENDIF}
 
   tmp:=TBIExporters.GuessExtension(TPath.GetExtension(AFile));
 
