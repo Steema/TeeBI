@@ -41,6 +41,7 @@ type
 
   TBIExcelEngine=class
   public
+    class function IsExcelInstalled:Boolean; static;
     class procedure SaveToFile(const AData:TDataItem; const AFileName:String); virtual;
   end;
 
@@ -354,6 +355,11 @@ begin
 end;
 
 { TBIExcelEngine }
+
+class function TBIExcelEngine.IsExcelInstalled: Boolean;
+begin
+  result:=IsExcel_Installed;
+end;
 
 class procedure TBIExcelEngine.SaveToFile(const AData: TDataItem;
   const AFileName: String);
