@@ -38,7 +38,7 @@ implementation
 {$R *.fmx}
 
 uses
-  BI.Persist, BI.DataSource, FMXBI.Grid.Grid;
+  BI.Persist, BI.DataSource, FMX.Grid, FMXBI.Grid.Grid;
 
 procedure TFormHistogramText.FormCreate(Sender: TObject);
 var Summary : TSummary;
