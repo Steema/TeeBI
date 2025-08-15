@@ -89,6 +89,7 @@ type
     procedure Assign(Source:TPersistent); override;
 
     function Calculate(const Source:TDataItem):TDataItem;
+    procedure Clear;
     function BinCount:Integer; inline;
   published
     property Active:Boolean read FActive write SetActive default False;
@@ -503,6 +504,20 @@ begin
 
   AutoMinimum:=True;
   AutoMaximum:=True;
+end;
+
+procedure THistogram.Clear;
+begin
+  FActive:=False;
+
+  FBinSize:=0;
+  FFloatFormat:='';
+  FMinimum:=0;
+  FMaximum:=0;
+  FNumBins:=0;
+
+  FAutoMinimum:=True;
+  FAutoMaximum:=True;
 end;
 
 procedure THistogram.Assign(Source:TPersistent);
@@ -3267,7 +3282,10 @@ end;
 
 procedure TGroupBy.SetHistogram(const Value: THistogram);
 begin
-  FHistogram.Assign(Value)
+  if Value=nil then
+     FHistogram.Clear
+  else
+     FHistogram.Assign(Value)
 end;
 
 function TGroupBy.ToString: String;
