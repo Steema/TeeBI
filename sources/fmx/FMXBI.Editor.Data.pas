@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Data Import Editor                         }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2025 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit FMXBI.Editor.Data;
@@ -31,7 +31,7 @@ uses
   {$ENDIF}
 
   FMX.Dialogs, FMX.StdCtrls, FMX.Edit, FMX.TabControl, BI.Persist, System.Math,
-  FMX.ListBox, FMX.Memo, FMX.Layouts, FMXBI.Editor.Items;
+  FMX.ListBox, FMX.Memo, FMX.Layouts, FMXBI.Editor.Items, FMX.Memo.Types;
 
 type
   TDataEditor = class(TForm)
@@ -405,7 +405,7 @@ end;
 
 procedure TDataEditor.TryChange(const ATag,AText:String);
 begin
-  if not IChanging then
+  if (not IChanging) and (Data<>nil) then
      Data[ATag]:=AText;
 end;
 
@@ -780,13 +780,17 @@ end;
 procedure TDataEditor.Select(const AData: TDataDefinition);
 begin
   Data:=AData;
-  Data.Store:=IStore;
 
-  IChanging:=True;
-  try
-    RefreshSettings;
-  finally
-    IChanging:=False;
+  if Data<>nil then
+  begin
+    Data.Store:=IStore;
+
+    IChanging:=True;
+    try
+      RefreshSettings;
+    finally
+      IChanging:=False;
+    end;
   end;
 end;
 

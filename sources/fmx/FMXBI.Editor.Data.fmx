@@ -420,8 +420,8 @@ object DataEditor: TDataEditor
             Size.PlatformDefault = False
             TabOrder = 17
             Visible = False
-            Viewport.Width = 499.000000000000000000
-            Viewport.Height = 46.000000000000000000
+            Viewport.Width = 503.000000000000000000
+            Viewport.Height = 50.000000000000000000
           end
           object Label16: TLabel
             Position.X = 248.000000000000000000
@@ -573,8 +573,8 @@ object DataEditor: TDataEditor
                 Size.Height = 347.000000000000000000
                 Size.PlatformDefault = False
                 TabOrder = 0
-                Viewport.Width = 499.000000000000000000
-                Viewport.Height = 343.000000000000000000
+                Viewport.Width = 503.000000000000000000
+                Viewport.Height = 347.000000000000000000
               end
             end
           end
@@ -814,6 +814,7 @@ object DataEditor: TDataEditor
             OnChange = EProxyPasswordChange
             OnChangeTracking = EProxyPasswordChange
             object PasswordEditButton1: TPasswordEditButton
+              Touch.InteractiveGestures = [LongTap]
               CanFocus = False
               Cursor = crArrow
               Size.Width = 28.000000000000000000
