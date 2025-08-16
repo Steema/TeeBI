@@ -1,13 +1,16 @@
 ## What is a TDataItem ?
 
-TDataItem is a class, a versatile and all-purpose structure.
+```TDataItem``` is a class, a versatile and all-purpose structure.
 
 ```delphi
 // pseudo-code
+uses BI.DataItem;
+
 type
   TDataItem = class
-    Items : Array of TDataItem
-    Values : Array of (Integer or String or Boolean or Single or TDateTime)
+    Items  : Array of TDataItem
+    Values : Array of (Integer or String or
+                       Boolean or Single or TDateTime)
   end
 ```
 
@@ -26,17 +29,26 @@ Record, Class
 // Database oriented
 TDataset
 
-// Multi-dimensional
-Array of Array of...
+// Multi-dimensional, hierarchical
+Array of Array of..., *Generic Tree
 
 // Versatile, N-dimensional, hierarchical
 TDataItem
 ```
 
-Fields of a TDataItem can also be a TDataItem, this recursivity allows tree structures of any kind, for example the traditional:
+Fields of a ```TDataItem``` can also be a ```TDataItem```.
+This recursivity allows tree structures of any kind, 
+for example the traditional:
 
 Database -> Tables -> Fields
 
+can be emulated using ```TDataItem``` children.
+
 TeeBI uses this capability to for example directly display grid columns that contain tables.
 
-Anyway, a TDataItem can also be used as a simple one-dimension array.
+A ```TDataItem``` can also be used as a simple one-dimension array.
+
+There are no dependencies other than the Delphi RTL, no dlls, just 100% Pascal code.
+
+* [Generic Tree code](https://github.com/davidberneda/GenericTree)
+
