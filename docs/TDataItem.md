@@ -1,4 +1,4 @@
-## What is a TDataItem ?
+4## What is a TDataItem ?
 
 ```TDataItem``` is a class, a versatile and all-purpose structure.
 
@@ -35,6 +35,9 @@ Array of Array of..., *Generic Tree
 // Versatile, N-dimensional, hierarchical
 TDataItem
 ```
+
+[Example project: What can be done with a TDataItem?](https://github.com/Steema/TeeBI/tree/master/docs/Starting%20Guide/Samples)
+
 
 Fields of a ```TDataItem``` can also be a ```TDataItem```.
 This recursivity allows tree structures of any kind, 
