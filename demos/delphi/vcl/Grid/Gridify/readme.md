@@ -1,13 +1,16 @@
 ## TGridify algorithm
 
-Convert any flat table to a pivot-grid.
+Convert any flat table to a pivot-grid in one line of code.
 
 The ```TGridify``` class is used to create the right-side table from the left-side one.
 
 
 ```delphi
-BIGrid2.Data := TGridify.From(BIGrid1.Data,'Rank','Year','Person');
+BIGrid2.Data := TGridify.From(BIGrid1.Data,'Happiness','Year','Person');
 ```
+![](https://raw.github.com/Steema/BI/master/docs/img/TeeBi-gridify-example.gif)
+
+### TDataRank
 
 This example also shows how to fill cells using colors from "ranks" (the order of a column value in its group).
 
