@@ -13,7 +13,7 @@ uses
   BI.Convert,
   BI.CSV,
   BI.DataItem,
-  BI.Dataset,
+  BI.DataSet,
   BI.DataSource,
   BI.DB.Dataset,
   BI.DB,
