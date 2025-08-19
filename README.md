@@ -3,7 +3,7 @@
 [![https://t.me/steema_bi](https://raw.github.com/Steema/BI/master/docs/img/Telegram_Icon.png)](https://t.me/steema_bi)
 
 
-![TeeBI Gridify and Colorize](https://raw.github.com/Steema/BI/master/docs/img/TeeBI_Gridify_colored.png)
+[![TeeBI Gridify and Colorize](https://raw.github.com/Steema/BI/master/docs/img/TeeBI_Gridify_colored.png)](https://github.com/Steema/TeeBI/tree/master/demos/delphi/vcl/Grid/Gridify)
 
 ## Datamining, Visualization, Multidimensional Queries, Pivot Tables, Big data
  
