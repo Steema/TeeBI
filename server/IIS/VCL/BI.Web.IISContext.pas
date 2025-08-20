@@ -24,10 +24,11 @@ type
                            const ARequest: TWebRequest;
                            const AResponse: TWebResponse):Boolean; static;
 
-    procedure AddCookie(const AName,AValue:String); override;
+    procedure AddCookie(const AHost,AName,AValue:String); override;
     function FormParams: String; override;
     function GetContentType:String; override;
     function GetCookie(const AName:String):String; override;
+    function GetDocument:String; override;
     function GetStream:TStream; override;
     function Headers: TStrings; override;
     function Params:TStrings; override;
@@ -44,6 +45,15 @@ uses
   System.IOUtils, BI.DataSource, BI.Persist;
 
 { TBIIISContext }
+
+procedure TBIIISContext.AddCookie(const AHost, AName, AValue: String);
+var Cookie : TCookie;
+begin
+  Cookie:=TWebResponse(ResponseInfo).Cookies.Add;
+  Cookie.Name:=AName;
+  Cookie.Value:=AValue;
+  Cookie.Domain:=AHost;
+end;
 
 procedure TBIIISContext.Finish;
 var tmp : TWebResponse;
@@ -62,6 +72,31 @@ end;
 function TBIIISContext.FormParams: String;
 begin
   result:=TWebRequest(RequestInfo).ContentFields.Text; //FormParams;
+end;
+
+function TBIIISContext.GetContentType: String;
+begin
+  result:=TWebRequest(RequestInfo).ContentType;
+end;
+
+function TBIIISContext.GetCookie(const AName: String): String;
+begin
+  result:=TWebRequest(RequestInfo).CookieFields.Values[AName];
+end;
+
+function TBIIISContext.GetDocument: String;
+begin
+  result:=TWebRequest(RequestInfo).Content;
+end;
+
+function TBIIISContext.GetStream: TStream;
+begin
+  result:=ResponseStream;
+end;
+
+function TBIIISContext.Headers: TStrings;
+begin
+  result:=TWebResponse(ResponseInfo).CustomHeaders;
 end;
 
 function TBIIISContext.Params: TStrings;
@@ -122,6 +157,11 @@ begin
   finally
     tmp.Free;
   end;
+end;
+
+procedure TBIIISContext.Redirect(const AURL: String);
+begin
+  TWebResponse(ResponseInfo).SendRedirect(AURL);
 end;
 
 function TBIIISContext.ResponseSize: Int64;

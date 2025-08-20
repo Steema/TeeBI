@@ -3,7 +3,8 @@ unit BIWebModuleUnit;
 interface
 
 uses System.SysUtils, System.Classes, Web.HTTPApp,
-     BI.Web, BI.Web.Common, BI.Web.IISContext, BI.Web.AllData, BI.Persist;
+     BI.Web, BI.Web.Common, BI.Web.Context, BI.Web.IISContext,
+     BI.Web.AllData, BI.Persist;
 
 type
   TWebModule1 = class(TWebModule)
@@ -35,6 +36,9 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+uses
+  BI.Web.Modules.Default;
 
 procedure TWebModule1.WebModule1DefaultHandlerAction(Sender: TObject;
   Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
@@ -73,7 +77,7 @@ begin
   Data:=TAllData.Create;
 
   BIWeb.Logs.History:=History;
-  BIWeb.Data:=Data;
+  TDefaultModule(BIWeb.DefaultModule).Data:=Data;
   BIWeb.Logs.AddHistory:=AddHistory;
 
   Log('Started: '+DateTimeToStr(Now));
