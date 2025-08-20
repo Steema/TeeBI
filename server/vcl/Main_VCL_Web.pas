@@ -32,7 +32,6 @@ type
     Panel2: TPanel;
     Label2: TLabel;
     LConnections: TLabel;
-    Button1: TButton;
     CBActive: TCheckBox;
     Label3: TLabel;
     EPort: TEdit;
@@ -67,13 +66,17 @@ type
     EPublic: TEdit;
     CBStartMin: TCheckBox;
     Button3: TButton;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Exit2: TMenuItem;
+    View1: TMenuItem;
+    DataManager1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TrayIcon1Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
     procedure CBActiveClick(Sender: TObject);
     procedure EPortChange(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure CBAutoScrollClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -91,6 +94,8 @@ type
     procedure TimerSchedulerTimer(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
+    procedure DataManager1Click(Sender: TObject);
+    procedure Exit2Click(Sender: TObject);
   private
     { Private declarations }
     Data : TAllData;
@@ -388,7 +393,7 @@ begin
   Data:=TAllData.Create(AStore);
 end;
 
-procedure TFormBIWeb.Button1Click(Sender: TObject);
+procedure TFormBIWeb.DataManager1Click(Sender: TObject);
 var tmp : String;
 begin
   if Data<>nil then
@@ -503,6 +508,11 @@ procedure TFormBIWeb.Exit1Click(Sender: TObject);
 begin
   CloseFromMenu:=True;
   Close;
+end;
+
+procedure TFormBIWeb.Exit2Click(Sender: TObject);
+begin
+  Exit1Click(Self);
 end;
 
 function TFormBIWeb.FaviconStream:TStream;

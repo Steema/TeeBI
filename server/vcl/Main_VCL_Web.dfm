@@ -10,6 +10,7 @@ object FormBIWeb: TFormBIWeb
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -307,22 +308,13 @@ object FormBIWeb: TFormBIWeb
       Caption = '&Port:'
       FocusControl = EPort
     end
-    object Button1: TButton
-      Left = 472
-      Top = 7
-      Width = 107
-      Height = 25
-      Caption = 'Data &Manager...'
-      TabOrder = 0
-      OnClick = Button1Click
-    end
     object CBActive: TCheckBox
       Left = 248
       Top = 31
       Width = 97
       Height = 17
       Caption = '&Active'
-      TabOrder = 1
+      TabOrder = 0
       OnClick = CBActiveClick
     end
     object EPort: TEdit
@@ -331,7 +323,7 @@ object FormBIWeb: TFormBIWeb
       Width = 44
       Height = 21
       Enabled = False
-      TabOrder = 2
+      TabOrder = 1
       Text = '15015'
       OnChange = EPortChange
     end
@@ -344,7 +336,7 @@ object FormBIWeb: TFormBIWeb
       Min = 1
       Max = 65535
       Position = 15015
-      TabOrder = 3
+      TabOrder = 2
       Thousands = False
     end
   end
@@ -911,5 +903,24 @@ object FormBIWeb: TFormBIWeb
     OnTimer = TimerSchedulerTimer
     Left = 320
     Top = 200
+  end
+  object MainMenu1: TMainMenu
+    Left = 136
+    Top = 176
+    object File1: TMenuItem
+      Caption = '&File'
+      object Exit2: TMenuItem
+        Caption = '&Exit'
+        ShortCut = 32856
+        OnClick = Exit2Click
+      end
+    end
+    object View1: TMenuItem
+      Caption = '&View'
+      object DataManager1: TMenuItem
+        Caption = '&Data Manager...'
+        OnClick = DataManager1Click
+      end
+    end
   end
 end

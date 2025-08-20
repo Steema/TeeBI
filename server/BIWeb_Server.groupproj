@@ -15,6 +15,9 @@
         <Projects Include="Linux\BI_Linux_Web.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="vcl_debug\BIWeb_Debug.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -59,14 +62,23 @@
     <Target Name="BI_Linux_Web:Make">
         <MSBuild Projects="Linux\BI_Linux_Web.dproj" Targets="Make"/>
     </Target>
+    <Target Name="BIWeb_Debug">
+        <MSBuild Projects="vcl_debug\BIWeb_Debug.dproj"/>
+    </Target>
+    <Target Name="BIWeb_Debug:Clean">
+        <MSBuild Projects="vcl_debug\BIWeb_Debug.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BIWeb_Debug:Make">
+        <MSBuild Projects="vcl_debug\BIWeb_Debug.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="BI_VCL_Web;BI_FMX_Web;BI_VCL_IIS_Web;BI_Linux_Web"/>
+        <CallTarget Targets="BI_VCL_Web;BI_FMX_Web;BI_VCL_IIS_Web;BI_Linux_Web;BIWeb_Debug"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BI_VCL_Web:Clean;BI_FMX_Web:Clean;BI_VCL_IIS_Web:Clean;BI_Linux_Web:Clean"/>
+        <CallTarget Targets="BI_VCL_Web:Clean;BI_FMX_Web:Clean;BI_VCL_IIS_Web:Clean;BI_Linux_Web:Clean;BIWeb_Debug:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BI_VCL_Web:Make;BI_FMX_Web:Make;BI_VCL_IIS_Web:Make;BI_Linux_Web:Make"/>
+        <CallTarget Targets="BI_VCL_Web:Make;BI_FMX_Web:Make;BI_VCL_IIS_Web:Make;BI_Linux_Web:Make;BIWeb_Debug:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
