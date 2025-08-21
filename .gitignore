@@ -61,3 +61,5 @@ demos/3rd_party/d7zip/Win32/
 demos/delphi/Geographic/USA_Counties/Win64/
 demos/delphi/vcl/Query/Summary/__recovery/
 sources/vcl/__recovery/
+server/IIS/VCL/Win32/
+server/Linux/Linux64/

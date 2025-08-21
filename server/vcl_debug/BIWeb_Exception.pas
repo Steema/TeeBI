@@ -22,6 +22,8 @@ type
   private
     procedure HandleException(Sender: TObject; E: Exception);
   public
+    class var Prefix:String;
+
     class procedure Save(const E:Exception); static;
   end;
 
@@ -36,7 +38,7 @@ procedure Log(const S:String);
 var tmp : String;
 begin
   tmp:=TPath.Combine(TPath.GetDocumentsPath,'BIWeb');
-  tmp:=TPath.Combine(tmp,'BIWeb_Exception_'+FormatDateTime('yyyymmdd_hhnnss',Now)+'.txt');
+  tmp:=TPath.Combine(tmp,TBIWeb_Exception.Prefix+FormatDateTime('yyyymmdd_hhnnss',Now)+'.txt');
   TFile.WriteAllText(tmp,S+#13#10+#13#10+
      MadStackTrace.StackTrace);
 end;
@@ -50,6 +52,8 @@ end;
 
 var E : TBIWeb_Exception;
 initialization
+  TBIWeb_Exception.Prefix:='BIWeb_Exception_';
+
   E:=TBIWeb_Exception.Create;
   Application.OnException:=E.HandleException;
 finalization
