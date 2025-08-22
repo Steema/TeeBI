@@ -1,4 +1,4 @@
-4## What is a TDataItem ?
+## What is a TDataItem ?
 
 ```TDataItem``` is a class, a versatile and all-purpose structure.
 
