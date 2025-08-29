@@ -47,6 +47,7 @@ type
     class function GetItemNames(const AConnection:TCustomConnection;
                                 const IncludeSystem,IncludeViews:Boolean):TStrings; override;
     class procedure GuessForeignKeys(const AName:String; const Table:TDataSet; const AData:TDataItem; const Source:TBISource); override;
+    class function Import(const AConnection:TFDCustomConnection; const SQL:String):TDataItem; static;
     class function ImportFile(const Source:TBIDB; const AFileName:String):TDataArray; override;
     class procedure StartParallel; override;
     class function Supports(const Extension:String):Boolean; override;
@@ -388,6 +389,20 @@ begin
          Exit(DBDriverNames[t]);
 
   result:='';
+end;
+
+class function TDBFireDACEngine.Import(const AConnection:TFDCustomConnection; const SQL:String):TDataItem;
+var tmp : TFDQuery;
+begin
+  tmp:=TFDQuery.Create(nil);
+  try
+    tmp.Connection:=AConnection;
+    tmp.Open(SQL);
+
+    result:=TBIDB.From(tmp);
+  finally
+    tmp.Free;
+  end;
 end;
 
 class function TDBFireDACEngine.ImportFile(const Source:TBIDB; const AFileName:String):TDataArray;
