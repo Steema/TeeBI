@@ -261,7 +261,6 @@ object DataViewer: TDataViewer
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = -2
     object DataTotals: TStringGrid
       Left = 0
       Top = 600
