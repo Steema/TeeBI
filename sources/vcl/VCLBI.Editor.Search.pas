@@ -258,14 +258,17 @@ end;
 procedure TSearchEditor.Reposition(const ALeft:Integer);
 var tmp : Integer;
 begin
-  tmp:=SBClose.Left+SBClose.Width+1;
+  if SBClose<>nil then
+  begin
+    tmp:=SBClose.Left+SBClose.Width+1;
 
-  if ALeft>tmp then
-     tmp:=ALeft;
+    if ALeft>tmp then
+       tmp:=ALeft;
 
-  ESearch.Left:=tmp;
-  SBMenu.Left:=ESearch.Left+ESearch.Width+4;
-  LHits.Left:=SBMenu.Left+SBMenu.Width+4;
+    ESearch.Left:=tmp;
+    SBMenu.Left:=ESearch.Left+ESearch.Width+4;
+    LHits.Left:=SBMenu.Left+SBMenu.Width+4;
+  end;
 end;
 
 procedure TSearchEditor.Clear;

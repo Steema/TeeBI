@@ -841,7 +841,9 @@ begin
 
     IHighLight.OnChanged:=ChangedSearch;
     IHighLight.OnGetDataSet:=BIDataset;
-    IHighLight.SBClose.OnClick:=MenuSearchClick;
+
+    if IHighLight.SBClose<>nil then
+       IHighLight.SBClose.OnClick:=MenuSearchClick;
   end;
 
   result:=IHighLight;
