@@ -82,10 +82,21 @@ type
     function GetObject:TObject; override;
   end;
 
+  // This class used only at TeeGrid VCL Editor "Data" tab to connect with
+  // TeeBI data items.
+  TBIGridDataSelector=class
+  public
+    Grid : TTeeGrid;
+
+    procedure Selected(Sender: TObject);
+    procedure ShowData(Sender: TObject);
+  end;
+
 implementation
 
 uses
   VCL.Menus,
+  VCLBI.DataSelect,
   BI.DataSet,
   BI.DB.DataSet,
   BI.DataSource, VCLBI.Grid;
@@ -311,6 +322,23 @@ begin
 
   Grid.Columns.Clear;
   Grid.RefreshData;
+end;
+
+{ TBIGridDataSelector }
+
+procedure TBIGridDataSelector.Selected(Sender: TObject);
+begin
+  Grid.Data:=nil;
+  Grid.Data:=TBIGridData.From(TDataSelector(Sender).Selected);
+end;
+
+procedure TBIGridDataSelector.ShowData(Sender: TObject);
+var tmp : TWinControl;
+begin
+  tmp:=TWinControl(Sender);
+
+  if tmp.ControlCount=0 then
+     TDataSelector.Embedd(tmp.Owner,tmp,nil).OnSelect:=Selected;
 end;
 
 initialization
