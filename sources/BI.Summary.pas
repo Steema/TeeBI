@@ -1993,6 +1993,8 @@ procedure TSummary.Calculate(const AData:TDataItem);
   var t : Integer;
       tmp : TDataItem;
   begin
+    Valid; // <-- mandatory here, to calculate ActiveMeasuresCount
+
     for t:=0 to ActiveMeasuresCount-1 do
     begin
       ActiveMeasures[t].CalcData;  // <-- mandatory for each measure
