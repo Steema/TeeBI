@@ -29,6 +29,7 @@ object FormSummary: TFormSummary
     Height = 41
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 1170
     object CBHideDuplicates: TCheckBox
       Left = 445
       Top = 10
@@ -121,6 +122,7 @@ object FormSummary: TFormSummary
     Height = 539
     Align = alLeft
     TabOrder = 1
+    ExplicitHeight = 522
     object Splitter4: TSplitter
       Left = 1
       Top = 209
@@ -150,6 +152,7 @@ object FormSummary: TFormSummary
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
+      ExplicitTop = 431
       object Label1: TLabel
         Left = 9
         Top = 0
@@ -198,6 +201,7 @@ object FormSummary: TFormSummary
       ActivePage = TabSummary
       Align = alClient
       TabOrder = 2
+      ExplicitHeight = 219
       object TabSummary: TTabSheet
         Caption = 'Summary'
       end
@@ -216,6 +220,8 @@ object FormSummary: TFormSummary
     Align = alClient
     TabOrder = 2
     OnChange = PageControl1Change
+    ExplicitWidth = 870
+    ExplicitHeight = 522
     object TabGrid: TTabSheet
       Caption = 'Grid'
       object SplitterChart: TSplitter
@@ -285,6 +291,7 @@ object FormSummary: TFormSummary
         Height = 41
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 862
         object Button8: TButton
           Left = 10
           Top = 8
@@ -314,6 +321,8 @@ object FormSummary: TFormSummary
           end
           item
           end>
+        ExplicitWidth = 862
+        ExplicitHeight = 453
         Origin = '|Animals|Animals'
       end
     end
@@ -481,14 +490,6 @@ object FormSummary: TFormSummary
           TabOrder = 0
           DefaultCanvas = 'TGDIPlusCanvas'
           ColorPaletteIndex = 9
-          object TMarksTipTool
-            Format.CustomPosition = True
-            Format.Left = 0
-            Format.TextAlignment = taCenter
-            Format.Top = 0
-            Format.Visible = False
-            Style = smsLabelValue
-          end
         end
       end
     end
@@ -500,6 +501,8 @@ object FormSummary: TFormSummary
     Height = 35
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 563
+    ExplicitWidth = 1170
     object Label3: TLabel
       Left = 152
       Top = 11

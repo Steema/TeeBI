@@ -10,10 +10,8 @@ object TestSQLQueries: TTestSQLQueries
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 361
@@ -156,10 +154,6 @@ object TestSQLQueries: TTestSQLQueries
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Output'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object BIGrid1: TBIGrid
         Left = 0
         Top = 0
@@ -175,10 +169,6 @@ object TestSQLQueries: TTestSQLQueries
     object TabSheet2: TTabSheet
       Caption = 'Visualizer'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object BIVisualizer1: TBIComposer
         Left = 0
         Top = 0
@@ -195,18 +185,10 @@ object TestSQLQueries: TTestSQLQueries
     object TabSheet3: TTabSheet
       Caption = 'Grid Options'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSheet4: TTabSheet
       Caption = 'Benchmarks'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Benchmark: TButton
         Left = 22
         Top = 10
@@ -247,8 +229,8 @@ object TestSQLQueries: TTestSQLQueries
       end
       object CBLoopThread: TCheckBox
         Left = 24
-        Top = 146
-        Width = 85
+        Top = 153
+        Width = 121
         Height = 17
         Caption = 'Loop in thread'
         TabOrder = 4
@@ -310,8 +292,8 @@ object TestSQLQueries: TTestSQLQueries
       object LError: TLabel
         Left = 0
         Top = 0
-        Width = 3
-        Height = 13
+        Width = 1046
+        Height = 20
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clMaroon
@@ -319,6 +301,8 @@ object TestSQLQueries: TTestSQLQueries
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
+        ExplicitWidth = 3
+        ExplicitHeight = 13
       end
     end
   end
