@@ -1263,6 +1263,9 @@ var
     begin
       tmp:=Expressions[t];
 
+      // Not implemented yet:
+      // expressions within aggregates, like:  Sum(Foo)*123
+
       if TSQLParser.FindAggregate(tmp,tmpAgg) then
       begin
         if tmpSum=nil then
