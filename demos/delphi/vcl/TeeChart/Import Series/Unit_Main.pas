@@ -6,8 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VclTee.TeeGDIPlus, VCLTee.TeEngine,
   VCLTee.Series, VCLBI.Grid, Vcl.ExtCtrls, VCLTee.TeeProcs, VCLTee.Chart,
-  VCLBI.Chart, VCLBI.Chart.Plugin, Vcl.StdCtrls, VCLBI.DataControl,
-  VCLTee.TeeTools;
+  VCLBI.Chart, VCLBI.Chart.Plugin, Vcl.StdCtrls, VCLBI.DataControl;
 
 type
   TSeriesImport = class(TForm)
