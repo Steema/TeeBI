@@ -2495,12 +2495,58 @@ procedure TMeasure.Accumulate(const Index,ByIndex,By2: TInteger);
     end;
   end;
 
+  procedure CopySourceValue;
+  var tmp : TData;
+  begin
+    tmp:=Source.Value;
+
+    case Current.Kind of
+        dkInt32: Current.Int32Data[ByIndex]:=tmp;
+        dkInt64: Current.Int64Data[ByIndex]:=tmp;
+       dkSingle: Current.SingleData[ByIndex]:=tmp;
+       dkDouble: Current.DoubleData[ByIndex]:=tmp;
+     dkExtended: Current.ExtendedData[ByIndex]:=tmp;
+     dkDateTime: Current.DateTimeData[ByIndex]:=tmp;
+         dkText: Current.TextData[ByIndex]:=tmp;
+      dkBoolean: Current.BooleanData[ByIndex]:=tmp;
+    end;
+  end;
+
+  procedure CheckMinMax; overload;
+  var tmp : TData;
+  begin
+    tmp:=Source.Value;
+
+    case Current.Kind of
+        dkInt32: CheckMinMax(Integer(tmp));
+        dkInt64: CheckMinMax(Int64(tmp));
+       dkSingle: CheckMinMax(Single(tmp));
+       dkDouble: CheckMinMax(Double(tmp));
+     dkExtended: CheckMinMax(Extended(tmp));
+     dkDateTime: CheckMinMax(TDateTime(tmp));
+         dkText: CheckMinMax(String(tmp));
+      dkBoolean: CheckMinMax(Boolean(tmp));
+    end;
+  end;
+
   // Warning: Speed opt. This sub procedure is important to be isolated
   // at it produces enter and exit (due to Variant, VarClear, etc) overheads.
   procedure AccumulateExpression;
   begin
-    if Aggregate=TAggregate.Count then
-       Inc(Current.Int64Data[ByIndex])
+    if Aggregate=TAggregate.First then
+    begin
+      if Current.Missing[ByIndex] then
+      begin
+        Current.Missing[ByIndex]:=False;
+        CopySourceValue; // Copy first time
+      end;
+    end
+    else
+    if Aggregate=TAggregate.Last then
+    begin
+      Current.Missing[ByIndex]:=False;
+      CopySourceValue; // Copy always
+    end
     else
     begin
       if CalcCounts then
@@ -2510,9 +2556,9 @@ procedure TMeasure.Accumulate(const Index,ByIndex,By2: TInteger);
          Current.DoubleData[ByIndex]:=Current.DoubleData[ByIndex]+Source.Value
       else
       if BinCounts[By2,ByIndex]=1 then
-         Current.DoubleData[ByIndex]:=Source.Value
+         CopySourceValue
       else
-         CheckMinMax(TFloat(Source.Value));
+         CheckMinMax;
     end;
   end;
 
@@ -2525,11 +2571,11 @@ begin
      Missing.AsZero or
      (not Data.Missing[Index]) then
   begin
-    if Data=nil then
-       AccumulateExpression
-    else
     if Aggregate=TAggregate.Count then
        Inc(Current.Int64Data[ByIndex])
+    else
+    if Data=nil then
+       AccumulateExpression
     else
        AccumulateData(Data);
   end;
