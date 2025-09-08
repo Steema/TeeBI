@@ -50,6 +50,11 @@ begin
   result.Items.Add('Field 2',TDataKind.dkBoolean);
   result.Items.Add('Field 3',TDataKind.dkText);
 
+  result.Append([ 123, True,  'Apples' ]);
+  result.Append([ 456, False, 'Oranges' ]);
+  result.Append([ 789, True,  'Bananas' ]);
+
+  {
   result.Resize(3);
 
   // Fill 3 rows, 3 fields
@@ -65,6 +70,7 @@ begin
   result[0].Int32Data[2]:=789;
   result[1].BooleanData[2]:=True;
   result[2].TextData[2]:='Bananas';
+  }
 end;
 
 function AnotherTable:TDataItem;
@@ -76,6 +82,10 @@ begin
   result.Items.Add('Field A',TDataKind.dkSingle);
   result.Items.Add('Field B',TDataKind.dkText);
 
+  result.Append([ 123.456, 'Car' ]);
+  result.Append([ 789.321, 'Bike' ]);
+
+  {
   result.Resize(2);
 
   // Fill 2 rows, 2 fields
@@ -85,6 +95,7 @@ begin
 
   result[0].SingleData[1]:=789.321;
   result[1].TextData[1]:='Bike';
+  }
 end;
 
 function GroupOfTables:TDataItem;
@@ -118,6 +129,12 @@ begin
   SomeNested:=AnotherTable;
   result.Items.Add(SomeNested);
 
+  {
+  result.Append([  42, True, 'America' ]);
+  result.Append([  99, True, 'Africa' ]);
+  result.Append([ 555, True, 'Asia' ]);
+  }
+
   result.Resize(3);
 
   // Just fill some values
@@ -132,6 +149,7 @@ begin
   SomeInt.Int32Data[2]:=555;
   SomeBool.BooleanData[2]:=True;
   SomeText.TextData[2]:='Asia';
+
 
   // Fill 3rd rows in nested sub-table.
 

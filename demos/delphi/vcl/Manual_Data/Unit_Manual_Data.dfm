@@ -10,11 +10,9 @@ object FormManual: TFormManual
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 329
@@ -32,9 +30,7 @@ object FormManual: TFormManual
     Align = alTop
     Caption = 'Creating different kinds of TDataItem manually'
     TabOrder = 0
-    ExplicitLeft = 248
-    ExplicitTop = 264
-    ExplicitWidth = 185
+    ExplicitWidth = 929
   end
   object LBExample: TListBox
     Left = 0
@@ -52,6 +48,7 @@ object FormManual: TFormManual
       'Master Detail Embedded')
     TabOrder = 1
     OnClick = LBExampleClick
+    ExplicitHeight = 476
   end
   object PageControl1: TPageControl
     Left = 332
@@ -61,12 +58,10 @@ object FormManual: TFormManual
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 597
+    ExplicitHeight = 476
     object TabSheet1: TTabSheet
       Caption = 'Preview'
-      ExplicitLeft = 6
-      ExplicitTop = 16
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 173
@@ -87,8 +82,8 @@ object FormManual: TFormManual
         ParentBackground = False
         ParentColor = False
         TabOrder = 0
-        ExplicitLeft = -1
-        ExplicitHeight = 465
+        ExplicitWidth = 589
+        ExplicitHeight = 156
       end
       object BIGrid2: TBIGrid
         Left = 0
@@ -101,6 +96,8 @@ object FormManual: TFormManual
         ParentColor = False
         TabOrder = 1
         Visible = False
+        ExplicitTop = 159
+        ExplicitWidth = 589
       end
     end
   end
