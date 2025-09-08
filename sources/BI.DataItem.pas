@@ -151,6 +151,20 @@ type
     function GetLast: TDataItem;
     procedure InsertData(const AtIndex:TInteger);
     procedure Swap(const A,B:TInteger);
+
+    type
+      // To support "for Item in Items..."
+      TDataItemsEnumerator = class
+      private
+        FIndex: Integer;
+        FItems : TDataItems;
+      public
+        Constructor Create(const AItems:TDataItems);
+        function GetCurrent: TDataItem; inline;
+        function MoveNext: Boolean;
+        property Current: TDataItem read GetCurrent;
+      end;
+
   protected
     Valid : Boolean;
 
@@ -172,6 +186,8 @@ type
     function Exists(const AName:String):Boolean; inline;
 
     function Find(const AName: String): TDataItem; inline;
+
+    function GetEnumerator: TDataItemsEnumerator;
 
     function IndexOf(const AName:String):Integer;
     procedure Insert(const AData:TDataItem; const AIndex:Integer);
@@ -2394,6 +2410,11 @@ begin
   end;
 end;
 
+function TDataItems.GetEnumerator: TDataItemsEnumerator;
+begin
+  result:=TDataItemsEnumerator.Create(Self);
+end;
+
 function TDataItems.New(const AName: String; const AKind: TDataKind; const Tag:TObject=nil): TDataItem;
 begin
   result:=TDataItem.Create(AKind);
@@ -2999,6 +3020,28 @@ begin
   inherited Create;
   FName:=AName;
   Detail:=ADetail;
+end;
+
+{ TDataItems.TDataItemsEnumerator }
+
+Constructor TDataItems.TDataItemsEnumerator.Create(const AItems:TDataItems);
+begin
+  inherited Create;
+  FIndex := -1;
+  FItems:=AItems;
+end;
+
+function TDataItems.TDataItemsEnumerator.GetCurrent: TDataItem;
+begin
+  result:=FItems[FIndex];
+end;
+
+function TDataItems.TDataItemsEnumerator.MoveNext: Boolean;
+begin
+  Result := FIndex < FItems.Count - 1;
+
+  if Result then
+     Inc(FIndex);
 end;
 
 initialization
