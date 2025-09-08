@@ -1456,7 +1456,10 @@ begin
 
     if Children and (Data.AsTable or (Data.Kind=TDataKind.dkUnknown)) then
        for Item in Data.Items.AsArray do
-           DoLoad(Reader,Item,Children,ForceLoad);
+           if Reader.AtEnd then
+              Item.Resize(Data.Count) // <-- fix for "calculated fields" not being persisted, see
+           else
+              DoLoad(Reader,Item,Children,ForceLoad);
 
     TDataAccess(Data).ClearDelay;
   end;

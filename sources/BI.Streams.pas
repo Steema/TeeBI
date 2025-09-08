@@ -79,6 +79,8 @@ type
 
     Destructor Destroy; override;
 
+    function AtEnd:Boolean;
+
     procedure Read(var Value; Size:Integer);
     function ReadBoolean:Boolean; inline;
     procedure ReadComponent(const Value:TComponent); inline;
@@ -191,6 +193,12 @@ end;
 type
   TBinaryObjectReaderAccess=class(TBinaryObjectReader);
 {$ENDIF}
+
+// True when we have finished reading all bytes in the stream
+function TBIReader.AtEnd:Boolean;
+begin
+  result:=Position>=FStream.Size;
+end;
 
 function TBIReader.GetPosition: Int64;
 begin
