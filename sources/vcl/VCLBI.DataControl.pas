@@ -55,6 +55,8 @@ type
     property DockManager;
     {$ENDIF}
   public
+    OwnsData : Boolean;
+
     Constructor Create(AOwner:TComponent); override;
     Destructor Destroy; override;
 
@@ -251,6 +253,10 @@ end;
 Destructor TBIDataControl.Destroy;
 begin
   RemoveNotify;
+
+  if OwnsData then
+     DestroyData;
+
   inherited;
 end;
 
