@@ -108,6 +108,13 @@ begin
   Data.Items.Add('Units',TDataKind.dkText);
   Data.Items.Add('HasStock',TDataKind.dkBoolean);
 
+  Data.Append(['Tomato', 1000,  123.456, 'Kg',     True]);
+  Data.Append(['Apples',  768,    0.78,  'Tn',     False]);
+  Data.Append(['Bananas',  42, -454.1,   'Pounds', True]);
+
+  {
+  // Equivalent code without Append:
+
   Data.Resize(3);
 
   Data[0].TextData[0]:='Tomato';
@@ -129,6 +136,7 @@ begin
   Data[4].BooleanData[0]:=True;
   Data[4].BooleanData[1]:=False;
   Data[4].BooleanData[2]:=True;
+  }
 
   FormatSettings := TFormatSettings.Invariant;
 end;

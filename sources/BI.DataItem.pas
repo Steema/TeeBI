@@ -438,6 +438,8 @@ type
 
     Destructor Destroy; override;
 
+    function Append(const Values: Array of Variant):Integer;
+
     procedure Clear;
     procedure ClearData(const Recursive:Boolean=False);
 
@@ -1055,6 +1057,11 @@ begin
   end;
 end;
 
+procedure RaiseBIError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
+begin
+  raise EBIException.Create(AMessage);
+end;
+
 // This will effectively change (reorder) the rows
 procedure TDataItem.SortBy(const AData: TDataItem; const Ascending: Boolean; const IgnoreTextCase:Boolean);
 begin
@@ -1070,7 +1077,7 @@ begin
       dkBoolean: AData.BooleanData.Sort(Ascending,SwapRows);
     end
   else
-    raise EBIException.Create('Error: Cannot sort data: '+Name+' using data: '+AData.Name);
+    RaiseBIError('Error: Cannot sort data: '+Name+' using data: '+AData.Name);
 end;
 
 // Liberate memory. Always recursive (all Items and sub-Items)
@@ -1286,7 +1293,7 @@ begin
     tmp:=GetProvider;
 
     if tmp=nil then
-       raise EBIException.Create('Internal Error: Missing Provider for data item: '+FullName)
+       RaiseBIError('Internal Error: Missing Provider for data item: '+FullName)
     else
     begin
       Inc(FConsumers.Changing);
@@ -1385,6 +1392,51 @@ begin
   else
     IHasDate:=False;
   end;
+end;
+
+// Adds a new row to this TDataItem
+// Contributed by: https://github.com/De-Novo-Research
+// https://github.com/Steema/TeeBI/issues/14
+function TDataItem.Append(const Values: Array of Variant): Integer;
+
+  procedure SetValue(const AItem:TDataItem; const Value:Variant);
+  begin
+    case AItem.Kind of
+      dkInt32: AItem.Int32Data[result] := Value;
+      dkInt64: AItem.Int64Data[result] := Value;
+     dkSingle: AItem.SingleData[result] := Value;
+     dkDouble: AItem.DoubleData[result] := Value;
+   dkExtended: AItem.ExtendedData[result] := Value;
+       dkText: AItem.TextData[result] := {VarToStr}(Value);
+   dkDateTime: AItem.DateTimeData[result] := Value;
+    dkBoolean: AItem.BooleanData[result] := Value;
+    else
+      RaiseBIError('Unsupported data kind for column: '+AItem.Name);
+    end;
+  end;
+
+  procedure CheckCount(const ACount:Integer);
+  begin
+    if Length(Values) <> ACount then
+       RaiseBIError('Values count ('+Length(Values).ToString+
+                    ') must match column count ('+ACount.ToString+')');
+  end;
+
+var i: Integer;
+begin
+  if AsTable then
+     CheckCount(Items.Count)
+  else
+     CheckCount(1); // Single column
+
+  result := Count;
+  Resize(result + 1);
+
+  if AsTable then
+     for i := 0 to High(Values) do
+         SetValue(Items[i],Values[i])
+  else
+     SetValue(Self,Values[0]);
 end;
 
 procedure TDataItem.CheckEmptyName;
@@ -1816,12 +1868,6 @@ begin
 end;
 
 function TIndexHelper.IndexOfRow(const ARow:TLoopInteger):TInteger;
-
-  procedure DoError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
-  begin
-    raise EBIException.Create(AMessage);
-  end;
-
 var t : Integer;
     tmp : TNativeInteger;
 begin
@@ -1833,7 +1879,7 @@ begin
         if Masters[t].FindMapRow(ARow,tmp) then
            Inc(result,Multi[t]*tmp)
         else
-           DoError('Cannot find value in '+Masters[t].Name+' map at index: '+IntToStr(ARow));
+           RaiseBIError('Cannot find value in '+Masters[t].Name+' map at index: '+IntToStr(ARow));
       end;
 end;
 
