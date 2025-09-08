@@ -523,36 +523,51 @@ function SelectApacheAB:TDataItem;
 var
   Item, A, B: TDataItem;
   Query: TDataSelect;
-
+  Filter : TExpression;
 begin
-     Item:=TDataItem.Create(True);
-     A:=Item.Items.Add('a', TDataKind.dkText);
-     B:=Item.Items.Add('b', TDataKind.dkInt32);
+  Item:=TDataItem.Create(True);
 
-     Item.Resize(4);
+  // Add two columns
+  A:=Item.Items.Add('a', TDataKind.dkText);
+  B:=Item.Items.Add('b', TDataKind.dkInt32);
 
-     A.TextData[0]:='a';
-     A.TextData[1]:='b';
-     A.TextData[2]:='c';
-     A.TextData[3]:='d';
+  // Add 4 rows
+  Item.Append([ 'a', 1 ]);
+  Item.Append([ 'b', 10 ]);
+  Item.Append([ 'c', 10 ]);
+  Item.Append([ 'd', 100 ]);
 
-     B.Int32Data[0]:=1;
-     B.Int32Data[1]:=10;
-     B.Int32Data[2]:=10;
-     B.Int32Data[3]:=100;
+  {
+  Item.Resize(4);
 
-     Query:=TDataSelect.Create(nil);
-     try
-       Query.Add(Item['a']);
-       Query.Add(Item['b']);
-       Query.Filter:=TDataFilter.FromString(Item,'b=10');
-       result:=Query.Calculate;
-     finally
-       Query.Free;
-       Item.Free;
-     end;
+  A.TextData[0]:='a';
+  A.TextData[1]:='b';
+  A.TextData[2]:='c';
+  A.TextData[3]:='d';
+
+  B.Int32Data[0]:=1;
+  B.Int32Data[1]:=10;
+  B.Int32Data[2]:=10;
+  B.Int32Data[3]:=100;
+  }
+
+  Query:=TDataSelect.Create(nil);
+  try
+    Query.Add(Item['a']);
+    Query.Add(Item['b']);
+
+    Filter:=TDataFilter.FromString(Item,'b=10');
+
+    Query.Filter:=Filter;
+
+    result:=Query.Calculate;
+
+    Filter.Free;
+  finally
+    Query.Free;
+    Item.Free;
+  end;
 end;
-
 
 function SelectOrdersNotIsNullDateCustomerIntel:TDataItem;
 var Query : TDataSelect;
@@ -626,7 +641,7 @@ end;
 procedure CheckSteemaWeb;
 begin
   if not TStores.Exists('Steema') then
-     TStores.Add('Steema','web:steema.cat');
+     TStores.Add('Steema','web:teebi.steema.cat');
 end;
 
 // Called when a TStore.Load fails
@@ -791,11 +806,8 @@ begin
     Items.AddChildObject(tmp,'Cumulative Sum by Color',@CumulativeSumByColorSummary);
 
   tmp:=Items.AddChild(nil,'Web Store');
-  {
-    No server is currently running at steema web !!
     Items.AddChildObject(tmp,'Load sample from Steema web',@SampleFromSteemaWeb);
     Items.AddChildObject(tmp,'Remote Query from Steema web',@RemoteQueryFromSteemaWeb);
-  }
 
   tmp:=Items.AddChild(nil,'Exporting');
     Items.AddChildObject(tmp,'JSON',@ExportToJSON);

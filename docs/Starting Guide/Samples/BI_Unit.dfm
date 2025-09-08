@@ -20,6 +20,7 @@ object FormTests: TFormTests
     Height = 41
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 928
     object Button1: TButton
       Left = 8
       Top = 9
@@ -40,6 +41,7 @@ object FormTests: TFormTests
     ReadOnly = True
     TabOrder = 1
     OnChange = TreeChange
+    ExplicitHeight = 486
   end
   object Memo1: TMemo
     Left = 0
@@ -51,6 +53,8 @@ object FormTests: TFormTests
     TabOrder = 2
     Visible = False
     WordWrap = False
+    ExplicitTop = 527
+    ExplicitWidth = 928
   end
   object BIGrid1: TBIGrid
     Left = 265
@@ -62,5 +66,7 @@ object FormTests: TFormTests
     ParentBackground = False
     ParentColor = False
     TabOrder = 3
+    ExplicitWidth = 663
+    ExplicitHeight = 486
   end
 end
