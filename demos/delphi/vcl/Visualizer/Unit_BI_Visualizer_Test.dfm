@@ -10,11 +10,9 @@ object FormViz: TFormViz
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   WindowState = wsMaximized
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 305
@@ -34,6 +32,7 @@ object FormViz: TFormViz
     Color = clWhite
     ParentBackground = False
     TabOrder = 0
+    ExplicitWidth = 893
     object SpeedButton1: TSpeedButton
       Left = 4
       Top = 6
@@ -148,14 +147,16 @@ object FormViz: TFormViz
     Color = clWhite
     ParentBackground = False
     TabOrder = 1
+    ExplicitHeight = 502
     object PageControl1: TPageControl
       Left = 0
       Top = 0
       Width = 305
       Height = 519
-      ActivePage = TabSettings
+      ActivePage = TabData
       Align = alClient
       TabOrder = 0
+      ExplicitHeight = 502
       object TabSettings: TTabSheet
         Caption = 'Settings'
       end
@@ -224,6 +225,8 @@ object FormViz: TFormViz
     TabOrder = 2
     Groups = <>
     Values = <>
+    ExplicitWidth = 585
+    ExplicitHeight = 502
   end
   object BIQuery1: TBIQuery
     Left = 352

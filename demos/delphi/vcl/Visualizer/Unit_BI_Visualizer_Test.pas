@@ -72,25 +72,33 @@ implementation
 uses
   BI.UI, BI.Expression, VCLBI.Editor.ControlTree;
 
-procedure TFormViz.FormDestroy(Sender: TObject);
-begin
-  Summary.Free;
-  BIVisualizer1.Data.Free;
-end;
-
 var
   Simple : TDataItem=nil;
 
-procedure CreateSimple;
+procedure CreateSimple; // just a test
 begin
   Simple:=TDataItem.Create(True);
 
   Simple.Items.Add('Name',TDataKind.dkText);
   Simple.Items.Add('X',TDataKind.dkInt32);
 
+  Simple.Append([ 'A', 1 ]);
+  Simple.Append([ 'B', 2 ]);
+  Simple.Append([ 'C', 3 ]);
+
+  {
   Simple.Resize(3);
   Simple[0].TextData:=['A','B','C'];
   Simple[1].Int32Data:=[1,2,3];
+  }
+end;
+
+procedure TFormViz.FormDestroy(Sender: TObject);
+begin
+  Summary.Free;
+  BIVisualizer1.Data.Free;
+
+  Simple.Free;
 end;
 
 procedure TFormViz.Recalculate(Sender: TObject);
@@ -100,8 +108,8 @@ begin
 
   if Simple=nil then
      CreateSimple;
-  BIVisualizer1.Data:=Simple;
 
+  BIVisualizer1.Data:=Simple;
 
   if CBQuery.Checked then
      BIVisualizer1.Provider:=BIQuery1
@@ -238,8 +246,9 @@ begin
 
   Recalculate(Self);
 end;
+
 initialization
-ReportMemoryLeaksOnShutdown := True;
+  ReportMemoryLeaksOnShutdown := True;
 finalization
-CheckSynchronize;
+  CheckSynchronize;
 end.
