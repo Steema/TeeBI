@@ -37,7 +37,8 @@ procedure TDataItem_Test.TestAppend(Value1, Value2, _Result: Integer);
 var
   R: Integer;
 begin
-  FData.Int32Data.Append(Value1);
+  FData.Append([Value1]); // <-- alternative way: FData.Int32Data.Append(Value1);
+
   FData.Int32Data.Append(Value2);
 
   R := FData.Int32Data.Count;

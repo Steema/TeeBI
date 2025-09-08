@@ -221,6 +221,7 @@
         <DCCReference Include="BI.Tests.Queries.pas"/>
         <DCCReference Include="BI.Tests.SQLParser.pas"/>
         <DCCReference Include="BI.Expressions.Samples.pas"/>
+        <DCCReference Include="BI.Tests.DataCursor.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -279,6 +280,12 @@
                 </DeployFile>
                 <DeployFile LocalName="TeeBI_Tests.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="TeeBI_Tests" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Win32\Debug\TeeBI_Tests.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>TeeBI_Tests.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>
