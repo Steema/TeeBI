@@ -169,6 +169,7 @@ type
     Valid : Boolean;
 
     procedure AddDirect(const AData:TDataItem);
+    procedure ClearArray;
     procedure DestroyAll;
     procedure DoChanged;
     function GetEmptyName:String;
@@ -2492,6 +2493,11 @@ begin
   for tmp in FItems do
       tmp.FParent:=nil;
 
+  FItems:=nil;
+end;
+
+procedure TDataItems.ClearArray;
+begin
   FItems:=nil;
 end;
 

@@ -33,9 +33,12 @@ type
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    BFlatten: TButton;
     procedure FormCreate(Sender: TObject);
     procedure LBTestClick(Sender: TObject);
     procedure BIGrid2Resize(Sender: TObject);
+    procedure BFlattenClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
 
@@ -55,6 +58,7 @@ implementation
 
 uses
   BI.DataItem, BI.Gridify, BI.Rank, BI.UI, BI.Arrays.Strings,
+  BI.Tools,
   BI.Demos.RandomTable;
 
 // Use the grid "Colorize" feature on "Rank" field (if available)
@@ -93,13 +97,21 @@ end;
 {$DEFINE XE7}
 {$ENDIF}
 
-// Execute TGridify tests
+procedure TFromGridify.BFlattenClick(Sender: TObject);
+begin
+  // Remove sub-tables, leaving a flat Items structure
+  TDataFlatten.Flatten(BIGrid2.Data);
+
+  BIGrid2.RefreshData;
+end;
+
 procedure TFromGridify.BIGrid2Resize(Sender: TObject);
 begin
   // Cosmetic
   Label3.Left:=BIGrid2.Left;
 end;
 
+// Execute TGridify tests
 procedure TFromGridify.DoGridify(const TestNumber:Integer);
 var Year,
     Person,
@@ -172,6 +184,12 @@ begin
   LBTestClick(Self);
 end;
 
+procedure TFromGridify.FormDestroy(Sender: TObject);
+begin
+  BIGrid2.Data.Free;
+  BIGrid1.Data.Free;
+end;
+
 procedure TFromGridify.LBTestClick(Sender: TObject);
 var t1 : TStopWatch;
 begin
@@ -183,6 +201,8 @@ begin
 
   if BIGrid2.Data<>nil then
      TryColorizeRanks;
+
+  BFlatten.Enabled:=BIGrid2.Data<>nil;
 end;
 
 end.

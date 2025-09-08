@@ -70,6 +70,12 @@ type
     class procedure Normalize(const AData:TDataArray); overload; static;
   end;
 
+  // Removes sub-tables that might exists, making all AData Items at the same level
+  TDataFlatten=record
+  public
+    class procedure Flatten(const AData:TDataItem); static;
+  end;
+
 implementation
 
 { TSplitOptions }
@@ -347,6 +353,53 @@ var Item : TDataItem;
 begin
   for Item in AData do
       Normalize(Item);
+end;
+
+
+type
+  TDataItemsAccess=class(TDataItems);
+
+{ TDataFlatten }
+
+// Converts a hierarchical tree of TDataItems into a flat TDataItem, destroying
+// the middle tables.
+// Note: Middle table names are lost.
+class procedure TDataFlatten.Flatten(const AData: TDataItem);
+
+  function LastParent:TDataItem;
+  begin
+    result:=AData;
+
+    while result.Parent<>nil do
+          result:=result.Parent;
+  end;
+
+var t : Integer;
+    tmp : TDataItem;
+begin
+  if AData.AsTable then
+  begin
+    t:=AData.Items.Count-1;
+
+    while t>=0 do
+    begin
+      Flatten(AData[t]);
+      Dec(t);
+    end;
+
+    if AData.Parent<>nil then
+    begin
+      TDataItemsAccess(AData.Items).ClearArray;
+      AData.Free;
+    end;
+  end
+  else
+  begin
+    tmp:=LastParent;
+
+    if AData.Parent<>tmp then
+       tmp.Items.Insert(AData,tmp.Items.Count);
+  end;
 end;
 
 end.
