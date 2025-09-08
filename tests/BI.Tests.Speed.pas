@@ -255,6 +255,9 @@ begin
   Bench('Add '+Quantity_Add.ToString+' Records',Quantity_Add, procedure
     var t : Integer;
     begin
+      // Calling Resize and setting data is much faster than calling Append
+      // when there are many rows to add.
+
       // Prepare space
       Persons.Resize(Quantity_Add);
 
