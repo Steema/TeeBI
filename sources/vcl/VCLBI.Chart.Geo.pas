@@ -590,6 +590,8 @@ class function TGeoChart.AreEntities(const Text:TDataItem; out AContext:TGeoCont
   var t : Integer;
       tmp : Int64;
   begin
+    Text.Load;
+
     for t:=0 to Text.Count-1 do
         if TryStrToInt64(Text.TextData[t],tmp) then
            Exit(True);
