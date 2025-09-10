@@ -511,7 +511,7 @@ end;
 // Returns True when there exists a hit for AData in ARow
 function TSearchHits.Exists(const ARow: TInteger; const AData: TDataItem): Boolean;
 begin
-  if Length(Items)>ARow then
+  if (ARow>=0) and (Length(Items)>ARow) then
      result:=Items[ARow].Exists(AData)
   else
      result:=False;
@@ -523,14 +523,17 @@ var t : Integer;
 begin
   result:=0;
 
-  for t:=0 to ARow-1 do
-      Inc(result,Items[t].Count);
+  if (ARow>=0) and (Length(Items)>ARow) then
+  begin
+    for t:=0 to ARow-1 do
+        Inc(result,Items[t].Count);
 
-  for t:=0 to High(Items[ARow]) do
-      if Items[ARow][t]=AData then
-         break
-      else
-         Inc(result);
+    for t:=0 to High(Items[ARow]) do
+        if Items[ARow][t]=AData then
+           break
+        else
+           Inc(result);
+  end;
 end;
 
 // Speed Bottleneck. Sequential search.
