@@ -250,6 +250,8 @@ type
     Destructor Destroy; override;
 
     procedure Assign(Source:TPersistent); override;
+
+    procedure CheckPendingData;
     procedure Clear;
 
     {$IFNDEF FPC}
@@ -810,11 +812,7 @@ begin
   inherited;
 end;
 
-{$IFDEF FMX}
-procedure TBIChart.Paint;
-{$ELSE}
-procedure TBIChart.WMPaint(var Message: TWMPaint);
-{$ENDIF}
+procedure TBIChart.CheckPendingData;
 var tmp : String;
 begin
   if IDirtyData<>nil then
@@ -833,7 +831,15 @@ begin
 
     IDirtyData:=nil;
   end;
+end;
 
+{$IFDEF FMX}
+procedure TBIChart.Paint;
+{$ELSE}
+procedure TBIChart.WMPaint(var Message: TWMPaint);
+{$ENDIF}
+begin
+  CheckPendingData;
   inherited;
 end;
 
