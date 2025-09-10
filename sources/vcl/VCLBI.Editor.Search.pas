@@ -49,6 +49,7 @@ type
     FOnChanged : TNotifyEvent;
     FOnGetDataSet : TGetDataSet;
 
+    procedure DoChanged;
     procedure SetCurrent(const Value:TInteger);
 
   public
@@ -230,13 +231,18 @@ begin
      AIndex:=-1;
 end;
 
+// Notify plugin
+procedure TSearchEditor.DoChanged;
+begin
+  if Assigned(FOnChanged) then
+     FOnChanged(Self);
+end;
+
 // Move to next search hit
 procedure TSearchEditor.SBDownClick(Sender: TObject);
 begin
   SetCurrent(Current+1);
-
-  if Assigned(FOnChanged) then
-     FOnChanged(Self);
+  DoChanged;
 end;
 
 // Show search options popup menu
@@ -249,9 +255,7 @@ end;
 procedure TSearchEditor.SBUpClick(Sender: TObject);
 begin
   SetCurrent(Current-1);
-
-  if Assigned(FOnChanged) then
-     FOnChanged(Self);
+  DoChanged;
 end;
 
 // Reset all controls Left positions
