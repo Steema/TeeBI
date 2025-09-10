@@ -346,7 +346,9 @@ type
     class function From(const AData:TInt32Array):TChartValues; overload; static;
     class function From(const AData:TInt64Array):TChartValues; overload; static;
     class function From(const AData:TSingleArray):TChartValues; overload; static;
+    class function From(const AData:BI.Arrays.TDoubleArray):TChartValues; overload; static;
     class function From(const AData:TExtendedArray):TChartValues; overload; static;
+    class function From(const AData:TDateTimeArray):TChartValues; overload; static;
     class function From(const AItem:TDataItem):TChartValues; overload; static;
   end;
 
@@ -369,39 +371,86 @@ begin
 end;
 
 class function TArrayToValues.From(const AData:TSingleArray):TChartValues;
-var t : Integer;
-begin
-  SetLength(result,AData.Count);
 
-  for t:=0 to AData.Count-1 do
-      result[t]:=AData[t];
+  procedure DoLoop; // this is to skip hint: unused: t
+  var t : Integer;
+  begin
+    SetLength(result,AData.Count);
+
+    for t:=0 to AData.Count-1 do
+        result[t]:=AData[t];
+  end;
+
+begin
+  if SizeOf(TChartValue)=SizeOf(Single) then
+     result:=TChartValues(AData.Copy)
+  else
+     DoLoop;
+end;
+
+class function TArrayToValues.From(const AData:BI.Arrays.TDoubleArray):TChartValues;
+
+  procedure DoLoop; // this is to skip hint: unused: t
+  var t : Integer;
+  begin
+    SetLength(result,AData.Count);
+
+    for t:=0 to AData.Count-1 do
+        result[t]:=AData[t];
+  end;
+
+begin
+  if SizeOf(TChartValue)=SizeOf(Double) then
+     result:=TChartValues(AData.Copy)
+  else
+     DoLoop;
 end;
 
 class function TArrayToValues.From(const AData:TExtendedArray):TChartValues;
-var t : Integer;
-begin
-  SetLength(result,AData.Count);
 
-  for t:=0 to AData.Count-1 do
-      result[t]:=AData[t];
+  procedure DoLoop; // this is to skip hint: unused: t
+  var t : Integer;
+  begin
+    SetLength(result,AData.Count);
+
+    for t:=0 to AData.Count-1 do
+        result[t]:=AData[t];
+  end;
+
+begin
+  if SizeOf(TChartValue)=SizeOf({$IFDEF CPUX86}Extended{$ELSE}Double{$ENDIF}) then
+     result:=TChartValues(AData.Copy)
+  else
+     DoLoop;
+end;
+
+class function TArrayToValues.From(const AData:TDateTimeArray):TChartValues;
+
+  procedure DoLoop; // this is to skip hint: unused: t
+  var t : Integer;
+  begin
+    SetLength(result,AData.Count);
+
+    for t:=0 to AData.Count-1 do
+        result[t]:=AData[t];
+  end;
+
+begin
+  if SizeOf(TChartValue)=SizeOf(Double) then
+     result:=TChartValues(AData.Copy)
+  else
+     DoLoop;
 end;
 
 class function TArrayToValues.From(const AItem:TDataItem):TChartValues;
 begin
-  if AItem.Kind=TDataKind.dkDateTime then
-     result:=TChartValues(AItem.DateTimeData.Copy)
-  else
-  if AItem.Kind=TDataKind.dkDouble then
-     result:=TChartValues(AItem.DoubleData.Copy)
-  else
-  begin
-    // Do the hard way
-    case AItem.Kind of
-        dkInt32: result:=From(AItem.Int32Data);
-        dkInt64: result:=From(AItem.Int64Data);
-       dkSingle: result:=From(AItem.SingleData);
-     dkExtended: result:=From(AItem.ExtendedData);
-    end;
+  case AItem.Kind of
+      dkInt32: result:=From(AItem.Int32Data);
+      dkInt64: result:=From(AItem.Int64Data);
+     dkSingle: result:=From(AItem.SingleData);
+     dkDouble: result:=From(AItem.DoubleData);
+   dkExtended: result:=From(AItem.ExtendedData);
+   dkDateTime: result:=From(AItem.DateTimeData);
   end;
 end;
 
@@ -628,7 +677,7 @@ class function TChartData.From(const AData:TDataItem;
                                const AOwner:TComponent;
                                const AClass:TChartSeriesClass=nil):TChartSeries;
 
-  procedure DoError; {$IF CompilerVersion>=37}noreturn;{$ENDIF}
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create('Error: Cannot determine Series class from Data'+AData.Name);
   end;
