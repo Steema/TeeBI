@@ -24,7 +24,8 @@ uses
 type
   {
     TDataSplit returns two Indices arrays (A and B) with the row numbers for
-    both parts of the split
+    both parts of the split.
+    Split can be done by percentage (ie: 60% - 40%) or absolute Count number of rows.
   }
 
   TSplitBy=(Percent,Count);
@@ -77,6 +78,9 @@ type
   end;
 
 implementation
+
+uses
+  {System.}SysUtils;
 
 { TSplitOptions }
 
@@ -366,6 +370,25 @@ type
 // Note: Middle table names are lost.
 class procedure TDataFlatten.Flatten(const AData: TDataItem);
 
+  // Make sure AData.Name is not already duplicated, existing at AParent.
+  procedure CheckUniqueName(const AParent,AData:TDataItem);
+  var tmp : String;
+      Version : Integer;
+  begin
+    Version:=0;
+
+    tmp:=AData.Name;
+
+    while AParent.Items.Exists(tmp) do
+    begin
+      Inc(Version);
+      tmp:=AData.Name+IntToStr(Version); // 'Foo1', 'Foo2', etc
+    end;
+
+    if AData.Name<>tmp then
+       AData.Name:=tmp;
+  end;
+
   function LastParent:TDataItem;
   begin
     result:=AData;
@@ -398,7 +421,10 @@ begin
     tmp:=LastParent;
 
     if AData.Parent<>tmp then
-       tmp.Items.Insert(AData,tmp.Items.Count);
+    begin
+      CheckUniqueName(tmp,AData);
+      tmp.Items.Insert(AData,tmp.Items.Count);
+    end;
   end;
 end;
 
