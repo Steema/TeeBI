@@ -554,6 +554,12 @@ begin
   begin
     Inc(ARow);
 
+    if ARow>=L then
+    begin
+      ARow:=-1;
+      Exit;
+    end;
+
     tmpRowItems:=Items[ARow].Count;
 
     if (tmp+tmpRowItems)>=AIndex then
@@ -563,12 +569,6 @@ begin
     end;
 
     Inc(tmp,tmpRowItems);
-
-    if ARow>=L then
-    begin
-      ARow:=-1;
-      Exit;
-    end;
   end;
 end;
 
