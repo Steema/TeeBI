@@ -39,6 +39,7 @@ type
     procedure ReadOrigin(Reader: TReader);
     procedure SetDataItem(const Value: TDataItem); // <-- do not rename to SetData (FMX conflict)
     procedure SetProvider(const Value: TComponent);
+    procedure TryDestroyData;
     procedure WriteOrigin(Writer: TWriter);
   protected
     procedure AddNotify;
@@ -253,10 +254,7 @@ end;
 Destructor TBIDataControl.Destroy;
 begin
   RemoveNotify;
-
-  if OwnsData then
-     DestroyData;
-
+  TryDestroyData;
   inherited;
 end;
 
@@ -418,6 +416,8 @@ begin
   if FData<>Value then
   begin
     RemoveNotify;
+
+    TryDestroyData;
     FData:=Value;
 
     tmp:=TComponentImporter.ProviderOf(FData);
@@ -442,6 +442,7 @@ begin
 
   InternalSetProvider(Value);
 
+  TryDestroyData;
   FData:=nil;
 
   AddNotify;
@@ -515,6 +516,12 @@ end;
 procedure TBIDataControl.ReadOrigin(Reader: TReader);
 begin
   IOrigin:=Reader.ReadString;
+end;
+
+procedure TBIDataControl.TryDestroyData;
+begin
+  if OwnsData then
+     DestroyData;
 end;
 
 procedure TBIDataControl.DestroyData;
