@@ -126,6 +126,7 @@ type
     procedure BindTo(const AData:TDataItem);
     procedure Colorize(const AItems:TDataColorizers);
     procedure Duplicates(const AData:TDataItem; const Hide:Boolean);
+    procedure FocusCell(const ARow:Integer; const AData:TDataItem);
     procedure Invalidate; override;
 
     property CurrentRow:Integer read GetCurrentRow write SetCurrentRow;
@@ -540,6 +541,11 @@ begin
          Exit(TSplitter(Controls[t]));
 
   result:=nil;
+end;
+
+procedure TBIGrid.FocusCell(const ARow: Integer; const AData: TDataItem);
+begin
+  Plugin.FocusCell(ARow,AData);
 end;
 
 procedure TBIGrid.TryShowItems;

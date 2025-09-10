@@ -53,6 +53,7 @@ type
     procedure BindTo(const ADataSet:TDataSet); virtual; abstract;
     procedure Colorize(const AItems:TDataColorizers); virtual; abstract;
     procedure Duplicates(const AData:TDataItem; const Hide:Boolean); virtual; abstract;
+    procedure FocusCell(const ARow:Integer; const AData:TDataItem); virtual;
 
     function GetControl:TObject; virtual; abstract; // Returns TObject, for compat VCL <-> FMX
     function GetObject:TObject; virtual; abstract;
@@ -66,5 +67,12 @@ type
   end;
 
 implementation
+
+{ TBIGridPlugin }
+
+procedure TBIGridPlugin.FocusCell(const ARow: Integer; const AData: TDataItem);
+begin
+ // Do nothing by default
+end;
 
 end.

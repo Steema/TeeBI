@@ -114,6 +114,7 @@ type
     procedure DestroyMenu;
     function DetailItems:TDataArray;
     procedure DetailClicked(Sender: TObject);
+    procedure DoFocusCell(const ARow:Integer; const AData:TDataItem);
     procedure DoGroupBy(Sender:TObject);
     procedure DoTitleClick(AColumn:TColumn);
     procedure ExportDataClick(Sender:TObject);
@@ -128,6 +129,7 @@ type
     procedure MenuSearchClick(Sender: TObject);
     procedure MenuSortClick(Sender:TObject);
     function ParentsOf(AField:TField):Integer;
+    function RealRecordNumber(const ADataSet:TBIDataSet; const ARow:Integer):Integer;
     procedure RepaintTotals;
     procedure ResetFeatures;
     procedure RowNumbersClick(Sender:TObject);
@@ -239,6 +241,7 @@ type
     procedure BindTo(const ADataSet:TDataSet); override;
     procedure Colorize(const AItems:TDataColorizers); override;
     procedure Duplicates(const AData:TDataItem; const Hide:Boolean); override;
+    procedure FocusCell(const ARow:Integer; const AData:TDataItem); override;
     function GetControl: TObject; override;
     function GetObject:TObject; override;
   end;
@@ -367,6 +370,11 @@ begin
       IGrid.InvalidateGrid;
     end;
   end;
+end;
+
+procedure TBIDBGridPlugin.FocusCell(const ARow:Integer; const AData:TDataItem);
+begin
+  IGrid.DoFocusCell(ARow,AData);
 end;
 
 function TBIDBGridPlugin.GetControl: TObject;
@@ -513,8 +521,28 @@ begin
   end;
 end;
 
-procedure TBIDBGrid.ChangedSearch(Sender:TObject);
+procedure TBIDBGrid.DoFocusCell(const ARow:Integer; const AData:TDataItem);
+var tmp : TBIDataset;
 begin
+  tmp:=BIDataset;
+
+  if tmp<>nil then
+  begin
+    tmp.RecNo:=tmp.Cursor.IndexOfRow(ARow)+1;
+    SelectedIndex:=ColumnOf(AData).Index;
+  end;
+end;
+
+procedure TBIDBGrid.ChangedSearch(Sender:TObject);
+var tmpRow : TInteger;
+    tmpData : TDataItem;
+begin
+  // Obtain the row and data for the Nth "hit"
+  IHighLight.Search.Hits.Find(IHighLight.Current,tmpRow,tmpData);
+
+  if tmpRow<>-1 then
+     DoFocusCell(tmpRow,tmpData);
+
   Repaint;
 end;
 
@@ -1100,10 +1128,14 @@ begin
   result:=DefaultRowHeight div 2;
 end;
 
+function TBIDBGrid.RealRecordNumber(const ADataSet:TBIDataSet; const ARow:Integer):Integer;
+begin
+  result:=ADataSet.Cursor.Position(ADataSet.RecNo-1+ARow-Row);
+end;
+
 function TBIDBGrid.TryColorize(const ARow,ACol:Integer; const AColumn:TColumn; out AIndex:Integer; out APercent:Double):Boolean;
 var tmpData : TBIDataSet;
     tmpItem : TDataItem;
-    tmpRecNo : Integer;
 begin
   result:=False;
 
@@ -1114,10 +1146,8 @@ begin
     tmpItem:=tmpData.DataOf(AColumn.Field);
 
     if tmpItem<>nil then
-    begin
-      tmpRecNo:=tmpData.Cursor.Position(tmpData.RecNo-1+ARow-Row);
-      result:=FColorizers.TryColorize(tmpItem,tmpRecNo,APercent,AIndex);
-    end;
+       result:=FColorizers.TryColorize(tmpItem,
+                 RealRecordNumber(tmpData,ARow),APercent,AIndex);
   end;
 end;
 
@@ -1375,7 +1405,7 @@ var
     begin
       tmpData:=TBIDataSet(DataSource.DataSet);
       tmpItem:=tmpData.DataOf(Col.Field);
-      tmpRecNo:=tmpData.Cursor.Position(tmpData.RecNo-1+ARow-Row);
+      tmpRecNo:=RealRecordNumber(tmpData,ARow);
 
       if tmpRecNo>-1 then
       begin
