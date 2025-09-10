@@ -101,61 +101,15 @@ object DataManager: TDataManager
     BevelOuter = bvNone
     TabOrder = 1
     OnResize = PanelSearchResize
-    object PanelStores: TPanel
-      Left = 359
-      Top = 0
-      Width = 274
-      Height = 41
-      Align = alRight
-      BevelOuter = bvNone
-      TabOrder = 0
-      OnResize = PanelStoresResize
-      object Label1: TLabel
-        Left = 11
-        Top = 14
-        Width = 30
-        Height = 13
-        Caption = 'S&tore:'
-        FocusControl = CBStores
-      end
-      object CBStores: TComboBox
-        Left = 44
-        Top = 11
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        DropDownCount = 25
-        TabOrder = 0
-        OnChange = CBStoresChange
-      end
-      object PanelManage: TPanel
-        Left = 196
-        Top = 0
-        Width = 78
-        Height = 41
-        Align = alRight
-        BevelOuter = bvNone
-        TabOrder = 1
-        ExplicitLeft = 195
-        object BManageStores: TButton
-          Left = 5
-          Top = 9
-          Width = 69
-          Height = 25
-          Caption = '&Manage...'
-          TabOrder = 0
-          OnClick = BManageStoresClick
-        end
-      end
-    end
-    object Panel1: TPanel
+    object PanelSearchCombo: TPanel
       Left = 0
       Top = 0
-      Width = 359
+      Width = 360
       Height = 41
       Align = alClient
       BevelOuter = bvNone
-      TabOrder = 1
+      TabOrder = 0
+      ExplicitWidth = 241
       object LSearch: TLabel
         Left = 9
         Top = 14
@@ -171,6 +125,44 @@ object DataManager: TDataManager
         Height = 21
         TabOrder = 0
         OnChange = ESearchChange
+      end
+    end
+    object PanelStores: TPanel
+      Left = 360
+      Top = 0
+      Width = 273
+      Height = 41
+      Align = alRight
+      BevelOuter = bvNone
+      TabOrder = 1
+      OnClick = PanelStoresClick
+      ExplicitLeft = 118
+      object LStore: TLabel
+        Left = 12
+        Top = 15
+        Width = 30
+        Height = 13
+        Caption = 'S&tore:'
+        FocusControl = CBStores
+      end
+      object BManageStores: TButton
+        Left = 197
+        Top = 10
+        Width = 69
+        Height = 25
+        Caption = '&Manage...'
+        TabOrder = 0
+        OnClick = BManageStoresClick
+      end
+      object CBStores: TComboBox
+        Left = 46
+        Top = 12
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        DropDownCount = 25
+        TabOrder = 1
+        OnChange = CBStoresChange
       end
     end
   end

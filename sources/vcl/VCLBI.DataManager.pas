@@ -34,10 +34,7 @@ type
     BCancel: TButton;
     PanelSearch: TPanel;
     Tree: TTreeView;
-    PanelStores: TPanel;
-    Label1: TLabel;
-    CBStores: TComboBox;
-    Panel1: TPanel;
+    PanelSearchCombo: TPanel;
     LSearch: TLabel;
     ESearch: TEdit;
     BAdd: TButton;
@@ -54,7 +51,7 @@ type
     DataMenu: TPopupMenu;
     ViewData1: TMenuItem;
     BRename: TButton;
-    PanelManage: TPanel;
+    PanelStores: TPanel;
     BManageStores: TButton;
     TabLinks: TTabSheet;
     Custommanual1: TMenuItem;
@@ -67,6 +64,8 @@ type
     CBParallel: TCheckBox;
     CBStoponerrors: TCheckBox;
     ImportProgress: TProgressBar;
+    LStore: TLabel;
+    CBStores: TComboBox;
     procedure TreeChange(Sender: TObject; Node: TTreeNode);
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
       var AllowExpansion: Boolean);
@@ -90,8 +89,8 @@ type
     procedure PanelSearchResize(Sender: TObject);
     procedure ViewData1Click(Sender: TObject);
     procedure BRenameClick(Sender: TObject);
-    procedure PanelStoresResize(Sender: TObject);
     procedure Custommanual1Click(Sender: TObject);
+    procedure PanelStoresClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -696,10 +695,12 @@ begin
 end;
 
 procedure TDataManager.FormResize(Sender: TObject);
+const
+  MinStoresWidth=420;
 begin
   if PanelStores.Visible then
   begin
-    if Width<(270+274) then
+    if Width<MinStoresWidth then
     begin
       PanelStores.Parent:=Self;
       PanelStores.Align:=alTop;
@@ -712,7 +713,7 @@ begin
     begin
       PanelStores.Parent:=PanelSearch;
       PanelStores.Align:=alRight;
-      PanelStores.Width:=274;
+      PanelStores.Width:=MinStoresWidth;
     end;
   end;
 end;
@@ -957,6 +958,12 @@ begin
      ShowDataLinks;
 end;
 
+procedure TDataManager.PanelStoresClick(Sender: TObject);
+begin
+  LStore.Visible:=PanelStores.Width>275;
+  BManageStores.Visible:=PanelStores.Width>150;
+end;
+
 procedure TDataManager.PanelSearchResize(Sender: TObject);
 var tmp : Integer;
 begin
@@ -974,20 +981,6 @@ begin
   end
   else
     PanelSearch.Visible:=True;
-end;
-
-procedure TDataManager.PanelStoresResize(Sender: TObject);
-var tmp : Integer;
-begin
-  PanelManage.Visible:=PanelStores.Width>150;
-
-  if PanelManage.Visible then
-     tmp:=PanelStores.Width-PanelManage.Width-CBStores.Left
-  else
-     tmp:=PanelStores.Width-CBStores.Left-4;
-
-  if tmp>20 then
-     CBStores.Width:=tmp;
 end;
 
 procedure TDataManager.SelectData(const AData: TDataItem);
