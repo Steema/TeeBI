@@ -129,6 +129,7 @@ type
     procedure GuessItems(const S:String);
 
     function IndexOf(const AData:TDataItem):Integer;
+    function IndexOfRow(const ARow:Integer):Integer;
 
     procedure LoadData;
 
@@ -2571,6 +2572,16 @@ begin
          Exit(t);
 
   result:=-1;
+end;
+
+function TDataCursor.IndexOfRow(const ARow: Integer): Integer;
+var t : Integer;
+begin
+  for t:=Low(Index) to High(Index) do
+      if Index[t]=ARow+1 then
+         Exit(t);
+
+  result:=ARow;
 end;
 
 procedure TDataCursor.SetItems(const AItems:TDataArray);
