@@ -144,17 +144,25 @@ type
     property View3D default False;
   end;
 
+  TChartSeriesArray=Array of TChartSeries;
+
   // Converts data from a Chart or one or more Series to a TDataItem
   TChartData=record
   private
     class procedure InitNotMandatory(const ASeries:TChartSeries;
                                      const ACount:Integer); static;
 
+    class function InternalFrom(const AData: TDataArray;
+                                const AOwner:TComponent;
+                                const AClass:TChartSeriesClass;
+                                const MaxSeries:Integer): TChartSeriesArray; static;
+
     class function NewSeries(const AOwner:TComponent;
                              const AClass:TChartSeriesClass):TChartSeries; static;
   public
     class procedure AddSeries(const ASeries: TChartSeries; const ADest: TDataItem); static;
 
+    // Convert from TDataItem to -> Series
     class function From(const AData:TDataArray;
                         const AOwner:TComponent;
                         const AClass:TChartSeriesClass=nil):TChartSeries; overload; static;
@@ -163,6 +171,11 @@ type
                         const AOwner:TComponent;
                         const AClass:TChartSeriesClass=nil):TChartSeries; overload; static;
 
+    class function From(const AData:TDataItem;
+                        const AClass:TChartSeriesClass=nil;
+                        const AOwner:TComponent=nil):TChartSeriesArray; overload; static;
+
+    // Convert from Series or Chart to -> TDataItem
     class function From(const ASeries:TChartSeries):TDataItem; overload; static;
     class function From(const AChart:TCustomChart):TDataItem; overload; static;
     class function From(const ASeries:Array of TChartSeries):TDataItem; overload; static;
@@ -457,9 +470,10 @@ end;
 type
   TLabelsListAccess=class(TLabelsList);
 
-class function TChartData.From(const AData: TDataArray;
+class function TChartData.InternalFrom(const AData: TDataArray;
                                const AOwner:TComponent;
-                               const AClass:TChartSeriesClass): TChartSeries;
+                               const AClass:TChartSeriesClass;
+                               const MaxSeries:Integer): TChartSeriesArray;
 
   procedure CopyData(const AList:TChartValueList; const AData:TDataItem);
   begin
@@ -557,7 +571,7 @@ class function TChartData.From(const AData: TDataArray;
       result:=AClass.Create(AOwner);
   end;
 
-  procedure AddLabels;
+  procedure AddLabels(const ADest:TChartSeries);
   var t : Integer;
       tmp : TDataItem;
   begin
@@ -567,7 +581,7 @@ class function TChartData.From(const AData: TDataArray;
 
       if tmp.Kind=TDataKind.dkText then
       begin
-        AddNullsText(result,tmp.TextData);
+        AddNullsText(ADest,tmp.TextData);
         break;
       end;
     end;
@@ -585,119 +599,178 @@ class function TChartData.From(const AData: TDataArray;
 
 var
   tmpNum : Integer;
+  CurrentData : Integer;
 
-  procedure CopyValues;
-  var t,
-      tmpPos : Integer;
+  procedure AddNewSeries(const ASeries:TChartSeries);
 
-      tmp : TDataItem;
-      tmpList : TChartValueList;
-      tmpCount : Integer;
-  begin
-    if tmpNum<result.ValuesList.Count then
-       tmpPos:=1
-    else
-       tmpPos:=0;  // start at X values
+    procedure CopyValues(const ADest:TChartSeries);
+    var t,
+        L,
+        tmpPos : Integer;
 
-    tmpCount:=0;
-
-    for t:=0 to AData.Count-1 do
+        tmp : TDataItem;
+        tmpList : TChartValueList;
+        tmpCount : Integer;
     begin
-      tmp:=AData[t];
+      if tmpNum<ADest.ValuesList.Count then
+         tmpPos:=1
+      else
+         tmpPos:=0;  // start at X values
 
-      if IsNumberOrDateTime(tmp) then
+      L:=Length(result);
+
+      if L>1 then
       begin
-        if tmpNum=1 then
-           AddXY(result,tmp)
-        else
+        ADest.ValuesList[0].Count:=result[0].ValuesList[0].Count;
+        ADest.ValuesList[0].Value:=result[0].ValuesList[0].Value;
+        Inc(tmpPos);
+      end;
+
+      tmpCount:=0;
+
+      while CurrentData<AData.Count do
+      begin
+        tmp:=AData[CurrentData];
+
+        if IsNumberOrDateTime(tmp) then
         begin
-          tmpList:=FindValuesList(result.ValuesList,tmp.Name);
+          if tmpNum=1 then
+             AddXY(ADest,tmp)
+          else
+          begin
+            // Try to find a list with the same name, ie: "Y"
+            tmpList:=FindValuesList(ADest.ValuesList,tmp.Name);
 
-          if tmpList=nil then
-             tmpList:=result.ValuesList[tmpPos];
+            if tmpList=nil then
+               if ADest.ValuesList.Count>tmpPos then
+                  tmpList:=ADest.ValuesList[tmpPos];
 
-          CopyData(tmpList,tmp);
+            if tmpList=nil then
+            begin
+              // We should create another series
+              AddNewSeries(DoCreateSeries(tmpNum));
+            end
+            else
+            begin
+              CopyData(tmpList,tmp);
 
-          if tmpList.Count>tmpCount then
-             tmpCount:=tmpList.Count;
+              if tmpList.Count>tmpCount then
+                 tmpCount:=tmpList.Count;
+            end;
+          end;
+
+          Inc(tmpPos);
         end;
 
-        Inc(tmpPos);
+        Inc(CurrentData);
+      end;
+
+      if ADest.NotMandatoryValueList.Count=0 then
+      begin
+        InitNotMandatory(ADest,tmpCount);
+
+        ADest.NotMandatoryValueList.DateTime:=False;
       end;
     end;
 
-    if result.NotMandatoryValueList.Count=0 then
-    begin
-      InitNotMandatory(result,tmpCount);
+  var L : Integer;
+  begin
+    L:=Length(result);
+    SetLength(result,L+1);
 
-      result.NotMandatoryValueList.DateTime:=False;
+    result[L]:=ASeries;
+
+    if AData.Count=1 then
+    begin
+      AddSingleItem(ASeries,AData[0]);
+      ASeries.ColorEachPoint:=True;
+    end
+    else
+    begin
+      AddLabels(ASeries);
+      CopyValues(ASeries);
+
+      {$IFNDEF SERIESLABELSRESIZE}
+      for t:=0 to AData.Count-1 do
+      begin
+        tmp:=AData[t];
+
+        if tmp.Kind=TDataKind.dkText then
+        begin
+          for tt:=0 to ASeries.Count-1 do
+              ASeries.SetNull(tt,False);
+
+          break;
+        end;
+      end;
+      {$ENDIF}
     end;
+  end;
+
+  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
+  begin
+    raise EBIException.Create('Error: Cannot determine Series class from DataItem');
   end;
 
 {$IFNDEF SERIESLABELSRESIZE}
 var t,tt : Integer;
     tmp : TDataItem;
 {$ENDIF}
+
+var tmp : TChartSeries;
 begin
   tmpNum:=NumericItemsOf(AData);
 
-  result:=DoCreateSeries(tmpNum);
+  tmp:=DoCreateSeries(tmpNum);
+
+  if tmp=nil then
+     DoError;
+
+  CurrentData:=0;
+
+  AddNewSeries(tmp);
 
   if result=nil then
-     Exit; // DoError !
+     DoError;
+end;
 
-  if AData.Count=1 then
-  begin
-    AddSingleItem(result,AData[0]);
-    result.ColorEachPoint:=True;
-  end
+class function TChartData.From(const AData: TDataArray;
+                               const AOwner:TComponent;
+                               const AClass:TChartSeriesClass): TChartSeries;
+var tmp : TChartSeriesArray;
+begin
+  tmp:=InternalFrom(AData,AOwner,AClass,1);
+
+  if tmp=nil then
+     result:=nil
+  else
+     result:=tmp[0];
+end;
+
+function DataToArray(const AData:TDataItem):TDataArray;
+begin
+  AData.Load;
+
+  if AData.AsTable then
+     result:=AData.Items.AsArray
   else
   begin
-    AddLabels;
-    CopyValues;
-
-    {$IFNDEF SERIESLABELSRESIZE}
-    for t:=0 to AData.Count-1 do
-    begin
-      tmp:=AData[t];
-
-      if tmp.Kind=TDataKind.dkText then
-      begin
-        for tt:=0 to result.Count-1 do
-            result.SetNull(tt,False);
-
-        break;
-      end;
-    end;
-    {$ENDIF}
-  end
+    result:=nil;
+    result.Add(AData);
+  end;
 end;
 
 class function TChartData.From(const AData:TDataItem;
                                const AOwner:TComponent;
                                const AClass:TChartSeriesClass=nil):TChartSeries;
-
-  procedure DoError; {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
-  begin
-    raise EBIException.Create('Error: Cannot determine Series class from Data'+AData.Name);
-  end;
-
-var tmp : TDataArray;
 begin
-  AData.Load;
+  result:=From(DataToArray(AData),AOwner,AClass);
+end;
 
-  if AData.AsTable then
-     tmp:=AData.Items.AsArray
-  else
-  begin
-    tmp:=nil;
-    tmp.Add(AData);
-  end;
-
-  result:=From(tmp,AOwner,AClass);
-
-  if result=nil then
-     DoError;
+class function TChartData.From(const AData: TDataItem;
+  const AClass: TChartSeriesClass; const AOwner: TComponent): TChartSeriesArray;
+begin
+  result:=InternalFrom(DataToArray(AData),AOwner,AClass,0);
 end;
 
 { TBITChart }
