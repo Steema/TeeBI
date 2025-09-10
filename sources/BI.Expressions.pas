@@ -741,7 +741,17 @@ begin
      result:=dkBoolean
   else
   if Expression is TArithmeticExpression then
-     result:=TDataExpression.KindOf(TArithmeticExpression(Expression).Left) // Right?
+  begin
+    result:=TDataExpression.KindOf(TArithmeticExpression(Expression).Left); // also consider Right?
+
+    // Special case for division, type kind should be promoted to floating point,
+    // to consider potential decimals in the division result.
+    if TArithmeticExpression(Expression).Operand=TArithmeticOperand.Divide then
+       if (result<>TDataKind.dkSingle) and
+          (result<>TDataKind.dkDouble) and
+          (result<>TDataKind.dkExtended) then
+             result:=TDataKind.dkDouble;
+  end
   else
   if Expression is TUnaryNotExpression then
      result:=dkBoolean
