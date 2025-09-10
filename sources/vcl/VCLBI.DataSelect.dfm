@@ -23,6 +23,8 @@ object DataSelector: TDataSelector
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change
+    ExplicitWidth = 420
+    ExplicitHeight = 440
     object TabSource: TTabSheet
       Caption = 'Source'
       ImageIndex = 2
@@ -61,6 +63,8 @@ object DataSelector: TDataSelector
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 440
+    ExplicitWidth = 420
     object PanelAlignButtons: TPanel
       Left = 241
       Top = 0
@@ -69,6 +73,7 @@ object DataSelector: TDataSelector
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitLeft = 235
       object BOK: TButton
         Left = 0
         Top = 8
