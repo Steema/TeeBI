@@ -360,7 +360,11 @@ type
     class function From(const AData:TInt64Array):TChartValues; overload; static;
     class function From(const AData:TSingleArray):TChartValues; overload; static;
     class function From(const AData:BI.Arrays.TDoubleArray):TChartValues; overload; static;
+
+    {$IFDEF CPUX86}
     class function From(const AData:TExtendedArray):TChartValues; overload; static;
+    {$ENDIF}
+
     class function From(const AData:TDateTimeArray):TChartValues; overload; static;
     class function From(const AItem:TDataItem):TChartValues; overload; static;
   end;
@@ -419,6 +423,7 @@ begin
      DoLoop;
 end;
 
+{$IFDEF CPUX86}
 class function TArrayToValues.From(const AData:TExtendedArray):TChartValues;
 
   procedure DoLoop; // this is to skip hint: unused: t
@@ -436,6 +441,7 @@ begin
   else
      DoLoop;
 end;
+{$ENDIF}
 
 class function TArrayToValues.From(const AData:TDateTimeArray):TChartValues;
 
@@ -604,8 +610,7 @@ var
   procedure AddNewSeries(const ASeries:TChartSeries);
 
     procedure CopyValues(const ADest:TChartSeries);
-    var t,
-        L,
+    var L,
         tmpPos : Integer;
 
         tmp : TDataItem;
@@ -673,6 +678,27 @@ var
       end;
     end;
 
+   {$IFNDEF SERIESLABELSRESIZE}
+   procedure SetSeriesNulls;
+   var tmp : TDataItem;
+       t,
+       tt : Integer;
+   begin
+     for t:=0 to AData.Count-1 do
+     begin
+       tmp:=AData[t];
+
+       if tmp.Kind=TDataKind.dkText then
+       begin
+         for tt:=0 to ASeries.Count-1 do
+             ASeries.SetNull(tt,False);
+
+         break;
+       end;
+     end;
+   end;
+  {$ENDIF}
+
   var L : Integer;
   begin
     L:=Length(result);
@@ -691,18 +717,7 @@ var
       CopyValues(ASeries);
 
       {$IFNDEF SERIESLABELSRESIZE}
-      for t:=0 to AData.Count-1 do
-      begin
-        tmp:=AData[t];
-
-        if tmp.Kind=TDataKind.dkText then
-        begin
-          for tt:=0 to ASeries.Count-1 do
-              ASeries.SetNull(tt,False);
-
-          break;
-        end;
-      end;
+      AddSeriesNulls;
       {$ENDIF}
     end;
   end;
@@ -711,11 +726,6 @@ var
   begin
     raise EBIException.Create('Error: Cannot determine Series class from DataItem');
   end;
-
-{$IFNDEF SERIESLABELSRESIZE}
-var t,tt : Integer;
-    tmp : TDataItem;
-{$ENDIF}
 
 var tmp : TChartSeries;
 begin
