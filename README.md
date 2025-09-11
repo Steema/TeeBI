@@ -39,7 +39,7 @@ A simple class to implement in-memory database complex structures, to provide:
 
 - Supported development environments: 
 
-  *  Embarcadero RAD Studio Athens 12.3, and from Studio XE4 and up (Delphi and C++)
+  *  Embarcadero RAD Studio Florence 13.0, and from Studio XE4 and up (Delphi and C++)
   *  [Lazarus](https://www.lazarus-ide.org/) / FreePascal
   
 ### Getting started
