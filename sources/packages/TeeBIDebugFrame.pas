@@ -40,7 +40,8 @@ type
     Code : Integer;
   end;
 
-  TDataItemDebugFrame = class(TFrame, IOTADebuggerVisualizerExternalViewerUpdater, IOTAThreadNotifier)
+  TDataItemDebugFrame = class(TFrame, IOTADebuggerVisualizerExternalViewerUpdater,
+           IOTAThreadNotifier, IOTAThreadNotifier160)
     StatusLabel: TLabel;
   private
     { Private declarations }
@@ -79,10 +80,14 @@ type
     procedure Modified;
     {$IF CompilerVersion>=35} // RAD 11.0 Alexandria and up
     procedure EvaluateComplete(const ExprStr, ResultStr: string; CanModify: Boolean;
-      ResultAddress, ResultSize: LongWord; ReturnCode: Integer);
+      ResultAddress, ResultSize: LongWord; ReturnCode: Integer); overload;
     {$ENDIF}
     procedure ModifyComplete(const ExprStr, ResultStr: string; ReturnCode: Integer);
     procedure ThreadNotify(Reason: TOTANotifyReason);
+
+    { IOTAThreadNotifier160 }
+    procedure EvaluateComplete(const ExprStr, ResultStr: string; CanModify: Boolean;
+      ResultAddress: TOTAAddress; ResultSize: LongWord; ReturnCode: Integer); overload;
   end;
 
 implementation
@@ -188,6 +193,15 @@ begin
   end
   else
     result:=nil;
+end;
+
+procedure TDataItemDebugFrame.EvaluateComplete(const ExprStr, ResultStr: string;
+  CanModify: Boolean; ResultAddress: TOTAAddress; ResultSize: LongWord;
+  ReturnCode: Integer);
+begin
+  FDebug.Completed := True;
+  FDebug.Deferred.Result := ResultStr;
+  FDebug.Deferred.Code:=ReturnCode;
 end;
 
 procedure TDataItemDebugFrame.EvaluateExpression(const Context: TDebugContext; const Expression, TypeName,EvalResult: String);

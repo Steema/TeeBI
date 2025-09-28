@@ -7,7 +7,7 @@ object DataItemDebugFrame: TDataItemDebugFrame
   object StatusLabel: TLabel
     Left = 0
     Top = 0
-    Width = 482
+    Width = 58
     Height = 25
     Align = alTop
     Alignment = taCenter
