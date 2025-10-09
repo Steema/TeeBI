@@ -528,7 +528,7 @@ begin
   {$IFNDEF AUTOREFCOUNT}
   Data.Free;
   {$ENDIF}
-  Data:=nil;
+  FData:=nil;
 end;
 
 end.
