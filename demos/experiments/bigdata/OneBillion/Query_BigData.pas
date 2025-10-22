@@ -8,13 +8,24 @@ interface
 
 }
 
-uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VCLBI.DataControl, VCLBI.Visualizer,
-  Vcl.ExtCtrls, Vcl.StdCtrls, BI.DataItem, BI.Persist, BI.Query;
-
 // Comment to disable using TeeChart
 {$DEFINE USE_CHARTS}
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VCLBI.DataControl,
+
+  {$IFDEF USE_CHARTS}
+  VCLTee.TeeConst,
+
+    {$IF TeeMsg_TeeChartPalette='TeeChart'}
+    {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
+    {$ENDIF}
+  {$ENDIF}
+
+  VCLBI.Visualizer,
+  Vcl.ExtCtrls, Vcl.StdCtrls, BI.DataItem, BI.Persist, BI.Query;
+
 
 type
   TFormQuery = class(TForm)
@@ -48,8 +59,14 @@ implementation
 uses
   // These units enable Chart visualization (using TeeChart)
   {$IFDEF USE_CHARTS}
-  VCLBI.Visualizer.Chart, VCLBI.Chart.Geo, VCLBI.Chart.ThreeD,
-  VCLBI.Chart.Financial, VCLBI.Editor.Visualizer.Chart,
+  VCLBI.Visualizer.Chart,
+
+  {$IFDEF TEEPRO}
+  // "Pro" chart styles
+  VCLBI.Chart.Geo, VCLBI.Chart.ThreeD, VCLBI.Chart.Financial,
+  {$ENDIF}
+
+  VCLBI.Editor.Visualizer.Chart,
   {$ENDIF}
 
   {$IFDEF FPC}
