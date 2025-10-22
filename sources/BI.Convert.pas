@@ -11,6 +11,7 @@ interface
 uses
   BI.DataItem;
 
+type
 {
   Use TDataKindConvert.Convert method to change the "Kind" property of a
   TDataItem object.
@@ -24,19 +25,28 @@ uses
     TDataItem AsTable (multiple fields) cannot be converted.
     All Items must be converted individually.
 }
-
-type
   TDataKindConvert=record
   public
     class function CanConvert(const AData:TDataItem; const AKind:TDataKind):Boolean; static;
     class function Convert(const AData:TDataItem; const AKind:TDataKind):Boolean; static;
   end;
 
+{
+  Use TDateTimeConvert methods to convert from a single DateTime data item to a
+  structure of sub-items (Day,Month,Year, etc), and vice-versa: from a structure
+  to a single TDataItem.
+}
+  TDateTimeConvert=record
+  public
+    class function ToTable(const AData:TDataItem):TDataItem; static;
+    class function ToDateTime(const AData:TDataItem):TDataItem; static;
+  end;
+
 implementation
 
 uses
   BI.Arrays,
-  {System.}SysUtils, {System.}Math;
+  {System.}SysUtils, {System.}Math, {System.}DateUtils;
 
 {$IFDEF FPC}
 {$IFNDEF CPUX64}
@@ -600,6 +610,175 @@ begin
   else
     result:=AKind=TDataKind.dkUnknown;
   end;
+end;
+
+{ TDateTimeConvert }
+
+const
+  stDay    = 'Day';
+  stMonth  = 'Month';
+  stYear   = 'Year';
+  stHour   = 'Hour';
+  stMinute = 'Minute';
+  stSecond = 'Second';
+  stMillisecond = 'Millisecond';
+
+// Returns a TDataItem of DateTime kind and fills it with the datetime
+// values from the Day,Month,Year,Hour,Minute,Second and Millisecond item structure.
+class function TDateTimeConvert.ToDateTime(const AData: TDataItem): TDataItem;
+
+  procedure DoError(const AMessage:String); noreturn;
+  begin
+    raise EBIException.Create(AMessage);
+  end;
+
+var
+  _day, _month, _year,
+  _hour, _minute, _second, _millisecond : TDataItem;
+
+  procedure DoTime(const AIndex:Integer);
+  var msec : Word;
+  begin
+    if _millisecond=nil then
+       msec:=0
+    else
+       msec:=_millisecond.Int32Data[AIndex];
+
+    result.DateTimeData[AIndex]:=
+       EncodeTime(_hour.Int32Data[AIndex],
+                  _minute.Int32Data[AIndex],
+                  _second.Int32Data[AIndex],
+                  msec);
+  end;
+
+  procedure DoDate(const AIndex:Integer);
+  begin
+    result.DateTimeData[AIndex]:=
+       EncodeDate(_year.Int32Data[AIndex],
+                  _month.Int32Data[AIndex],
+                  _day.Int32Data[AIndex]);
+  end;
+
+  procedure DoDateTime(const AIndex:Integer);
+  var msec : Word;
+  begin
+    if _millisecond=nil then
+       msec:=0
+    else
+       msec:=_millisecond.Int32Data[AIndex];
+
+    result.DateTimeData[AIndex]:=
+       EncodeDateTime(_year.Int32Data[AIndex],
+                  _month.Int32Data[AIndex],
+                  _day.Int32Data[AIndex],
+                  _hour.Int32Data[AIndex],
+                  _minute.Int32Data[AIndex],
+                  _second.Int32Data[AIndex],
+                  msec);
+  end;
+
+var tmp : String;
+    hasDate,
+    hasTime : Boolean;
+
+    t : TLoopInteger;
+begin
+  if AData.AsTable then
+  begin
+    _day:=AData.Items.Find(stDay);
+    _month:=AData.Items.Find(stMonth);
+    _year:=AData.Items.Find(stYear);
+
+    hasDate:=(_day<>nil) and
+             (_month<>nil) and
+             (_year<>nil);
+
+    _hour:=AData.Items.Find(stHour);
+    _minute:=AData.Items.Find(stMinute);
+    _second:=AData.Items.Find(stSecond);
+    _millisecond:=AData.Items.Find(stMillisecond);
+
+    hasTime:=(_hour<>nil) and
+             (_minute<>nil) and
+             (_second<>nil);
+
+    if (not hasDate) and (not hasTime) then
+       DoError('Data items must contain either date (Day,Month,Year), time (Hour,Minute,Second and optional Millisecond) or both items');
+
+    tmp:=AData.Name;
+
+    if tmp='' then
+       if hasDate then
+          if hasTime then
+             tmp:='DateTime'
+          else
+             tmp:='Date'
+       else
+       if hasTime then
+          tmp:='Time';
+
+    result:=TDataItem.Create(TDataKind.dkDateTime,tmp);
+
+    result.Resize(AData.Count);
+
+    for t:=0 to AData.Count-1 do
+    begin
+      if hasDate then
+         if hasTime then
+            DoDateTime(t)
+         else
+            DoDate(t)
+      else
+        DoTime(t);
+    end;
+  end
+  else
+    DoError('Data must be a table with Day,Month,Year and optionally Hour,Minute,Second (and Millisecond)');
+end;
+
+// Returns a table (with Day,Month,Year,Hour,Minute,Second and Millisecond items),
+// and fills it with values from AData (which must be of DateTime kind)
+class function TDateTimeConvert.ToTable(const AData: TDataItem): TDataItem;
+var day,month,year,
+    hour,minute,second,millisecond : TDataItem;
+
+    t : TLoopInteger;
+    tmp : TDateTime;
+
+    d,m,y,h,mm,s,msec : Word;
+begin
+  if AData.Kind=TDataKind.dkDateTime then
+  begin
+    result:=TDataItem.Create(True);
+
+    day:=result.Items.Add('Day',TDataKind.dkInt32);
+    month:=result.Items.Add('Month',TDataKind.dkInt32);
+    year:=result.Items.Add('Year',TDataKind.dkInt32);
+    hour:=result.Items.Add('Hour',TDataKind.dkInt32);
+    minute:=result.Items.Add('Minute',TDataKind.dkInt32);
+    second:=result.Items.Add('Second',TDataKind.dkInt32);
+    millisecond:=result.Items.Add('Millisecond',TDataKind.dkInt32);
+
+    result.Resize(AData.Count);
+
+    for t:=0 to AData.Count-1 do
+    begin
+      tmp:=AData.DateTimeData[t];
+
+      DecodeDate(tmp,y,m,d);
+      DecodeTime(tmp,h,mm,s,msec);
+
+      year.Int32Data[t]:=y;
+      month.Int32Data[t]:=m;
+      day.Int32Data[t]:=d;
+      hour.Int32Data[t]:=h;
+      minute.Int32Data[t]:=mm;
+      second.Int32Data[t]:=s;
+      millisecond.Int32Data[t]:=msec;
+    end;
+  end
+  else
+    raise EBIException.Create('Data Kind must be DateTime');
 end;
 
 end.
