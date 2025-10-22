@@ -35,7 +35,7 @@ A simple class to implement in-memory database complex structures, to provide:
 
 - [Import data](https://github.com/Steema/TeeBI/tree/master/demos/delphi/vcl/Import) from files, databases, objects (ORM), [AI](https://github.com/Steema/TeeBI/tree/master/demos/3rd_party/AI) in one or few lines of code
 
-- [Export data](https://github.com/Steema/BI/wiki/exporting) (to csv,pdf,html,xml,excel,json), comparisons and manipulations
+- [Export data](https://github.com/Steema/BI/wiki/exporting) (to csv,pdf,html,xml,excel,json), comparisons, manipulations and [conversions](https://github.com/Steema/TeeBI/tree/master/demos/delphi/vcl/Convert/DateTime)
 
 - Supported development environments: 
 
