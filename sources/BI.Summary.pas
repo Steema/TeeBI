@@ -1372,29 +1372,31 @@ procedure TSummary.Fill;
     end;
   end;
 
+  procedure Fill(t:TLoopInteger);
+  var tmpRow,
+      tmpCol : TInteger;
+  begin
+    if ByRows.Position(t,tmpRow) then
+       if ByCols=nil then
+          DoAccumulate(t,tmpRow)
+       else
+       if ByCols.Position(t,tmpCol) then
+          DoAccumulate(t,tmpRow,tmpCol);
+  end;
+
   procedure FillGroups;
   var t : TLoopInteger;
-      tmpRow,
-      tmpCol : TInteger;
   begin
     for t:=0 to Hops.Main.Count-1 do
     begin
       Hops.Invalidate(t);
-
-      if ByRows.Position(t,tmpRow) then
-         if ByCols=nil then
-            DoAccumulate(t,tmpRow)
-         else
-         if ByCols.Position(t,tmpCol) then
-            DoAccumulate(t,tmpRow,tmpCol);
+      Fill(t);
     end;
   end;
 
   procedure FillGroupsFilter;
   var Pass : Boolean;
       t : TLoopInteger;
-      tmpRow,
-      tmpCol : TInteger;
   begin
     for t:=0 to Hops.Main.Count-1 do
     begin
@@ -1408,12 +1410,7 @@ procedure TSummary.Fill;
            Pass:=Filter.Value; // <-- compiler error, needs temp boolean "Pass"
 
         if Pass then
-           if ByRows.Position(t,tmpRow) then
-              if ByCols=nil then
-                 DoAccumulate(t,tmpRow)
-              else
-              if ByCols.Position(t,tmpCol) then
-                 DoAccumulate(t,tmpRow,tmpCol);
+           Fill(t);
       end;
     end;
   end;
