@@ -180,6 +180,8 @@ type
     Constructor Create(const AExpression:TExpression); overload;
     Constructor Create(const AData:TDataItem; const AExpression:String); overload;
 
+    Destructor Destroy; override;
+
     procedure Fill(const AParent:TDataItem=nil);
 
     class function From(const AExpression:TExpression;
@@ -1004,6 +1006,12 @@ Constructor TExpressionColumn.Create(const AData:TDataItem; const AExpression: S
 begin
   Create(TDataExpression.FromString(AData,AExpression));
   Data:=AData;
+end;
+
+destructor TExpressionColumn.Destroy;
+begin
+  FExpression.Free;
+  inherited;
 end;
 
 class function TExpressionColumn.From(const AExpression:TExpression;
