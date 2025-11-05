@@ -221,12 +221,12 @@ type
     procedure ReadOrigin(Reader: TReader);
     procedure SetData(const Value: TDataItem);
     procedure SetFieldProperties(const AField:TField; const AData:TDataItem);
+    procedure SetFilter(const Value: TBIFilter);
     procedure SetMaster(const Value: TBIDataSet);
     procedure SetProvider(const Value: TComponent);
     procedure SetRowNumbers(const Value: Boolean);
     procedure TryCreateLink;
     procedure WriteOrigin(Writer: TWriter);
-    procedure SetFilter(const Value: TBIFilter);
   protected
     Index : TCursorIndex;
 

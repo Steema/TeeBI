@@ -2236,7 +2236,7 @@ end;
 procedure TDataCursor.SetFilter(const Value: TExpression);
 begin
   if FFilter<>Value then
-     SetDirectFilter(TExpression.Clone(Value));
+     SetDirectFilter(Value); // Pending: TExpression.Clone(Value));
 end;
 
 class procedure TDataCursor.SetMasterExpression(const Master:TDataItem; const MasterCol:TExpression; const AIndex:TInteger);
