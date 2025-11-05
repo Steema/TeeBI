@@ -225,6 +225,8 @@ class function TSelectSamples.CreateSelect(const AOwner:TComponent; const AIndex
 
            // Add City column from nested select query:
            result.Add(CitiesOf('France')['City']);
+
+           // Note: Pending to fix the memory leak of creating CitiesOf and never destroying it
          end;
 
      21: begin
@@ -236,6 +238,8 @@ class function TSelectSamples.CreateSelect(const AOwner:TComponent; const AIndex
            result.Add(Samples.Products['UnitPrice']);
 
            result.Filter:=BiggerThanAverage;
+
+           // Note: Pending to fix the memory leak of creating the nested select and never destroying it
          end;
 
      22: begin
