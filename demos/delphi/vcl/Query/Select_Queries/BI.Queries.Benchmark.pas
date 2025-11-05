@@ -17,7 +17,7 @@ uses
   System.Classes, System.SysUtils, BI.DataItem;
 
 type
-  TQueryBenchmark=record
+  TQueryBenchmark=class
   public
     class function BenchmarkAll(const AItems:TStrings):TDataItem; static;
 
@@ -25,7 +25,8 @@ type
                              out AIterations:Integer;
                              out Rows:Int64):Int64; static;
 
-    class function MultiCPU(const IsMultiCPU,IsThreadLoop:Boolean):Int64; static;
+    class function MultiCPU(const IsMultiCPU,IsThreadLoop:Boolean;
+                            const TimesBench:Integer):Int64; static;
   end;
 
 implementation
@@ -43,6 +44,7 @@ class function TQueryBenchmark.Benchmark(const AIndex:Integer;
                                          out AIterations:Integer;
                                          out Rows:Int64):Int64;
 
+  // Set a different number of benchmark executions depending on the specific sample query
   function GetIterations:Integer;
   begin
     if AIndex=25 then
@@ -146,7 +148,8 @@ begin
   result:=D;
 end;
 
-class function TQueryBenchmark.MultiCPU(const IsMultiCPU,IsThreadLoop:Boolean):Int64;
+class function TQueryBenchmark.MultiCPU(const IsMultiCPU,IsThreadLoop:Boolean;
+                                        const TimesBench:Integer):Int64;
 
 var Data : Array of TDataItem;
     Query : Array of TDataSelect;
@@ -161,17 +164,14 @@ var Data : Array of TDataItem;
         Query[t].Free;
   end;
 
-const
-  MaxLoop=1000;
-
-  procedure BenchQuery(N:Integer);
+  procedure BenchQuery(const AQuery:Integer);
   var Query : TDataSelect;
       Data : TDataItem;
       Loop : Integer;
   begin
-    for Loop:=1 to MaxLoop do
+    for Loop:=1 to TimesBench do
     begin
-      Query:=TSelectSamples.CreateSelect(nil,N);
+      Query:=TSelectSamples.CreateSelect(nil,AQuery);
       Data:=Query.Calculate;
 
       Data.Free;
@@ -191,7 +191,7 @@ const
        begin
          // Do loop inside thread
 
-         for Loop:=1 to MaxLoop do
+         for Loop:=1 to TimesBench do
          begin
            Query:=TSelectSamples.CreateSelect(nil,N);
            Data:=Query.Calculate;
@@ -202,7 +202,7 @@ const
        end)
     else
     begin
-      for Loop:=1 to MaxLoop do
+      for Loop:=1 to TimesBench do
       begin
         // Do thread inside loop
 
@@ -227,7 +227,7 @@ const
            BenchQuery(t)
     else
     begin
-      for Loop:=1 to MaxLoop do
+      for Loop:=1 to TimesBench do
       begin
         for t:=0 to ACount-1 do
         begin

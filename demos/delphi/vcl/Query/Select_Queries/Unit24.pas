@@ -67,6 +67,8 @@ type
     CBMultiCPU: TCheckBox;
     CBLoopThread: TCheckBox;
     Button8: TButton;
+    ETimesBench: TEdit;
+    Label1: TLabel;
     procedure ListBox1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -229,7 +231,7 @@ end;
 procedure TTestSQLQueries.BThreadTestClick(Sender: TObject);
 var tmp : Int64;
 begin
-  tmp:=TQueryBenchmark.MultiCPU(CBMultiCPU.Checked,CBLoopThread.Checked);
+  tmp:=TQueryBenchmark.MultiCPU(CBMultiCPU.Checked,CBLoopThread.Checked,StrToInt(ETimesBench.Text));
   Caption:='Time: '+tmp.ToString+' msec';
 end;
 

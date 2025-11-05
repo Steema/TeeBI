@@ -189,6 +189,13 @@ object TestSQLQueries: TTestSQLQueries
     object TabSheet4: TTabSheet
       Caption = 'Benchmarks'
       ImageIndex = 3
+      object Label1: TLabel
+        Left = 139
+        Top = 142
+        Width = 31
+        Height = 13
+        Caption = 'Times:'
+      end
       object Benchmark: TButton
         Left = 22
         Top = 10
@@ -210,7 +217,7 @@ object TestSQLQueries: TTestSQLQueries
       end
       object BThreadTest: TButton
         Left = 22
-        Top = 97
+        Top = 139
         Width = 99
         Height = 25
         Caption = 'Thread Test'
@@ -219,7 +226,7 @@ object TestSQLQueries: TTestSQLQueries
       end
       object CBMultiCPU: TCheckBox
         Left = 24
-        Top = 130
+        Top = 170
         Width = 68
         Height = 17
         Caption = 'Multi CPU'
@@ -229,11 +236,19 @@ object TestSQLQueries: TTestSQLQueries
       end
       object CBLoopThread: TCheckBox
         Left = 24
-        Top = 153
+        Top = 193
         Width = 121
         Height = 17
         Caption = 'Loop in thread'
         TabOrder = 4
+      end
+      object ETimesBench: TEdit
+        Left = 176
+        Top = 139
+        Width = 41
+        Height = 21
+        TabOrder = 5
+        Text = '1000'
       end
     end
   end

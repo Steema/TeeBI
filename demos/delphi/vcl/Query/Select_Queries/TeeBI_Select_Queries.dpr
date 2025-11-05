@@ -4,9 +4,13 @@ program TeeBI_Select_Queries;
 {.$DEFINE LEAKCHECK}
 
 uses
+  {$IFDEF FASTMM}
+  FastMM5,
+  {$ENDIF}
   {$IFDEF LEAKCHECK}
-    LeakCheck,
+  LeakCheck,
   {$ENDIF }
+
   Vcl.Forms,
   Unit24 in 'Unit24.pas' {Form24},
   BI.Tests.SelectSamples in '..\..\..\..\..\tests\BI.Tests.SelectSamples.pas',
