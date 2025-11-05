@@ -29,7 +29,17 @@ uses
   VCLBI.Editor.BIGrid, VCLBI.Editor.Chart, VCLBI.Editor.Query,
 
   // TeeChart
-  VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart, VCLTee.TeeTools;
+  VCLTee.TeEngine, VCLTee.TeeProcs,
+
+  {$IF TeeMsg_TeeChartPalette='TeeChart'}
+  {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
+  {$ENDIF}
+
+  {$IFDEF TEEPRO}
+  VCLTee.TeeTools,
+  {$ENDIF}
+
+  VCLTee.Chart;
 
 type
   TMainForm = class(TForm)
