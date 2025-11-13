@@ -17,10 +17,8 @@ object USADemo_Form: TUSADemo_Form
   object Splitter1: TSplitter
     Left = 180
     Top = 137
+    Width = 6
     Height = 480
-    ExplicitLeft = 287
-    ExplicitTop = 111
-    ExplicitHeight = 699
   end
   object Panel1: TPanel
     Left = 0
@@ -29,7 +27,6 @@ object USADemo_Form: TUSADemo_Form
     Height = 137
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 838
     object Image1: TImage
       Left = 1
       Top = 1
@@ -496,12 +493,11 @@ object USADemo_Form: TUSADemo_Form
     ParentColor = False
     TabOrder = 1
     Alternate.Enabled = True
-    ExplicitHeight = 463
   end
   object BIChart1: TBIChart
-    Left = 183
+    Left = 186
     Top = 137
-    Width = 661
+    Width = 658
     Height = 480
     Align = alClient
     UseDockManager = False
@@ -510,12 +506,12 @@ object USADemo_Form: TUSADemo_Form
     ParentBackground = True
     ParentDoubleBuffered = False
     TabOrder = 2
-    ExplicitWidth = 655
-    ExplicitHeight = 463
+    ExplicitLeft = 183
+    ExplicitWidth = 661
     object BITChart1: TBITChart
       Left = 0
       Top = 24
-      Width = 661
+      Width = 658
       Height = 456
       BackWall.Brush.Gradient.Direction = gdBottomTop
       BackWall.Brush.Gradient.EndColor = clWhite
@@ -570,8 +566,7 @@ object USADemo_Form: TUSADemo_Form
       OnAddSeries = BITChart1AddSeries
       ParentColor = True
       TabOrder = 0
-      ExplicitWidth = 655
-      ExplicitHeight = 439
+      ExplicitWidth = 661
       DefaultCanvas = 'TGDIPlusCanvas'
       ColorPaletteIndex = 9
       object MarksTool1: TMarksTipTool

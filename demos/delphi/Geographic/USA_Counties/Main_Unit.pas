@@ -11,6 +11,8 @@ interface
 }
 
 
+{.$DEFINE USE_TEEGRID}
+
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, VCLTee.TeEngine, Vcl.Grids,
@@ -55,6 +57,7 @@ type
     function EducationField:TDataItem;
     procedure DoQuery;
     procedure SetupChart;
+    procedure SetupGrid;
     function WorldSeries:TWorldSeries;
   public
     { Public declarations }
@@ -71,7 +74,12 @@ uses
   BI.Geographic, VCLTee.TeeSurfa,
   VCLTee.TeeSkia, VCLTee.TeeGDIPlus,
   VCLBI.Grid.DBGrid,
-//  VCLBI.Grid.TeeGrid, // <-- use TeeGrid instead of standard TDBGrid
+
+  {$IFDEF USE_TEEGRID}
+  Tee.Grid.Columns,
+  VCLBI.Grid.TeeGrid, // <-- use TeeGrid instead of standard TDBGrid
+  {$ENDIF}
+
   VCLTee.Grid, VCLTee.EditChar;
 
 procedure TUSADemo_Form.Button1Click(Sender: TObject);
@@ -140,10 +148,26 @@ begin
   BIGrid1.Data:=BIQuery1.Calculate;
   BIChart1.Data:=BIGrid1.Data;
 
-  (BIGrid1.Plugin.GetObject as TBIDBGrid).Fields[1].DisplayLabel:='%';
-//  (BIGrid1.Plugin.GetControl as TBITeeGrid).Columns[1].Width.Value:=90;
-
   BIChart1.Chart.Title.Caption:=EducationField.Name;
+
+  SetupGrid;
+end;
+
+procedure TUSADemo_Form.SetupGrid;
+var tmp : TObject;
+begin
+  tmp:=BIGrid1.Plugin.GetObject;
+
+  if tmp is TBIDBGrid then
+     TBIDBGrid(tmp).Fields[1].DisplayLabel:='%'
+  {$IFDEF USE_TEEGRID}
+  else
+  if tmp is TBITeeGrid then
+  begin
+    TBITeeGrid(tmp).Columns[1].Width.Value:=90;
+    TBITeeGrid(tmp).Width:=160;
+  end;
+  {$ENDIF}
 end;
 
 procedure TUSADemo_Form.BITChart1AddSeries(Sender: TCustomChartSeries);
