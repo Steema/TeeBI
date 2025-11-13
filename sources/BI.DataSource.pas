@@ -149,7 +149,7 @@ type
     procedure PrepareIndex(const AIndex:TCursorIndex=nil; const AllRows:Boolean=True);
     procedure SetItems(const AItems:TDataArray);
 
-    class procedure SetMasterExpression(const Master:TDataItem;
+    class procedure SetMasterExpression(const AMaster:TDataItem;
                                         const MasterCol:TExpression;
                                         const AIndex:TInteger); static;
 
@@ -2239,18 +2239,18 @@ begin
      SetDirectFilter(Value); // Pending: TExpression.Clone(Value));
 end;
 
-class procedure TDataCursor.SetMasterExpression(const Master:TDataItem; const MasterCol:TExpression; const AIndex:TInteger);
+class procedure TDataCursor.SetMasterExpression(const AMaster:TDataItem; const MasterCol:TExpression; const AIndex:TInteger);
 begin
   if MasterCol<>nil then
-  case Master.Kind of
-       dkInt32: TIntegerExpression(MasterCol).Number:=Master.Int32Data[AIndex];
-       dkInt64: TIntegerExpression(MasterCol).Number:=Master.Int64Data[AIndex];
-      dkSingle: TFloatExpression(MasterCol).Number:=Master.SingleData[AIndex];
-      dkDouble: TFloatExpression(MasterCol).Number:=Master.DoubleData[AIndex];
-    dkExtended: TFloatExpression(MasterCol).Number:=Master.ExtendedData[AIndex];
-        dkText: TTextExpression(MasterCol).Text:=Master.TextData[AIndex];
-    dkDateTime: TDateTimeExpression(MasterCol).DateTime:=Master.DateTimeData[AIndex];
-     dkBoolean: TBooleanExpression(MasterCol).Logical:=Master.BooleanData[AIndex];
+  case AMaster.Kind of
+       dkInt32: TIntegerExpression(MasterCol).Number:=AMaster.Int32Data[AIndex];
+       dkInt64: TIntegerExpression(MasterCol).Number:=AMaster.Int64Data[AIndex];
+      dkSingle: TFloatExpression(MasterCol).Number:=AMaster.SingleData[AIndex];
+      dkDouble: TFloatExpression(MasterCol).Number:=AMaster.DoubleData[AIndex];
+    dkExtended: TFloatExpression(MasterCol).Number:=AMaster.ExtendedData[AIndex];
+        dkText: TTextExpression(MasterCol).Text:=AMaster.TextData[AIndex];
+    dkDateTime: TDateTimeExpression(MasterCol).DateTime:=AMaster.DateTimeData[AIndex];
+     dkBoolean: TBooleanExpression(MasterCol).Logical:=AMaster.BooleanData[AIndex];
   end;
 end;
 
@@ -3261,9 +3261,11 @@ begin
 
     TDataAccess(tmp).SetInternalDate(TDataAccess(AItem).IDate);
 
+    { REMOVED !
     // "Remember" the original Data Item that corresponds to each Item in the query.
     // Note: Using the "Master" property is not a good solution (maybe better a new "Origin" property)
     tmp.Master:=AItem;
+    }
   end;
 end;
 
