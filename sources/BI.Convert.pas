@@ -627,7 +627,7 @@ const
 // values from the Day,Month,Year,Hour,Minute,Second and Millisecond item structure.
 class function TDateTimeConvert.ToDateTime(const AData: TDataItem): TDataItem;
 
-  procedure DoError(const AMessage:String); noreturn;
+  procedure DoError(const AMessage:String); {$IFNDEF FPC}{$IF CompilerVersion>=37}noreturn;{$ENDIF}{$ENDIF}
   begin
     raise EBIException.Create(AMessage);
   end;
