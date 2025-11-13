@@ -179,6 +179,8 @@ begin
   end
   else
      LFound.Caption:=BIDataset1.Cursor.Index.Count.ToString;
+
+  LFound.Repaint;
 end;
 
 procedure TFormSearchDemo.SetSearch(const AIndex:TCursorIndex);
@@ -420,26 +422,12 @@ end;
 procedure TFormSearchDemo.FocusCell;
 var tmpRow : TInteger;
     tmpData : TDataItem;
-    Grid : TBIDBGrid;
-    tmpCol : TColumn;
 begin
   // Obtain the row and data for the Nth "hit"
   Search.Hits.Find(CurrentHit,tmpRow,tmpData);
 
   if tmpRow<>-1 then
-  begin
-    // Get the real Grid control
-    Grid:=TBIDBGrid(BIGrid1.Plugin.GetObject);
-
-    // Change the dataset row
-    Grid.DataSource.DataSet.RecNo:=tmpRow+1;
-
-    tmpCol:=Grid.ColumnOf(tmpData);
-
-    if tmpCol<>nil then
-       // Select the grid column that belongs to the selected Field
-       Grid.SelectedField:=Grid.ColumnOf(tmpData).Field;
-  end;
+     BIGrid1.FocusCell(tmpRow,tmpData);
 end;
 
 end.

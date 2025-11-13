@@ -21,6 +21,7 @@ object FormSearchDemo: TFormSearchDemo
     Height = 105
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 1075
     object Label1: TLabel
       Left = 8
       Top = 14
@@ -158,6 +159,8 @@ object FormSearchDemo: TFormSearchDemo
     ParentColor = False
     TabOrder = 1
     DataSource = DataSource1
+    ExplicitWidth = 1075
+    ExplicitHeight = 541
   end
   object Panel2: TPanel
     Left = 0
@@ -167,6 +170,8 @@ object FormSearchDemo: TFormSearchDemo
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 646
+    ExplicitWidth = 1075
     object DBNavigator1: TDBNavigator
       Left = 185
       Top = 0
@@ -176,6 +181,7 @@ object FormSearchDemo: TFormSearchDemo
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast]
       Align = alClient
       TabOrder = 0
+      ExplicitWidth = 890
     end
     object CurrentRecord: TPanel
       Left = 0
