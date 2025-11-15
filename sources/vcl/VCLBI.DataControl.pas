@@ -8,6 +8,9 @@ uses
   {$IFDEF FMX}
   FMX.Controls, FMX.Layouts,
   {$ELSE}
+  {$IFDEF MSWINDOWS}
+  Messages,
+  {$ENDIF}
   Vcl.Controls, Vcl.Graphics,
   {$ENDIF}
   BI.DataItem;
@@ -54,6 +57,8 @@ type
 
     {$IFNDEF FMX}
     property DockManager;
+    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
+
     {$ENDIF}
   public
     OwnsData : Boolean;
@@ -257,6 +262,36 @@ begin
   TryDestroyData;
   inherited;
 end;
+
+{$IFNDEF FMX}
+{$IFDEF MSWINDOWS}
+{
+procedure TBIDataControl.WMGetDlgCode(var Message: TWMGetDlgCode);
+begin
+  inherited;
+  Message.Result:=Message.Result or DLGC_WANTARROWS;
+end;
+
+procedure TBIDataControl.CMSysColorChange(var Message: TMessage);
+begin
+  inherited;
+  Invalidate;
+end;
+}
+{$ENDIF}
+
+{$IFDEF MSWINDOWS}
+procedure TBIDataControl.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+begin
+//   inherited else
+//  Not done here. See CreateParams override.
+//  if Color=clNone then
+//     SetBkMode(Message.DC, TRANSPARENT);
+
+     Message.Result:=1;
+end;
+{$ENDIF}
+{$ENDIF}
 
 function TBIDataControl.Origin:String;
 begin
