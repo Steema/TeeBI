@@ -667,6 +667,8 @@ procedure TGroupChart.Finished;
     begin
       if Chart.SeriesCount>0 then
       begin
+        Chart[0].ColorEachPoint:=False; // Disable previously set
+
         {$IFDEF TEEPRO}
         CheckAreaTransparency;
         {$ENDIF}
