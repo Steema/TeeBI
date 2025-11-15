@@ -2320,8 +2320,12 @@ begin
             end;
 
       ')',
-      ']',
-      ',' : break;
+      ']' : break;
+
+      ',' : // Not possible to use "," as decimal separator in expressions,
+            // because the parser will for example wrongly interpret [1,2]
+            // as 1.2 instead of an array of two integers (1 and 2).
+            break;
 
  '"','''' : begin
               if tmp=nil then
@@ -2380,6 +2384,7 @@ begin
               result:=Logical(tmp,ParseComparerOperand(C));
               Exit;
             end;
+
     else
       Token:=Token+C;
     end;
