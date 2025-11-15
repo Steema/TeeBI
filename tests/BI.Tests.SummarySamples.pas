@@ -87,7 +87,6 @@ begin
   AItems.Add('27 First Order Quantity by Product');
   AItems.Add('28 Last Order Quantity by Product');
   AItems.Add('29 By CategoryName, CategoryID (redundant)');
-
 end;
 
 function TSampleSummaries.CreateSummary(const AOwner:TComponent; const AIndex:Integer):TSummary;
