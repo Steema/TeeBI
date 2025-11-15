@@ -122,6 +122,7 @@ type
     procedure SetExpression(const Value: TExpression);
     procedure SetMissing(const Value: TMeasureMissing);
   protected
+    function IsEnabled:Boolean;
     property Measure:TMeasure read FMeasure;
     procedure SetData(const Value: TDataItem); override;
   public
@@ -421,7 +422,7 @@ function TBIQuery.CreateProvider:TDataProvider;
     begin
       tmp:=Measures[t];
 
-      if tmp.Enabled and (tmp.RealData<>nil) then
+      if tmp.IsEnabled then
       begin
         if tmp.Expression=nil then
            tmpMeasure:=ASum.Measures.Add(tmp.RealData,tmp.Aggregate)
@@ -602,19 +603,13 @@ begin
 end;
 
 procedure TBIQuery.Parse(const AData:TDataItem; const SQL: String; const AError:TBIErrorProc=nil);
-var tmp : TDataItem;
+var tmp : TDataProvider;
 begin
-  tmp:=TBISQL.From(AData,SQL,nil,AError);
-
-  if tmp<>nil then
+  tmp:=TBISQL.ProviderFrom(AData,SQL,nil,AError);
   try
     Clear;
-
-    if tmp.Provider<>nil then
-       Assign(tmp.Provider);
-
+    Assign(tmp);
   finally
-    //TDataAccess(tmp).KeepProvider:=True; <--- why? (mem leak)
     tmp.Free;
   end;
 end;
@@ -1198,7 +1193,7 @@ begin
   result:=0;
 
   for t:=0 to Count-1 do
-      if Items[t].Enabled and (Items[t].RealData<>nil) then
+      if Items[t].IsEnabled then
          Inc(result);
 end;
 
@@ -1416,6 +1411,12 @@ end;
 function TQueryMeasure.GetMissing: TMeasureMissing;
 begin
   result:=FMeasure.Missing;
+end;
+
+function TQueryMeasure.IsEnabled: Boolean;
+begin
+  result:=Enabled and
+          ( (RealData<>nil) or (Measure.Expression<>nil) );
 end;
 
 function TQueryMeasure.RealData: TDataItem;
