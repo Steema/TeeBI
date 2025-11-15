@@ -3261,11 +3261,12 @@ begin
 
     TDataAccess(tmp).SetInternalDate(TDataAccess(AItem).IDate);
 
-    { REMOVED !
+    { DO NOT REMOVE !
     // "Remember" the original Data Item that corresponds to each Item in the query.
+    // For example a County Code should have a Master so a Geo Chart can guess it.
     // Note: Using the "Master" property is not a good solution (maybe better a new "Origin" property)
-    tmp.Master:=AItem;
     }
+    tmp.Master:=AItem;
   end;
 end;
 
