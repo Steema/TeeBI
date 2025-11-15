@@ -3387,6 +3387,12 @@ end;
 
 { TSummaryItem }
 
+Constructor TSummaryItem.Create;
+begin
+  inherited Create;
+  FActive:=True;
+end;
+
 Destructor TSummaryItem.Destroy;
 begin
   Clear;
@@ -3472,12 +3478,6 @@ procedure TSummaryItem.Clear;
 begin
   if not KeepSource then
      Source.Free;
-end;
-
-constructor TSummaryItem.Create;
-begin
-  inherited Create;
-  FActive:=True;
 end;
 
 function TSummaryItem.RealData: TDataItem;
