@@ -1051,7 +1051,10 @@ class function TSQLParser.DataOf(const AParent:TDataItem; const AData:String; ou
           AParent:=DataOf(AParent,tmp,tmpExp);
 
           if AParent=nil then
-             Exit
+          begin
+            tmpExp.Free;
+            Exit;
+          end
           else
              Delete(AName,1,i);
         end;
@@ -1129,6 +1132,9 @@ begin
   while (Copy(result,1,1)='(') and (Copy(result,Length(result),1)=')') do
     result:=Trim(Copy(result,2,Length(result)-2));
 end;
+
+type
+  TSummaryAccess=class(TSummary);
 
 function TSQLParser.Parse(const ErrorProc:TBIErrorProc=nil): TDataProvider;
 var
@@ -1309,7 +1315,7 @@ var
           else
              tmpData:=FData;
 
-          tmpSum.Filter:=ParseWhere(tmpData,Where);
+          TSummaryAccess(tmpSum).SetDirectFilter(ParseWhere(tmpData,Where));
         end;
 
         // Pending:
@@ -1431,62 +1437,82 @@ var
     end;
   end;
 
-var Distinct : Boolean;
+  procedure DoParse;
+  var Distinct : Boolean;
+  begin
+    FError:=ErrorProc;
+
+    Offset:=0;
+    Limit:=0;
+
+    tmpSum:=nil;
+    tmpFrom:=nil;
+
+    Optional('select');
+
+    Distinct:=Optional('distinct');
+
+    Expressions:=GetExpressions;
+
+    if Expressions<>nil then
+    begin
+      ParseText;
+
+      if ParseFrom then
+      begin
+        try
+          TrySummary;
+        except
+          on Exception do
+          begin
+            // Avoid memory leak
+            tmpSum.Free;
+            tmpSum:=nil;
+
+            raise;
+          end;
+        end;
+
+        if tmpSum=nil then
+           result:=TryCreateSelect(Distinct)
+        else
+        try
+          result:=tmpSum;
+          ParseGroups;
+        except
+          on Exception do
+          begin
+            // Avoid memory leak
+            result.Free;
+
+            raise;
+          end;
+        end;
+      end;
+    end
+    else
+      DoError('Missing expression(s)');
+  end;
+
+var OldDecimal,
+    OldThousands : Char;
 begin
   result:=nil;
 
-  FError:=ErrorProc;
+  // Numeric Expressions must use "." (dot) as decimal separator, to
+  // distinguish ambigous [1,2] as an array of two integers, instead of
+  // a 1.2 float number.
 
-  Offset:=0;
-  Limit:=0;
-
-  tmpSum:=nil;
-  tmpFrom:=nil;
-
-  Optional('select');
-
-  Distinct:=Optional('distinct');
-
-  Expressions:=GetExpressions;
-
-  if Expressions<>nil then
-  begin
-    ParseText;
-
-    if ParseFrom then
-    begin
-      try
-        TrySummary;
-      except
-        on Exception do
-        begin
-          // Avoid memory leak
-          tmpSum.Free;
-          tmpSum:=nil;
-
-          raise;
-        end;
-      end;
-
-      if tmpSum=nil then
-         result:=TryCreateSelect(Distinct)
-      else
-      try
-        result:=tmpSum;
-        ParseGroups;
-      except
-        on Exception do
-        begin
-          // Avoid memory leak
-          result.Free;
-
-          raise;
-        end;
-      end;
-    end;
-  end
-  else
-    DoError('Missing expression(s)');
+  OldDecimal:=FormatSettings.DecimalSeparator;
+  OldThousands:=FormatSettings.ThousandSeparator;
+  FormatSettings.DecimalSeparator:='.';
+  FormatSettings.ThousandSeparator:=#0;
+  try
+    DoParse;
+  finally
+    FormatSettings.DecimalSeparator:=OldDecimal;
+    FormatSettings.ThousandSeparator:=OldThousands;
+  end;
 end;
 
 end.
