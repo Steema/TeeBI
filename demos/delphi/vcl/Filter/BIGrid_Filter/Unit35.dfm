@@ -10,11 +10,9 @@ object Form35: TForm35
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter2: TSplitter
     Left = 385
@@ -34,8 +32,6 @@ object Form35: TForm35
     ParentBackground = False
     ParentColor = False
     TabOrder = 0
-    ExplicitLeft = 302
-    ExplicitWidth = 333
   end
   object Panel5: TPanel
     Left = 0
@@ -67,10 +63,6 @@ object Form35: TForm35
       OnChange = PageControl1Change
       object TabDate: TTabSheet
         Caption = 'Date'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 294
-        ExplicitHeight = 293
         object LBDateExamples: TListBox
           Left = 0
           Top = 0
@@ -101,17 +93,13 @@ object Form35: TForm35
             'From >= <= To')
           TabOrder = 0
           OnClick = LBDateExamplesClick
-          ExplicitWidth = 294
-          ExplicitHeight = 293
+          ExplicitLeft = 1
+          ExplicitTop = 1
         end
       end
       object TabNumber: TTabSheet
         Caption = 'Number'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 294
-        ExplicitHeight = 293
         object LBNumberExamples: TListBox
           Left = 0
           Top = 0
@@ -128,17 +116,11 @@ object Form35: TForm35
             '>= -300 and <= 300')
           TabOrder = 0
           OnClick = LBNumberExamplesClick
-          ExplicitWidth = 294
-          ExplicitHeight = 293
         end
       end
       object TabText: TTabSheet
         Caption = 'Text'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 294
-        ExplicitHeight = 293
         object LBTextExamples: TListBox
           Left = 0
           Top = 0
@@ -154,17 +136,11 @@ object Form35: TForm35
             'is empty')
           TabOrder = 0
           OnClick = LBTextExamplesClick
-          ExplicitWidth = 294
-          ExplicitHeight = 293
         end
       end
       object TabBoolean: TTabSheet
         Caption = 'Boolean'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object LBBooleanExamples: TListBox
           Left = 0
           Top = 0
@@ -178,8 +154,6 @@ object Form35: TForm35
             'False only')
           TabOrder = 0
           OnClick = LBBooleanExamplesClick
-          ExplicitWidth = 294
-          ExplicitHeight = 293
         end
       end
     end
@@ -191,9 +165,6 @@ object Form35: TForm35
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
-      ExplicitLeft = -6
-      ExplicitTop = 371
-      ExplicitWidth = 302
       object CBEnabled: TCheckBox
         Left = 16
         Top = 10
@@ -223,7 +194,6 @@ object Form35: TForm35
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 2
-      ExplicitWidth = 356
     end
   end
   object Panel1: TPanel
@@ -233,7 +203,6 @@ object Form35: TForm35
     Height = 70
     Align = alTop
     TabOrder = 2
-    ExplicitWidth = 635
     object Label1: TLabel
       Left = 16
       Top = 42
