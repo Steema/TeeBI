@@ -921,7 +921,15 @@ procedure TBIComposer.SortGroups;
     if AData.AsTable then
        result:=AData.Items.Count
     else
-       result:=AData.DataMap.Count;
+    if AData.Kind=TDataKind.dkUnknown then
+       result:=0
+    else
+    begin
+      if AData.DataMap=nil then
+         AData.Stats; // <-- Force creating DataMap, if not yet done
+
+      result:=AData.DataMap.Count;
+    end;
   end;
 
   // Returns True if group "New" should be considered as "better"
