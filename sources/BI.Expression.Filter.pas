@@ -262,6 +262,7 @@ type
 
     procedure DoChanged(Sender:TObject);
     function GetFilter: TExpression;
+    function GetKind: TDataKind;
     function MainData:TDataItem;
     function NewLogical(const AOperand:TLogicalOperand):TLogicalExpression;
     procedure SetBool(const Value: TBooleanFilter);
@@ -273,7 +274,6 @@ type
     procedure SetNumeric(const Value: TNumericFilter);
     procedure SetText(const Value: TTextFilter);
     procedure TryAdd(const AText:String; const A,B:TStrings);
-    function GetKind: TDataKind;
   protected
     procedure Changed; override;
     function DataExpression:TDataItemExpression;
