@@ -1020,8 +1020,8 @@ begin
 end;
 
 function TBIComposer.AddGroup(const APrevious:TGroup; const AIndex:Integer;
-                                const AParent:TComponent;
-                                const ARows:TCursorIndex):TGroup;
+                              const AParent:TComponent;
+                              const ARows:TCursorIndex):TGroup;
 
   procedure Add(const APos:TInteger; const GroupData:TDataItem);
 
@@ -1433,7 +1433,8 @@ begin
   tmp:=TPanel.Create(AOwner);
   tmp.BevelOuter:=TPanelBevel.bvNone;
   tmp.Caption:=ACaption;
-  tmp.ParentColor:=False;
+  tmp.ParentBackground:=False;
+//  tmp.Color:=clWhite;
   //tmp.DoubleBuffered:=True;
   {$ENDIF}
 
