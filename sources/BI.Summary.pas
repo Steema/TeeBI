@@ -3440,6 +3440,9 @@ class function TSummaryItem.GuessType(const AData: TDataItem): TSummaryItemType;
   end;
 
 begin
+  // !!! Wrong HasMaster?
+  // It is a good idea to check Master to determine AData is a group,
+  // but then all query-output Data items should not be assigned a Master by default !
   if TDataAccess(AData).HasMaster or AData.Primary then
      result:=TSummaryItemType.GroupBy
   else
