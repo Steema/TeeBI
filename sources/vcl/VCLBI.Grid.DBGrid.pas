@@ -498,15 +498,14 @@ end;
 
 procedure TBIDBGrid.CheckFilterGrid;
 
-  procedure AddButton(const AEvent:TNotifyEvent);
+  function AddButton(const AEvent:TNotifyEvent):TSpeedButton;
   const
     CloseCaption='x';
   begin
-    TFilterGrid(IAssociated).ICloseButton:=AddMenuButton(IAssociated,CloseCaption,
-                            8+(DefaultRowHeight div 2),AEvent);
+    result:=AddMenuButton(IAssociated,CloseCaption,8+(DefaultRowHeight div 2),AEvent);
 
-    TFilterGrid(IAssociated).ICloseButton.Hint:='Close';
-    TFilterGrid(IAssociated).ICloseButton.ShowHint:=True;
+    result.Hint:='Close';
+    result.ShowHint:=True;
   end;
 
 begin
@@ -515,9 +514,10 @@ begin
     IAssociated:=TFilterGrid.Create(Owner);
     TFilterGrid(IAssociated).IGrid:=Self;
     TFilterGrid(IAssociated).Hide;
-    TFilterGrid(IAssociated).Parent:=Parent;
+    TFilterGrid(IAssociated).ICloseButton:=AddButton(MenuFiltersClick);
 
-    AddButton(MenuFiltersClick);
+    // Set parent here, as the last thing:
+    TFilterGrid(IAssociated).Parent:=Parent;
   end;
 end;
 
@@ -2599,7 +2599,7 @@ begin
 
     DataSet.Tag:=NativeInt(AData);
 
-       DataSet.Data.Items[0].Name:=AData.Name;
+    DataSet.Data.Items[0].Name:=AData.Name;
 
     DataSet.Close;
     DBGrid.ChangeDataSet(DataSet);
