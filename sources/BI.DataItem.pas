@@ -283,11 +283,17 @@ type
 
   TNumericData=(Normal, Percentages);
 
+  {$DEFINE USE_INTERFACE}
+  {$IFDEF USE_INTERFACE}
+  IDataItem=interface
+  end;
+  {$ENDIF}
+
   // Main class.
   // TDataItem enables creating complex in-memory structures of column-based
   // tables and trees.
 
-  TDataItem=class
+  TDataItem=class{$IFDEF USE_INTERFACE}(TInterfacedObject,IDataItem){$ENDIF}
   private
     procedure SetName(const Value: String);
   type
