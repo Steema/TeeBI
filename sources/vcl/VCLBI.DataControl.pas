@@ -282,12 +282,24 @@ end;
 
 {$IFDEF MSWINDOWS}
 procedure TBIDataControl.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+
+  function AnyControlIsAlignClient:Boolean;
+  var t : Integer;
+  begin
+    for t:=0 to ControlCount-1 do
+        if Controls[t].Align=TAlign.alClient then
+           Exit(True);
+
+    result:=False;
+  end;
+
 begin
 //   inherited else
 //  Not done here. See CreateParams override.
 //  if Color=clNone then
 //     SetBkMode(Message.DC, TRANSPARENT);
 
+  if AnyControlIsAlignClient then
      Message.Result:=1;
 end;
 {$ENDIF}
