@@ -2684,6 +2684,7 @@ begin
       // Current (not optimized) filter size is: 0..Data.Count
       result.Resize(Data.Count);
 
+      // Potential multi-core parallelism here:
       for t:=0 to High(result) do
       begin
         FCurrent:=t;
@@ -2700,6 +2701,7 @@ begin
     begin
       result:=AIndex.Copy;
 
+      // Potential multi-core parallelism here:
       for t:=0 to High(result) do
       begin
         FCurrent:=result[t];
@@ -3265,8 +3267,10 @@ begin
     // "Remember" the original Data Item that corresponds to each Item in the query.
     // For example a County Code should have a Master so a Geo Chart can guess it.
     // Note: Using the "Master" property is not a good solution (maybe better a new "Origin" property)
+    // Note2: Using HasMaster is much better, only assign Master to items that already have a Master, like FIPS_CODE
     }
-    tmp.Master:=AItem;
+    if TDataItemAccess(AItem).HasMaster then
+       tmp.Master:=AItem;
   end;
 end;
 
