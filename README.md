@@ -37,6 +37,8 @@ A simple class to implement in-memory database complex structures, to provide:
 
 - [Export data](https://github.com/Steema/BI/wiki/exporting) (to csv,pdf,html,xml,excel,json), comparisons, manipulations and [conversions](https://github.com/Steema/TeeBI/tree/master/demos/delphi/vcl/Convert/DateTime)
 
+- TeeBI makes very easy to create custom dashboard no-code analytic applications for your end-users. Ready to use dialogs enable easy runtime connections to many database engines and to all kind of data sources, and drag and drop in the query dialogs allow selecting fields as measures, dimensions, parameters and filters with just mouse clicks.
+  
 - Supported development environments: 
 
   *  Embarcadero RAD Studio Florence 13.0, and from Studio XE4 and up (Delphi and C++)
@@ -110,7 +112,7 @@ Data1 := TChartData.From(Series1);
 
 ### Deprecated
 
-The following features have been marked as obsolete / incompatible, and moved to a separate folder outside the product:
+Features marked as obsolete and moved to a separate folder, but still usable:
 
 - [Machine-learning](https://github.com/Steema/BI/wiki/machine-learning) (native data pass to R Language and Python Scikit)
 
