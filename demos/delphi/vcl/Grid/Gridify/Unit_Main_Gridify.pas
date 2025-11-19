@@ -170,6 +170,7 @@ begin
   end;
 
   BIGrid2.Data:=tmp;
+  BIGrid2.OwnsData:=True;
 end;
 
 procedure TFromGridify.FormCreate(Sender: TObject);
