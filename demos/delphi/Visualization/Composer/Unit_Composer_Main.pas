@@ -30,8 +30,11 @@ uses
   // TeeBI controls
   VCLBI.DataControl, VCLBI.Visualizer, VCLBI.Grid,
 
+  // VCL Editors
+   VCLBI.Editor.Visualizer, VCLBI.Editor.Summary,
+
   // Important, use this optional unit to display charts:
-  VCLBI.Visualizer.Chart;
+  VCLBI.Visualizer.Chart, Vcl.ComCtrls;
 
 type
   TMainForm = class(TForm)
@@ -48,6 +51,9 @@ type
     Splitter2: TSplitter;
     Button1: TButton;
     ButtonQuery: TButton;
+    PageControl1: TPageControl;
+    TabOptions: TTabSheet;
+    TabQuery: TTabSheet;
     procedure LBTestClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -59,7 +65,11 @@ type
     Data : TDataItem;
     Summary : TSummary;
 
+    VisualizerEditor : TVisualizerEditor;
+    SummaryEditor : TSummaryEditor;
+
     procedure ExecuteQuery;
+    procedure RecalculateSummary(Sender: TObject);
   public
     { Public declarations }
   end;
@@ -90,9 +100,7 @@ uses
   VCLBI.Chart.ThreeD, VCLBI.Chart.Financial, VCLBI.Chart.Geo,
   {$ENDIF}
 
-  BI.Tests.SummarySamples, BI.SQL,
-
-  VCLBI.Editor.Visualizer, VCLBI.Editor.Summary;
+  BI.Tests.SummarySamples, BI.SQL;
 
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
@@ -127,6 +135,16 @@ end;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   TSampleSummaries.AddExamples(LBTest.Items);  // adds the list of examples
+
+  VisualizerEditor:=TVisualizerEditor.Embedd(Self,TabOptions);
+
+  SummaryEditor:=TSummaryEditor.Embedd(Self,TabQuery);
+  SummaryEditor.OnRecalculate:=RecalculateSummary;
+end;
+
+procedure TMainForm.RecalculateSummary(Sender: TObject);
+begin
+  ExecuteQuery;
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
@@ -145,6 +163,9 @@ begin
   ExecuteQuery;
 
   ButtonQuery.Enabled:=True;
+
+  SummaryEditor.Refresh(Summary);
+  VisualizerEditor.Refresh(BIComposer1);
 end;
 
 end.
