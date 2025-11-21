@@ -20,6 +20,15 @@ object MainForm: TMainForm
     Width = 6
     Height = 864
   end
+  object Splitter3: TSplitter
+    Left = 1099
+    Top = 41
+    Height = 864
+    Align = alRight
+    ExplicitLeft = 704
+    ExplicitTop = 424
+    ExplicitHeight = 100
+  end
   object PanelTop: TPanel
     Left = 0
     Top = 0
@@ -37,14 +46,23 @@ object MainForm: TMainForm
       OnClick = Button1Click
     end
     object ButtonQuery: TButton
-      Left = 136
-      Top = 9
+      Left = 104
+      Top = 11
       Width = 75
       Height = 25
       Caption = 'Query...'
       Enabled = False
       TabOrder = 1
       OnClick = ButtonQueryClick
+    end
+    object Button2: TButton
+      Left = 200
+      Top = 11
+      Width = 75
+      Height = 25
+      Caption = 'Data...'
+      TabOrder = 2
+      OnClick = Button2Click
     end
   end
   object PanelLeft: TPanel
@@ -85,22 +103,20 @@ object MainForm: TMainForm
       ItemHeight = 15
       TabOrder = 1
       OnClick = LBTestClick
-      ExplicitLeft = 2
-      ExplicitTop = 40
     end
   end
   object PanelRight: TPanel
     Left = 351
     Top = 41
-    Width = 751
+    Width = 748
     Height = 864
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 1040
+    ExplicitWidth = 751
     object Splitter2: TSplitter
       Left = 1
       Top = 471
-      Width = 749
+      Width = 746
       Height = 6
       Cursor = crVSplit
       Align = alBottom
@@ -110,17 +126,17 @@ object MainForm: TMainForm
     object MemoSQL: TMemo
       Left = 1
       Top = 774
-      Width = 749
+      Width = 746
       Height = 89
       Align = alBottom
       ScrollBars = ssVertical
       TabOrder = 0
-      ExplicitWidth = 1038
+      ExplicitWidth = 749
     end
     object BIGrid1: TBIGrid
       Left = 1
       Top = 477
-      Width = 749
+      Width = 746
       Height = 297
       Align = alBottom
       UseDockManager = False
@@ -128,12 +144,12 @@ object MainForm: TMainForm
       ParentColor = False
       TabOrder = 1
       Alternate.Enabled = True
-      ExplicitWidth = 1038
+      ExplicitWidth = 749
     end
     object BIComposer1: TBIComposer
       Left = 1
       Top = 1
-      Width = 749
+      Width = 746
       Height = 470
       Align = alClient
       UseDockManager = False
@@ -141,7 +157,7 @@ object MainForm: TMainForm
       TabOrder = 2
       Groups = <>
       Values = <>
-      ExplicitWidth = 1038
+      ExplicitWidth = 749
     end
   end
   object PageControl1: TPageControl
@@ -152,9 +168,6 @@ object MainForm: TMainForm
     ActivePage = TabOptions
     Align = alRight
     TabOrder = 3
-    ExplicitLeft = 560
-    ExplicitTop = 376
-    ExplicitHeight = 193
     object TabOptions: TTabSheet
       Caption = 'Options'
       ImageIndex = 1

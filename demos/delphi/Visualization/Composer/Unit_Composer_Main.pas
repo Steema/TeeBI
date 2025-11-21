@@ -31,7 +31,7 @@ uses
   VCLBI.DataControl, VCLBI.Visualizer, VCLBI.Grid,
 
   // VCL Editors
-   VCLBI.Editor.Visualizer, VCLBI.Editor.Summary,
+   VCLBI.Editor.Visualizer, VCLBI.Editor.Summary, VCLBI.DataViewer,
 
   // Important, use this optional unit to display charts:
   VCLBI.Visualizer.Chart, Vcl.ComCtrls;
@@ -54,11 +54,14 @@ type
     PageControl1: TPageControl;
     TabOptions: TTabSheet;
     TabQuery: TTabSheet;
+    Button2: TButton;
+    Splitter3: TSplitter;
     procedure LBTestClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure ButtonQueryClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
 
@@ -107,6 +110,11 @@ begin
   TVisualizerEditor.Edit(Self,BIComposer1);  // show the composer editor
 end;
 
+procedure TMainForm.Button2Click(Sender: TObject);
+begin
+  TDataViewer.View(Self,Samples.Demo);
+end;
+
 procedure TMainForm.ButtonQueryClick(Sender: TObject);
 begin
   if TSummaryEditor.Edit(Self,Summary) then // show the query editor
@@ -145,6 +153,7 @@ end;
 procedure TMainForm.RecalculateSummary(Sender: TObject);
 begin
   ExecuteQuery;
+  VisualizerEditor.Refresh(BIComposer1);
 end;
 
 procedure TMainForm.FormDestroy(Sender: TObject);
