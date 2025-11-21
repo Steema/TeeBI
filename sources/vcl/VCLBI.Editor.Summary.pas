@@ -12,9 +12,11 @@ uses
   {$IFNDEF FPC}
   Winapi.Windows, Winapi.Messages,
   {$ENDIF}
-  System.SysUtils, System.Classes,
-  Vcl.Graphics, System.Types, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  System.SysUtils, System.Classes, System.Types,
+
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.CheckLst, Vcl.Buttons,
+
   BI.DataItem, BI.Summary;
 
 type
@@ -157,6 +159,9 @@ type
 
     class function Edit(const AOwner:TComponent; const ASummary:TSummary):Boolean; static;
 
+    class function Embedd(const AOwner: TComponent;
+                          const AParent: TWinControl): TSummaryEditor; static;
+
     procedure Refresh(const ASummary:TSummary);
   end;
 
@@ -166,7 +171,9 @@ implementation
 
 uses
   Math,
-  BI.Expression, VCLBI.DataManager, BI.Languages.English, BI.Expressions;
+
+  BI.Expression, VCLBI.DataManager, VCLBI.Grid,
+  BI.Languages.English, BI.Expressions;
 
 procedure TSummaryEditor.CBAggregateChange(Sender: TObject);
 var tmp : TMeasure;
@@ -302,6 +309,14 @@ begin
   finally
     Free;
   end;
+end;
+
+class function TSummaryEditor.Embedd(const AOwner: TComponent;
+                    const AParent: TWinControl): TSummaryEditor;
+begin
+  result:=TSummaryEditor.Create(AOwner);
+  result.Align:=TAlign.alClient;
+  TUICommon.AddForm(result,AParent);
 end;
 
 procedure TSummaryEditor.EGroupExpressionChange(Sender: TObject);

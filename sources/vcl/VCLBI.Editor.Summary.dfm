@@ -36,7 +36,7 @@ object SummaryEditor: TSummaryEditor
           Height = 96
           Align = alClient
           DragMode = dmAutomatic
-          ItemHeight = 13
+          ItemHeight = 17
           TabOrder = 2
           OnClick = LMeasuresClick
           OnClickCheck = LMeasuresClickCheck
@@ -101,8 +101,8 @@ object SummaryEditor: TSummaryEditor
           object TabMeasure: TTabSheet
             Caption = 'Aggregate'
             object CBAggregate: TComboBox
-              Left = 8
-              Top = 9
+              Left = 6
+              Top = 8
               Width = 145
               Height = 21
               Style = csDropDownList
@@ -289,7 +289,7 @@ object SummaryEditor: TSummaryEditor
         Height = 99
         Align = alClient
         DragMode = dmAutomatic
-        ItemHeight = 13
+        ItemHeight = 17
         TabOrder = 1
         OnClick = LDimensionsClick
         OnClickCheck = LDimensionsClickCheck
