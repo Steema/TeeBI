@@ -439,7 +439,8 @@ begin
 
     DataGrid.BindTo(tmp);
 
-    (DataGrid.Plugin.GetControl as TDBGrid).Columns[0].Width:=300;
+    if DataGrid.Plugin.GetControl is TDBGrid then
+       TDBGrid(DataGrid.Plugin.GetControl).Columns[0].Width:=300;
 
     if DBNavigator1.DataSource=nil then
        DBNavigator1.DataSource:=DataGrid.DataSource;
