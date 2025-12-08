@@ -7,8 +7,17 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.ExtCtrls, Vcl.Grids,
   Vcl.DBGrids, BI.DataItem, BI.DataSet, BI.DataSource, Vcl.StdCtrls,
   VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart,
+
+  {$IF TeeMsg_TeeChartPalette='TeeChart'}
+  {$DEFINE TEEPRO} // <-- TeeChart Lite or Pro ?
+  {$ENDIF}
+
+  {$IFDEF TEEPRO}
   VCLTee.TeeTools,
-  VCLBI.Chart.Plugin, VCLBI.Chart, VCLBI.DataControl, VCLBI.Grid;
+  {$ENDIF}
+
+  VCLBI.Chart.Plugin, VCLBI.Chart, VCLBI.DataControl, VCLBI.Grid,
+  VCLTee.TeeTools;
 
 // Note: This example uses TBIGrid controls to show the extra features of TBIGrid.
 //       Standard VCL TDBGrid (with DataSource) or FMX TGrid controls (with LiveBindings)
