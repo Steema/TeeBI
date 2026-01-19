@@ -25,6 +25,7 @@ type
 
   TCSVHeader=record
   private
+    DefaultCount : Integer;
     Detected : Boolean;
     HasHeader : TTextHeaders;
   public
@@ -73,6 +74,8 @@ type
     Constructor Create(const Definition:TDataDefinition=nil; const MultiThread:Boolean=False); override;
 
     class function FileFilter:TFileFilters; override;
+
+    class function FromFolder(const Folder:String):TDataItem; static;
 
     function Import(const Folder:String; Recursive:Boolean=False):TDataArray; overload;
     function Import(const Strings:TStrings):TDataArray; override;
@@ -313,6 +316,8 @@ begin
       else
         result:=FinishRowByRow(tmpRow);
     finally
+      Header.Count:=Header.DefaultCount;  // return to default (1)
+
       tmpR.Free;
     end;
   end;
@@ -709,6 +714,8 @@ begin
   DecimalDetected:=False;
   Header.Detected:=False;
 
+  Header.DefaultCount:=Header.Count;
+
   PendingGuess:=True;
   tmpCurrent:=0;
   DeltaCapacity:=128;
@@ -721,6 +728,17 @@ begin
 
   SetLength(result,1);
   result[0]:=Data;
+end;
+
+class function TBICSV.FromFolder(const Folder: String): TDataItem;
+var csv : TBICSV;
+begin
+  csv:=TBICSV.Create;
+  try
+    result:=TDataItem.Create(csv.Import(Folder));
+  finally
+    csv.Free;
+  end;
 end;
 
 function TBICSV.Import(const Strings:TStrings):TDataArray;

@@ -1711,6 +1711,7 @@ procedure TBITextSource.SetColumn(const Col:TDataItem; const ARow:TInteger; cons
 
 var ValError,
     tmp : Integer;
+    tmpDate : TDateTime;
 begin
   if (not IgnoreMissing) and ((Value='') or (Value=MissingValue)) then
      Col.Missing[ARow]:=True
@@ -1731,7 +1732,12 @@ begin
   dkExtended : TryExtended;
 
       dkText : Col.TextData[ARow]:=Value;
-  dkDateTime : Col.DateTimeData[ARow]:=StrToDateTime(Value);
+
+  dkDateTime : if TryStrToDateTime(Value, tmpDate) then
+                  Col.DateTimeData[ARow]:=tmpDate
+               else
+                  DoChangeToText; // this might happen, for example 04:20 then 32:20 (it was minutes, not hours!)
+
    dkBoolean : TryBoolean;
   else
     DoError;
