@@ -406,7 +406,7 @@ begin
 
     while t>=0 do
     begin
-      Flatten(AData[t]);
+      Flatten(AData{$IFDEF FPC}.Items{$ENDIF}[t]);
       Dec(t);
     end;
 
