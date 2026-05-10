@@ -16,7 +16,7 @@ interface
 {
    Unit             Description
    ---------------  -----------------------------------
-   BI.Web.Net       TNetHttpClient support from RAD RTL System.Net
+   BI.Web.Net       TNetHttpClient support from RAD RTL System.Net 10.3 and up
    BI.Web.Indy      TIdHttp Indy support
    BI.Web.FPC       FreePascal Lazarus RTL TfpHttpClient
 
