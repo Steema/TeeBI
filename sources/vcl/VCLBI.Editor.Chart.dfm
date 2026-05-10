@@ -20,7 +20,7 @@ object BIChartEditor: TBIChartEditor
     Top = 0
     Width = 491
     Height = 360
-    ActivePage = TabView
+    ActivePage = TabData
     Align = alClient
     TabOrder = 0
     OnChange = PageControl1Change

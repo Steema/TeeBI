@@ -31,6 +31,8 @@ object DataManager: TDataManager
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 434
+    ExplicitWidth = 627
     object PanelOk: TPanel
       Left = 444
       Top = 0
@@ -39,6 +41,7 @@ object DataManager: TDataManager
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitLeft = 438
       object BOk: TButton
         Left = 14
         Top = 8
@@ -91,6 +94,15 @@ object DataManager: TDataManager
       TabOrder = 3
       OnClick = BRenameClick
     end
+    object BQuery: TButton
+      Left = 293
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = '&Query...'
+      TabOrder = 4
+      OnClick = BQueryClick
+    end
   end
   object PanelSearch: TPanel
     Left = 0
@@ -101,6 +113,7 @@ object DataManager: TDataManager
     BevelOuter = bvNone
     TabOrder = 1
     OnResize = PanelSearchResize
+    ExplicitWidth = 627
     object PanelSearchCombo: TPanel
       Left = 0
       Top = 0
@@ -109,7 +122,7 @@ object DataManager: TDataManager
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitWidth = 241
+      ExplicitWidth = 354
       object LSearch: TLabel
         Left = 9
         Top = 14
@@ -136,7 +149,7 @@ object DataManager: TDataManager
       BevelOuter = bvNone
       TabOrder = 1
       OnClick = PanelStoresClick
-      ExplicitLeft = 118
+      ExplicitLeft = 354
       object LStore: TLabel
         Left = 12
         Top = 15
@@ -181,6 +194,7 @@ object DataManager: TDataManager
     OnChange = TreeChange
     OnDblClick = TreeDblClick
     OnExpanding = TreeExpanding
+    ExplicitHeight = 393
   end
   object PageControl1: TPageControl
     Left = 227
@@ -191,6 +205,8 @@ object DataManager: TDataManager
     Align = alClient
     TabOrder = 3
     OnChange = PageControl1Change
+    ExplicitWidth = 400
+    ExplicitHeight = 393
     object TabSettings: TTabSheet
       Caption = 'Settings'
     end
@@ -207,6 +223,8 @@ object DataManager: TDataManager
         TabOrder = 0
         Visible = False
         WordWrap = False
+        ExplicitWidth = 392
+        ExplicitHeight = 92
       end
       object PanelDataTop: TPanel
         Left = 0
@@ -216,6 +234,7 @@ object DataManager: TDataManager
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 1
+        ExplicitWidth = 392
         object Label2: TLabel
           Left = 11
           Top = 44

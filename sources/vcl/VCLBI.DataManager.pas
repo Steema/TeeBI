@@ -66,6 +66,7 @@ type
     ImportProgress: TProgressBar;
     LStore: TLabel;
     CBStores: TComboBox;
+    BQuery: TButton;
     procedure TreeChange(Sender: TObject; Node: TTreeNode);
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
       var AllowExpansion: Boolean);
@@ -91,6 +92,7 @@ type
     procedure BRenameClick(Sender: TObject);
     procedure Custommanual1Click(Sender: TObject);
     procedure PanelStoresClick(Sender: TObject);
+    procedure BQueryClick(Sender: TObject);
   private
     { Private declarations }
 
@@ -196,7 +198,7 @@ uses
   {$ELSE}
   System.IOUtils, System.Diagnostics,
   {$ENDIF}
-  BI.Arrays, VCLBI.Menus, VCLBI.DataTree;
+  BI.Arrays, VCLBI.Menus, VCLBI.DataTree, VCLBI.Editor.Query, BI.Query;
 
 Constructor TDataManager.CreateStore(const AOwner: TComponent; const AStore: String='');
 begin
@@ -495,6 +497,18 @@ begin
   SelectStore;
 end;
 
+procedure TDataManager.BQueryClick(Sender: TObject);
+var tmp : TBIQuery;
+begin
+  tmp:=TBIQuery.Create(Self);
+  try
+    if TBIQueryEditor.Edit(Self,tmp) then
+       // TODO: Add new query definition (or sql) to TStore and listbox
+  finally
+    tmp.Free;
+  end;
+end;
+
 procedure TDataManager.BAddClick(Sender: TObject);
 begin
   TBIMenu.Popup(PopupMenu1,BAdd);
@@ -585,6 +599,7 @@ begin
     BAdd.Hide;
     BDelete.Hide;
     BRename.Hide;
+    BQuery.Hide;
 
     PageControl1.Hide;
     Splitter1.Hide;
