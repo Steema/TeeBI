@@ -3,7 +3,7 @@
 {  Zip Compression plugin for d7zip API       }
 {  https://github.com/geoffsmith82/d7zip      }
 {                                             }
-{  Copyright (c) 2016-2025 by Steema Software }
+{  Copyright (c) 2016-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Compression.d7zip;

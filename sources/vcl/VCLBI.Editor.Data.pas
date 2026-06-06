@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Data Import Definition Editor dialog       }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit VCLBI.Editor.Data;

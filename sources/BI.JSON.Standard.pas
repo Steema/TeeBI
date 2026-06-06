@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  JSON data Standard (Delphi) driver         }
-{  Copyright (c) 2015-2025 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.JSON.Standard;

@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Plugin for opaR native Delphi R language   }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Plugins.R.opaR;

@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  TBIGrid control for FireMonkey             }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit FMXBI.Grid;
@@ -37,7 +37,9 @@ type
     IPluginRight : TBIGridPlugin;
 
     procedure ControlDblClick(Sender: TObject);
+
     procedure CopyTable(Sender:TObject);
+
     function CreatePopup(const AOwner:TBIGridPlugin):TPopupMenu;
     function GetCurrentRow: Integer;
     function GetReadOnly: Boolean;
@@ -204,11 +206,17 @@ end;
 
 procedure TBIGrid.CopyTable(Sender:TObject);
 var tmp : TDataSet;
+    tmpData : TDataItem;
+    tmpS : String;
 begin
   tmp:=DataSetOf(Sender);
 
   if tmp is TBIDataset then
-     TUICommon.CopyToClipboard(TBICSVExport.AsString(TBIDataSet(tmp).Data));
+  begin
+    tmpData:=TBIDataSet(tmp).Data;
+    tmpS:=TBICSVExport.AsString(tmpData);
+    TUICommon.CopyToClipboard(tmpS);
+  end;
 end;
 
 function TBIGrid.CreatePopup(const AOwner:TBIGridPlugin):TPopupMenu;

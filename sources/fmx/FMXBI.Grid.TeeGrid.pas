@@ -4,7 +4,7 @@
 {                                             }
 {  https://www.steema.com/product/gridvcl     }
 {                                             }
-{  Copyright (c) 2016-2018 by Steema Software }
+{  Copyright (c) 2016-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit FMXBI.Grid.TeeGrid;

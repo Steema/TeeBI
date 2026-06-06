@@ -3,7 +3,7 @@
 {  TBIGrid plugin for TMS Firemonkey Grid     }
 {  http://www.tmssoftware.com                 }
 {                                             }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit FMXBI.Grid.TMS;

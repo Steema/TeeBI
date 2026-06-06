@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Flat table to pivot-grid algorithm         }
-{  Copyright (c) 2016-2025 by Steema Software }
+{  Copyright (c) 2016-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Gridify;

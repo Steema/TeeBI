@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Constants in English language              }
-{  Copyright (c) 2016-2025 by Steema Software }
+{  Copyright (c) 2016-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Languages.English;
@@ -13,7 +13,7 @@ const
   TeeBI_VersionString='v1 20250814';
   TeeBI_VersionMode='';
   TeeBI_Description='TeeBI';
-  TeeBI_CopyRight='Copyright '+{$IFDEF LCL}'(C)'{$ELSE}''{$ENDIF}+' 2015-2025 by Steema Software';
+  TeeBI_CopyRight='Copyright '+{$IFDEF LCL}'(C)'{$ELSE}''{$ENDIF}+' 2015-2026 by Steema Software';
 
 var
   BIMsg_About:String                       = 'About TeeBI...';

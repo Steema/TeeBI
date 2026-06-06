@@ -2,7 +2,7 @@
 {  TeeBI Software Library                     }
 {  Internal IDE Design-Time                   }
 {  Debug Visualizer Dockable Frame            }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit TeeBIDebugFrame;

@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Zip Compression plugin for Google Snappy   }
-{  Copyright (c) 2016-2025 by Steema Software }
+{  Copyright (c) 2016-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Compression.Snappy;

@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  Abstract TBIGridPlugin class               }
-{  Copyright (c) 2018-2025 by Steema Software }
+{  Copyright (c) 2018-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Grid.Plugin;

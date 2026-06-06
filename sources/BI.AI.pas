@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  AI Agents API                              }
-{  Copyright (c) 2025-2025 by Steema Software }
+{  Copyright (c) 2025-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.AI;
