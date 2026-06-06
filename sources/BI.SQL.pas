@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  SQL Language support                       }
-{  Copyright (c) 2015-2025 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.SQL;
@@ -113,6 +113,12 @@ type
 
     // Return SQL from AData Provider:
     class function From(const AData:TDataItem):String; overload; static;
+
+    // Executes a query from SQL-like parameters, and returns the output data item
+    class function QueryOf(const AData:TDataItem; const AQuery,AFilter,ADistinct: String): TDataItem; static;
+
+    // Executes a summary-only query from SQL-like parameters, and returns the output data item
+    class function SummaryOf(const AData:TDataItem; const ASummary,AHaving,AFilter: String): TDataItem; static;
   end;
 
 implementation
@@ -1512,6 +1518,140 @@ begin
   finally
     FormatSettings.DecimalSeparator:=OldDecimal;
     FormatSettings.ThousandSeparator:=OldThousands;
+  end;
+end;
+
+function GetFilter(const AData:TDataItem; const AFilter:String):TExpression;
+begin
+  if AFilter='' then
+     result:=nil
+  else
+     result:=TDataFilter.FromString(AData,AFilter);
+end;
+
+class function TBISQL.SummaryOf(const AData:TDataItem; const ASummary,AHaving,AFilter: String): TDataItem;
+
+  procedure PrepareSummary(const Summary:TSummary; const Data:TDataItem;
+                           const Items : TArray<String>);
+
+    function CreateGroup(const S:String):TGroupBy;
+    var tmp : TDataItem;
+    begin
+      tmp:=Data.Items.Find(S);
+
+      if tmp=nil then
+         result:=Summary.AddGroupBy(TDataExpression.FromString(Data,S))
+      else
+         result:=Summary.AddGroupBy(tmp);
+    end;
+
+  var S : TArray<String>;
+      t : Integer;
+      tmpS : String;
+      Aggregate : TAggregate;
+      tmpPart : TDateTimePart;
+      tmp : TDataItem;
+  begin
+    // Measures
+    S:=Items[0].Split([',']);
+
+    if Length(S)=0 then
+       Summary.AddMeasure(Data,TAggregate.Count)
+    else
+    for t:=0 to High(S) do
+    begin
+      tmpS:=S[t];
+
+      if TSQLParser.FindAggregate(tmpS,Aggregate) then
+      begin
+        tmp:=Data.Items.Find(tmpS);
+
+        if tmp=nil then
+           Summary.AddMeasure(TDataExpression.FromString(Data,tmpS),Aggregate)
+        else
+           Summary.AddMeasure(tmp,Aggregate);
+      end
+      else
+        raise EBIException.CreateFmt(BIMsg_Summary_WrongAggregate,[tmpS]);
+    end;
+
+    // GroupBy
+    if Length(Items)>1 then
+    begin
+      S:=Items[1].Split([',']);
+
+      for t:=0 to High(S) do
+      begin
+        tmpS:=S[t];
+
+        if TSQLParser.FindGroupByPart(tmpS,tmpPart) then
+           CreateGroup(tmpS).DatePart:=tmpPart
+        else
+           CreateGroup(tmpS);
+      end;
+    end;
+  end;
+
+var tmp: TSummary;
+    Items : TArray<String>;
+begin
+  result:=nil;
+
+  Items:=ASummary.Split([';']);
+
+  if Length(Items)>0 then
+  begin
+    tmp:=TSummary.Create(nil);
+    try
+      if AData<>nil then
+      begin
+        TSummaryAccess(tmp).SetDirectFilter(GetFilter(AData,AFilter));
+
+        if AHaving<>'' then
+           tmp.Having.Add(AHaving);
+
+        PrepareSummary(tmp,AData,Items);
+
+        result:=tmp.Calculate;
+      end;
+    finally
+      tmp.Free;
+    end;
+  end;
+end;
+
+type
+  TDataCursorAccess=class(TDataCursor);
+
+class function TBISQL.QueryOf(const AData:TDataItem; const AQuery,AFilter,ADistinct: String): TDataItem;
+var tmp : TDataSelect;
+    Items : TArray<String>;
+    tmpS : String;
+begin
+  result:=nil;
+
+  Items:=AQuery.Split([',']);
+
+  if Length(Items)>0 then
+  begin
+    tmp:=TDataSelect.Create(nil);
+    try
+      if AData<>nil then
+      begin
+        tmp.Data:=AData;
+
+        TDataCursorAccess(tmp).SetDirectFilter(GetFilter(tmp.Data,AFilter));
+
+        for tmpS in Items do
+            tmp.Add(tmp.Data.Items.Find(tmpS));
+
+        tmp.Distinct:=ADistinct<>'';
+
+        result:=tmp.Calculate;
+      end;
+    finally
+      tmp.Free;
+    end;
   end;
 end;
 

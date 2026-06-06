@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  A default web "Module"                     }
-{  Copyright (c) 2015-2025 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit BI.Web.Modules.Default;
@@ -49,8 +49,6 @@ type
                           const Format:String;
                           const Params:TStrings);
 
-    function QueryOf(const AData:TDataItem; const AQuery,AFilter,ADistinct: String): TDataItem;
-
     procedure ReturnCursor(const AContext:TWebContext;
                            const Params:TStrings;
                            var ACursor:TDataCursor; const AFormat:String;
@@ -66,8 +64,6 @@ type
 
 
     function Root(const AContext: TWebContext):String;
-
-    function SummaryOf(const AData:TDataItem; const ASummary,AHaving,AFilter:String):TDataItem;
 
     function TotalsOf(const Params:TStrings; const ACursor:TDataCursor):TDataItem;
 
@@ -226,100 +222,6 @@ begin
      end;
 end;
 
-type
-  TSummaryAccess=class(TSummary);
-
-function TDefaultModule.SummaryOf(const AData:TDataItem; const ASummary,AHaving,AFilter: String): TDataItem;
-
-  procedure PrepareSummary(const Summary:TSummary; const Data:TDataItem;
-                           const Items : TArray<String>);
-
-    function CreateGroup(const S:String):TGroupBy;
-    var tmp : TDataItem;
-    begin
-      tmp:=Data.Items.Find(S);
-
-      if tmp=nil then
-         result:=Summary.AddGroupBy(TDataExpression.FromString(Data,S))
-      else
-         result:=Summary.AddGroupBy(tmp);
-    end;
-
-  var S : TArray<String>;
-      t : Integer;
-      tmpS : String;
-      Aggregate : TAggregate;
-      tmpPart : TDateTimePart;
-      tmp : TDataItem;
-  begin
-    // Measures
-    S:=Items[0].Split([',']);
-
-    if Length(S)=0 then
-       Summary.AddMeasure(Data,TAggregate.Count)
-    else
-    for t:=0 to High(S) do
-    begin
-      tmpS:=S[t];
-
-      if TSQLParser.FindAggregate(tmpS,Aggregate) then
-      begin
-        tmp:=Data.Items.Find(tmpS);
-
-        if tmp=nil then
-           Summary.AddMeasure(TDataExpression.FromString(Data,tmpS),Aggregate)
-        else
-           Summary.AddMeasure(tmp,Aggregate);
-      end
-      else
-        raise EBIException.CreateFmt(BIMsg_Summary_WrongAggregate,[tmpS]);
-    end;
-
-    // GroupBy
-    if Length(Items)>1 then
-    begin
-      S:=Items[1].Split([',']);
-
-      for t:=0 to High(S) do
-      begin
-        tmpS:=S[t];
-
-        if TSQLParser.FindGroupByPart(tmpS,tmpPart) then
-           CreateGroup(tmpS).DatePart:=tmpPart
-        else
-           CreateGroup(tmpS);
-      end;
-    end;
-  end;
-
-var tmp: TSummary;
-    Items : TArray<String>;
-begin
-  result:=nil;
-
-  Items:=ASummary.Split([';']);
-
-  if Length(Items)>0 then
-  begin
-    tmp:=TSummary.Create(nil);
-    try
-      if AData<>nil then
-      begin
-        TSummaryAccess(tmp).SetDirectFilter(GetFilter(AData,AFilter));
-
-        if AHaving<>'' then
-           tmp.Having.Add(AHaving);
-
-        PrepareSummary(tmp,AData,Items);
-
-        result:=tmp.Calculate;
-      end;
-    finally
-      tmp.Free;
-    end;
-  end;
-end;
-
 procedure TDefaultModule.ProcessSingleData(const AData:TDataItem;
                                          const AContext: TWebContext;
                                          const Format:String;
@@ -332,7 +234,7 @@ procedure TDefaultModule.ProcessSingleData(const AData:TDataItem;
   begin
     T1:=TStopwatch.StartNew;
 
-    tmpSum:=SummaryOf(AData,ASummary,Params.Values['having'],Params.Values['summaryfilter']);
+    tmpSum:=TBISQL.SummaryOf(AData,ASummary,Params.Values['having'],Params.Values['summaryfilter']);
 
     tmp:=ReturnNormal(AContext,Params,Format,tmpSum,'summary',ASummary);
 
@@ -346,7 +248,7 @@ procedure TDefaultModule.ProcessSingleData(const AData:TDataItem;
   begin
     T1:=TStopwatch.StartNew;
 
-    tmpQuery:=QueryOf(AData,AQuery,Params.Values['filter'],Params.Values['distinct']);
+    tmpQuery:=TBISQL.QueryOf(AData,AQuery,Params.Values['filter'],Params.Values['distinct']);
 
     tmp:=ReturnNormal(AContext,Params,Format,tmpQuery,'query',AQuery);
 
@@ -851,38 +753,6 @@ begin
     end;
   finally
     ACursor.Filter:=nil;
-  end;
-end;
-
-function TDefaultModule.QueryOf(const AData:TDataItem; const AQuery,AFilter,ADistinct: String): TDataItem;
-var tmp : TDataSelect;
-    Items : TArray<String>;
-    tmpS : String;
-begin
-  result:=nil;
-
-  Items:=AQuery.Split([',']);
-
-  if Length(Items)>0 then
-  begin
-    tmp:=TDataSelect.Create(nil);
-    try
-      if AData<>nil then
-      begin
-        tmp.Data:=AData;
-
-        TDataCursorAccess(tmp).SetDirectFilter(GetFilter(tmp.Data,AFilter));
-
-        for tmpS in Items do
-            tmp.Add(tmp.Data.Items.Find(tmpS));
-
-        tmp.Distinct:=ADistinct<>'';
-
-        result:=tmp.Calculate;
-      end;
-    finally
-      tmp.Free;
-    end;
   end;
 end;
 
