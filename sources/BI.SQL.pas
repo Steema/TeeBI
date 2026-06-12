@@ -9,8 +9,8 @@ unit BI.SQL;
 interface
 
 uses
-  BI.Arrays, BI.DataItem, BI.DataSource, BI.Summary, BI.Expression,
-  BI.Persist, BI.Expressions, BI.Arrays.Strings;
+  {System.}Classes, BI.Arrays, BI.DataItem, BI.DataSource, BI.Summary,
+  BI.Expression, BI.Persist, BI.Expressions, BI.Arrays.Strings;
 
 type
   ESQLParser=class(EBIException);
@@ -119,6 +119,15 @@ type
 
     // Executes a summary-only query from SQL-like parameters, and returns the output data item
     class function SummaryOf(const AData:TDataItem; const ASummary,AHaving,AFilter: String): TDataItem; static;
+  end;
+
+  TBISQLSource=class(TBIFileSource)
+  protected
+    function DoImportFile(const FileName:String):TDataArray; override;
+  public
+    function Import(const Strings:TStrings):TDataArray; override;
+    class function FileFilter: TFileFilters; override;
+    class function Supports(const Extension: String): Boolean; override;
   end;
 
 implementation
@@ -552,16 +561,6 @@ class function TBISQL.From(const AData:TDataItem; const SQL: String;
 begin
   result:=TSQLParser.DataFrom(ProviderFrom(AData,SQL,GetData,ErrorProc));
 end;
-
-{
-  tmp:=TSQLParser.Create(AData,SQL);
-  try
-    tmp.OnGetData:=GetData;
-    result:=tmp.Calculate(ErrorProc);
-  finally
-    tmp.Free;
-  end;
-}
 
 class function TBISQL.From(const AData: TDataItem): String;
 begin
@@ -1348,9 +1347,10 @@ var
     for t:=Low(FromData) to High(FromData) do
     begin
       if Assigned(FOnGetData) then
-         FOnGetData(FromData[t],tmp)
-      else
-         tmp:=nil;
+         FOnGetData(FromData[t],tmp);
+
+      if tmp=nil then
+         tmp:=TStore.OriginToData(nil,'',FromData[t]);
 
       if (tmp=nil) and (FData<>nil) then
          tmp:=SearchInData(UnBracket(FromData[t]));
@@ -1655,4 +1655,37 @@ begin
   end;
 end;
 
+{ TBISQLFileSource }
+
+function TBISQLSource.Import(const Strings:TStrings):TDataArray;
+var SQL : TSQLParser;
+begin
+  SQL:=TSQLParser.Create(nil,Strings.Text);
+  try
+    result:=DataArrayFrom(SQL.Calculate);
+  finally
+    SQL.Free;
+  end;
+end;
+
+function TBISQLSource.DoImportFile(const FileName: String): TDataArray;
+begin
+  result:=DataArrayFrom(FromText(TBITextSource.LoadFromFile(FileName)));
+end;
+
+class function TBISQLSource.FileFilter: TFileFilters;
+begin
+  result:=nil;
+  result.Add('SQL files','*.sql');
+end;
+
+class function TBISQLSource.Supports(const Extension: String): Boolean;
+begin
+  result:=SameText(Extension,'.SQL');
+end;
+
+initialization
+  TBIFileImporters.RegisterClass(TBISQLSource);
+finalization
+  TBIFileImporters.UnRegisterClass(TBISQLSource);
 end.
