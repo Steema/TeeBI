@@ -98,7 +98,6 @@ object BIQueryEditor: TBIQueryEditor
         Color = clWhite
         ParentBackground = False
         TabOrder = 0
-        ExplicitTop = 72
         object Panel1: TPanel
           Left = 1
           Top = 1
@@ -397,8 +396,6 @@ object BIQueryEditor: TBIQueryEditor
         Height = 237
         Align = alClient
         TabOrder = 2
-        ExplicitLeft = 185
-        ExplicitWidth = 457
         object Splitter1: TSplitter
           Left = 176
           Top = 42
@@ -418,7 +415,6 @@ object BIQueryEditor: TBIQueryEditor
           Color = clWhite
           ParentBackground = False
           TabOrder = 0
-          ExplicitWidth = 455
           object Label1: TLabel
             Left = 5
             Top = 5
@@ -472,7 +468,6 @@ object BIQueryEditor: TBIQueryEditor
           OnClick = ListMeasuresClick
           OnClickCheck = ListRowsClickCheck
           OnDragOver = ListMeasuresDragOver
-          ExplicitWidth = 181
         end
         object Panel5: TPanel
           Left = 179
@@ -482,7 +477,6 @@ object BIQueryEditor: TBIQueryEditor
           Align = alRight
           BevelOuter = bvNone
           TabOrder = 2
-          ExplicitLeft = 182
           object PageOptions: TPageControl
             Left = 0
             Top = 0
