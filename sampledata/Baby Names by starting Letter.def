@@ -1,2 +1,3 @@
 Kind=FILE
-File=Baby Names by starting Letter.sql
+FileName=Baby Names by starting Letter.sql
+Parallel=True
