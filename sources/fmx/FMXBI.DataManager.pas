@@ -38,7 +38,7 @@ uses
 
   FMX.Dialogs, FMX.ListView.Types, FMX.ListView, FMX.StdCtrls,
   FMX.Layouts, BI.Persist, FMX.ListBox, FMX.TabControl, FMXBI.Editor.Data,
-  FMX.Edit, FMX.Menus, FMX.Memo, BI.DataItem;
+  FMX.Edit, FMX.Menus, FMX.Memo, BI.DataItem, FMX.Memo.Types;
 
 type
   TDataManagerEmbedMode=(Choose,Edit);
@@ -360,7 +360,7 @@ begin
 
     TStore.UnLoad(CurrentStore,IEditor.Data.Name);
 
-    tmp:=TDataItem.Create(Data);
+    tmp:=Data.ToItem;
     try
       tmp.Name:=IEditor.Data.Name;
       TStore.Save(tmp,tmpFileName);

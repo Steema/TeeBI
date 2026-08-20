@@ -132,6 +132,7 @@ type
     procedure Resize(const ACount: Integer); inline;
     function Subtract(const AItems:TDataArray):TDataArray; overload;
     function Subtract(const AItem:TDataItem):TDataArray; overload;
+    function ToItem:TDataItem;
   end;
 
   // Contains the list of sub-items of a TDataItem
@@ -2365,6 +2366,11 @@ begin
   for tmp in Self do
       if tmp<>AItem then
          result.Add(tmp);
+end;
+
+function TDataArrayHelper.ToItem: TDataItem;
+begin
+  result:=TDataItem.Create(Self);
 end;
 
 // Returns a new copy of the array with all items except AItems

@@ -527,7 +527,7 @@ begin
     for tmpField in AFields do
         tmp.Add(Import(tmpField));
 
-    result:=TDataItem.Create(tmp);
+    result:=tmp.ToItem;
     result.Name:=AName;
   finally
     Free;
@@ -571,7 +571,7 @@ var tmp : String;
 begin
   with TBIDataSetSource.Create do
   try
-    result:=TDataItem.Create(Import(AConnection));
+    result:=Import(AConnection).ToItem;
 
     tmp:=AName;
 

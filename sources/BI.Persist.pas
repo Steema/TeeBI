@@ -2986,7 +2986,7 @@ begin
 
   if Links.Count>0 then
   begin
-    tmpData:=TDataItem.Create(AData);
+    tmpData:=AData.ToItem;
     try
       TDataDefinition.SetMasters(tmpData,AStore,Links);
     finally

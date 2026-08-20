@@ -735,7 +735,7 @@ var csv : TBICSV;
 begin
   csv:=TBICSV.Create;
   try
-    result:=TDataItem.Create(csv.Import(Folder));
+    result:=csv.Import(Folder).ToItem;
   finally
     csv.Free;
   end;

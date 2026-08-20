@@ -424,7 +424,7 @@ function TComponentImporter.DoImport(const AComponent: TComponent):TDataItem;
     begin
       tmp:=TBIDB.Create;
       try
-        result:=TDataItem.Create(tmp.Import(AConnection));
+        result:=tmp.Import(AConnection).ToItem;
         result.Name:=AConnection.Name;
       finally
         tmp.Free;

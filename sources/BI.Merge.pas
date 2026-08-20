@@ -336,7 +336,7 @@ begin
     end;
   end
   else
-    result:=TDataItem.Create(AData); // Do not merge, simply group them
+    result:=AData.ToItem; // Do not merge, simply group them
 end;
 
 class procedure TDataMerge.FromData(const ADest: TDataItem; const AData: TDataArray);
