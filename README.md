@@ -65,9 +65,14 @@ var Data1 : TDataItem;
 Data1 := TBICSV.FromFile( 'mydata.csv' );  // also From TStrings, String etc
 
 // other importing methods:
-Data1 := TBIDB.From( SQLConnection1 ); // loads all tables in one line of code
+Data1 := TBIDB.From( SQLConnection1 ); // loads all tables in the connection in one line of code
+
+// import all tables from a database, one line of code:
+Data1 := TBIDB.Import(FDConnection1, False).ToItem;
+
+// import data from different formats
 Data1 := TBIJson.From ...
-Data1 := TBIXML.From ... // import different formats
+Data1 := TBIXML.From ... 
 
 // import from Artificial Intelligence AI agents, like Google Gemini:
 Data1 := TBIAI.From('Give me the list of the highest 10 mountains﻿ by elevation in csv format, just the list');
