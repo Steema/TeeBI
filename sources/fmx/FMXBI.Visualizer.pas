@@ -2590,7 +2590,7 @@ procedure TGroup.Traverse<T>(const AProc: TGroupProc<T>);
 var tmp : TGroup;
 begin
   if Self is T then
-     AProc(Self);
+     AProc(T(Self)); // Hard casting needed in 13.2
 
   for tmp in FGroups do
       tmp.Traverse<T>(AProc);
