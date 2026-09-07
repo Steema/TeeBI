@@ -31,7 +31,7 @@ type
                             const GetText:TNodeGetText<T>); overload; static;
     {$ENDIF}
 
-    class procedure Fill(const AData: TDataArray; const ATree: TTreeView;
+    class procedure Fill(const AData: {$IF CompilerVersion>26}TDataArray{$ELSE}Array of TDataItem{$ENDIF}; const ATree: TTreeView;
                          const AddLeaves:Boolean=True;
                          const AddNames:Boolean=True); overload; static;
 
@@ -163,7 +163,7 @@ begin
 end;
 {$ENDIF}
 
-class procedure TDataTree.Fill(const AData: TDataArray; const ATree: TTreeView;
+class procedure TDataTree.Fill(const AData: {$IF CompilerVersion>26}TDataArray{$ELSE}Array of TDataItem{$ENDIF}; const ATree: TTreeView;
           const AddLeaves:Boolean; const AddNames:Boolean);
 
   function CheckName(const S:String):String;

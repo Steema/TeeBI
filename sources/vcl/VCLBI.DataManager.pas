@@ -1,7 +1,7 @@
 {*********************************************}
 {  TeeBI Software Library                     }
 {  DataManager VCL                            }
-{  Copyright (c) 2015-2016 by Steema Software }
+{  Copyright (c) 2015-2026 by Steema Software }
 {  All Rights Reserved                        }
 {*********************************************}
 unit VCLBI.DataManager;
@@ -56,17 +56,21 @@ type
     TabLinks: TTabSheet;
     Custommanual1: TMenuItem;
     PanelDataTop: TPanel;
+    MemoDataInfo: TMemo;
+    CBStores: TComboBox;
+    LabelCloseStore: TLabel;
+    N1: TMenuItem;
+    NewQuery1: TMenuItem;
+    TabViewData: TTabSheet;
+    BIGrid1: TBIGrid;
+    Panel1: TPanel;
     Label2: TLabel;
     LLastImport: TLabel;
     BViewData: TButton;
-    MemoDataInfo: TMemo;
     BImportNow: TButton;
     CBParallel: TCheckBox;
     CBStoponerrors: TCheckBox;
     ImportProgress: TProgressBar;
-    LStore: TLabel;
-    CBStores: TComboBox;
-    BQuery: TButton;
     procedure TreeChange(Sender: TObject; Node: TTreeNode);
     procedure TreeExpanding(Sender: TObject; Node: TTreeNode;
       var AllowExpansion: Boolean);
@@ -92,7 +96,9 @@ type
     procedure BRenameClick(Sender: TObject);
     procedure Custommanual1Click(Sender: TObject);
     procedure PanelStoresClick(Sender: TObject);
-    procedure BQueryClick(Sender: TObject);
+    procedure LabelCloseStoreClick(Sender: TObject);
+    procedure NewQuery1Click(Sender: TObject);
+    procedure PanelSearchComboResize(Sender: TObject);
   private
     { Private declarations }
 
@@ -129,6 +135,7 @@ type
     function SelectedText:String;
     procedure SelectStore;
     procedure SetLastImport;
+    procedure SetActiveTab(const FromPageControl:Boolean);
     procedure ShowDataInfo(SelectAtEditor:Boolean);
     procedure ShowDataLinks;
     procedure TryAdd(const Kind:TDataDefinitionKind);
@@ -138,7 +145,7 @@ type
   protected
     StartEmpty : Boolean; // When True, the Tree of data items will not be filled
 
-    procedure FillData(const AData:TDataArray);
+    procedure FillData(const AData:{$IF CompilerVersion>26}TDataArray{$ELSE}Array of TDataItem{$ENDIF});
   public
     { Public declarations }
 
@@ -382,7 +389,7 @@ begin
 
   TStore.UnLoad(CurrentStore,tmpName);
 
-  tmp:=TDataItem.Create(AData);
+  tmp:=AData.ToItem;
   try
     tmp.Name:=tmpName;
     TStore.Save(tmp,tmpFileName);
@@ -497,18 +504,6 @@ begin
   SelectStore;
 end;
 
-procedure TDataManager.BQueryClick(Sender: TObject);
-var tmp : TBIQuery;
-begin
-  tmp:=TBIQuery.Create(Self);
-  try
-    if TBIQueryEditor.Edit(Self,tmp) then
-       // TODO: Add new query definition (or sql) to TStore and listbox
-  finally
-    tmp.Free;
-  end;
-end;
-
 procedure TDataManager.BAddClick(Sender: TObject);
 begin
   TBIMenu.Popup(PopupMenu1,BAdd);
@@ -539,7 +534,7 @@ begin
          Inc(result);
 end;
 
-procedure TDataManager.FillData(const AData: TDataArray);
+procedure TDataManager.FillData(const AData: {$IF CompilerVersion>26}TDataArray{$ELSE}Array of TDataItem{$ENDIF});
 begin
   TDataTree.Fill(AData,Tree,True);
 
@@ -599,7 +594,6 @@ begin
     BAdd.Hide;
     BDelete.Hide;
     BRename.Hide;
-    BQuery.Hide;
 
     PageControl1.Hide;
     Splitter1.Hide;
@@ -771,12 +765,9 @@ begin
   if IStore='' then
      IStore:=TStore.DefaultName;
 
-  if PanelStores.Visible then
-  begin
-    AddAllStores;
-    SelectStore;
-  end
-  else
+  AddAllStores;
+  SelectStore;
+
   if IStore<>'' then
      FillTree(IStore);
 end;
@@ -801,6 +792,16 @@ begin
   result:=not CBStopOnErrors.Checked;
 end;
 
+procedure TDataManager.LabelCloseStoreClick(Sender: TObject);
+begin
+  PanelStores.Visible:=not PanelStores.Visible;
+
+  if PanelStores.Visible then
+     LabelCloseStore.Caption:='>>'
+  else
+     LabelCloseStore.Caption:='<<';
+end;
+
 procedure TDataManager.LogException(const Text:String);
 begin
   {$IFNDEF FPC}
@@ -819,6 +820,18 @@ end;
 // Returns Tree node that is associated with AData.
 // If necessary, nodes are expanded to allow filling node children,
 // and collapsed when the AData cannot be found
+procedure TDataManager.NewQuery1Click(Sender: TObject);
+var tmp : TBIQuery;
+begin
+  tmp:=TBIQuery.Create(Self);
+  try
+    TBIQueryEditor.Edit(Self,tmp);
+    //
+  finally
+    tmp.Free;
+  end;
+end;
+
 function TDataManager.NodeWithData(const AData: TDataItem): TTreeNode;
 
   // Returns the item in the cache that corresponds to the "root" node
@@ -964,19 +977,37 @@ begin
   end;
 end;
 
-procedure TDataManager.PageControl1Change(Sender: TObject);
+procedure TDataManager.SetActiveTab(const FromPageControl:Boolean);
+
+  procedure ShowData;
+  begin
+    BIGrid1.Data:=TStore.Load(CurrentStore,Current);
+  end;
+
 begin
   if PageControl1.ActivePage=TabData then
-     ShowDataInfo(True)
+     ShowDataInfo(FromPageControl)
   else
   if PageControl1.ActivePage=TabLinks then
-     ShowDataLinks;
+     ShowDataLinks
+  else
+  if PageControl1.ActivePage=TabViewData then
+     ShowData;
+end;
+
+procedure TDataManager.PageControl1Change(Sender: TObject);
+begin
+  SetActiveTab(True);
 end;
 
 procedure TDataManager.PanelStoresClick(Sender: TObject);
 begin
-  LStore.Visible:=PanelStores.Width>275;
   BManageStores.Visible:=PanelStores.Width>150;
+end;
+
+procedure TDataManager.PanelSearchComboResize(Sender: TObject);
+begin
+  LabelCloseStore.Left:=PanelSearchCombo.Width-LabelCloseStore.Width-12;
 end;
 
 procedure TDataManager.PanelSearchResize(Sender: TObject);
@@ -1231,11 +1262,7 @@ begin
 
         ShowHideEditorTabs;
 
-        if PageControl1.ActivePage=TabData then
-           ShowDataInfo(False)
-        else
-        if PageControl1.ActivePage=TabLinks then
-           ShowDataLinks;
+        SetActiveTab(False);
       end;
     end;
 
