@@ -3,6 +3,13 @@ program TeeBI_Tests;
 {$R+}
 {$Q+}
 
+// ***************************************************************
+
+// This test project requires DUnit Testing Framework units.
+// available at: RAD Studio --> Tools --> Manage Features
+
+// ***************************************************************
+
 {.$DEFINE TESTINSIGHT}
 
 {$IFNDEF TESTINSIGHT}
