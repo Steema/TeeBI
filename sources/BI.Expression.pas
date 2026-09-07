@@ -422,7 +422,9 @@ type
                  Decade,
                  DecadeOfYear,
                  Century,
-                 Millennium);
+                 Millennium,
+
+                 MonthYear); // Month and Year together
 
   TDateTimePartHelper=record helper for TDateTimePart
   private
@@ -452,7 +454,8 @@ type
                'Decade',
                'Decade of Year',
                'Century',
-               'Millennium'
+               'Millennium',
+               'Month and Year'
              );
   public
     class
@@ -1580,7 +1583,8 @@ const Highs : Array[TDateTimePart] of Integer=(
                 0,    // Decade
                 10,   // DecadeOfYear
                 1000, // Century
-                100   // Millenium
+                100,  // Millenium
+                0     // Month and Year
               );
 begin
   result:=Highs[Self];
@@ -1750,6 +1754,9 @@ TDateTimePart.HundredsOfSecond: result:=MilliSecondOf(AValue) div 10;
  TDateTimePart.DecadeOfYear : result:=1+((tmpYear div 10) mod 10); // 1..10
       TDateTimePart.Century : result:=1+(tmpYear div 100); // ...19, 20, 21, 22...
    TDateTimePart.Millennium : result:=1+(tmpYear div 1000);  //
+
+    TDateTimePart.MonthYear : result:=(12*tmpYear)+TBIDateTime.MonthOf(AValue);
+
       else
         result:=0; // <-- just to skip warning
       end;

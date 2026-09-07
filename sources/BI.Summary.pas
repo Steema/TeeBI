@@ -2048,6 +2048,7 @@ begin
       TDateTimePart.Decade: result:=DecadeOf(MaxYear)-DecadeOf(MinYear)+1;
      TDateTimePart.Century: result:=(MaxYear div 100)-(MinYear div 100)+1;
   TDateTimePart.Millennium: result:=(MaxYear div 1000)-(MinYear div 1000)+1;
+   TDateTimePart.MonthYear: result:=12*(MaxYear-MinYear+1);
   else
     result:=Part.High;
   end;
@@ -2090,6 +2091,7 @@ TDateTimePart.HundredsOfSecond: result:=MilliSecondOf(ADate) div 10;
     TDateTimePart.DecadeOfYear: result:=((tmpYear div 10) mod 10);
          TDateTimePart.Century: result:=(tmpYear div 100)-(MinYear div 100);
       TDateTimePart.Millennium: result:=(tmpYear div 1000)-(MinYear div 1000);
+       TDateTimePart.MonthYear: result:=(12*(tmpYear-MinYear))+TBIDateTime.MonthOf(ADate)-1;
       else
         result:=-1;
       end;
@@ -2138,6 +2140,7 @@ begin
     TDateTimePart.DecadeOfYear: FillInteger(1);
     TDateTimePart.Century     : FillInteger(1+(MinYear div 100));
     TDateTimePart.Millennium  : FillInteger(1+(MinYear div 1000));
+    TDateTimePart.MonthYear   : FillInteger(12*MinYear);
   else
     for t:=0 to High(Items) do
         Items[t].Name:=Part.AsString(t);
@@ -2210,6 +2213,7 @@ begin
   TDateTimePart.DecadeOfYear  : FillInteger(1);
        TDateTimePart.Century  : FillInteger(1+(MinYear div 100));
     TDateTimePart.Millennium  : FillInteger(1+(MinYear div 1000));
+     TDateTimePart.MonthYear  : FillInteger(12*MinYear);
   else
   begin
     t:=0;
