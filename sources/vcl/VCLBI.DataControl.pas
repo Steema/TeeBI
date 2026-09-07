@@ -56,9 +56,8 @@ type
     procedure UpdatedDataValues; virtual;
 
     {$IFNDEF FMX}
+    procedure WMEraseBkgnd(var Message: {$IFDEF FPC}TLMEraseBkgnd{$ELSE}TWMEraseBkgnd{$ENDIF}); message {$IFDEF FPC}LM_ERASEBKGND{$ELSE}WM_ERASEBKGND{$ENDIF};
     property DockManager;
-    procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
-
     {$ENDIF}
   public
     OwnsData : Boolean;
@@ -281,7 +280,7 @@ end;
 {$ENDIF}
 
 {$IFDEF MSWINDOWS}
-procedure TBIDataControl.WMEraseBkgnd(var Message: TWmEraseBkgnd);
+procedure TBIDataControl.WMEraseBkgnd(var Message: {$IFDEF FPC}TLMEraseBkgnd{$ELSE}TWMEraseBkgnd{$ENDIF});
 
   function AnyControlIsAlignClient:Boolean;
   var t : Integer;
@@ -295,7 +294,7 @@ procedure TBIDataControl.WMEraseBkgnd(var Message: TWmEraseBkgnd);
 
 begin
 //   inherited else
-//  Not done here. See CreateParams override.
+//  Not done here. Must be done at a CreateParams override (no longer done).
 //  if Color=clNone then
 //     SetBkMode(Message.DC, TRANSPARENT);
 
