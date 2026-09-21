@@ -6,9 +6,10 @@
         <MainSource>TeeBI_Speed_FMX.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Release</Config>
-        <Platform Condition="'$(Platform)'==''">Linux64</Platform>
-        <TargetedPlatforms>558227</TargetedPlatforms>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <TargetedPlatforms>693395</TargetedPlatforms>
         <AppType>Application</AppType>
+        <ProjectName Condition="'$(ProjectName)'==''">TeeBI_Speed_FMX</ProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -99,8 +100,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <DCC_UnitSearchPath>c:\root\teebee\sources;c:\root\teebee\sources\fmx;c:\root\teebee\sources\grid;c:\root\teebee\sources\grid\fmx;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;fmxtee;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_UnitSearchPath>C:\GitHub\BI\sources;C:\GitHub\BI\sources\fmx;C:\Root\TeeBI_VCL\Sources\Grid;C:\Root\TeeBI_VCL\Sources\Grid\fmx;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>TeeBI_Speed_FMX</SanitizedProjectName>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <AUP_WRITE_CALENDAR>true</AUP_WRITE_CALENDAR>
@@ -326,11 +327,6 @@
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp370.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k370.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp370.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="\\tsclient\C\Root\TeeChartVCL\sources9\Compiled\Delphi37.win32\Bin\DclTeePro937.bpl">TeeChart Pro 2026 VCL Components</Excluded_Packages>
-                    <Excluded_Packages Name="\\tsclient\C\Root\TeeChartVCL\sources9\..\..\TeeTreeVCL\Sources9\Compiled\Delphi37.win32\Bin\DclTree2D37Tee9.bpl">TeeTree 2 Components</Excluded_Packages>
-                    <Excluded_Packages Name="\\tsclient\C\Root\TeeChartVCL\sources9\..\..\TeeTreeVCL\Sources9\Compiled\Delphi37.win32\Bin\DclFMXTree37.bpl">TeeTree for FireMonkey</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclFMXtee9370.bpl">TeeChart Lite FMX Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcltee9370.bpl">TeeChart Standard VCL Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="5">
@@ -386,6 +382,12 @@
                 <DeployFile LocalName="Android\Release\splash_image_def.xml" Configuration="Release" Class="AndroidSplashImageDef"/>
                 <DeployFile LocalName="Android\Release\styles.xml" Configuration="Release" Class="AndroidSplashStyles"/>
                 <DeployFile LocalName="Linux64\Release\TeeBI_Speed_FMX" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="Linux64\Release\TeeBI_Speed_FMX" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Linux64">
+                        <RemoteName>TeeBI_Speed_FMX</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="OSX32\Release\TeeBI_Speed_FMX.entitlements" Configuration="Release" Class="ProjectOSXEntitlements"/>
                 <DeployFile LocalName="OSX32\Release\TeeBI_Speed_FMX.info.plist" Configuration="Release" Class="ProjectOSXInfoPList"/>
                 <DeployFile LocalName="OSX32\Release\TeeBI_Speed_FMX" Configuration="Release" Class="ProjectOutput"/>
@@ -1360,8 +1362,8 @@
                 <Platform value="iOSDevice64">True</Platform>
                 <Platform value="iOSSimARM64">True</Platform>
                 <Platform value="Linux64">True</Platform>
-                <Platform value="OSX64">False</Platform>
-                <Platform value="OSXARM64">False</Platform>
+                <Platform value="OSX64">True</Platform>
+                <Platform value="OSXARM64">True</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
