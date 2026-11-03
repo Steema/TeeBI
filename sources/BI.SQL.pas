@@ -1349,14 +1349,14 @@ var
       if Assigned(FOnGetData) then
          FOnGetData(FromData[t],tmp);
 
-      if tmp=nil then
-         tmp:=TStore.OriginToData(nil,'',FromData[t]);
-
       if (tmp=nil) and (FData<>nil) then
          tmp:=SearchInData(UnBracket(FromData[t]));
 
       if tmp=nil then
       begin
+        if tmp=nil then
+           tmp:=TStore.OriginToData(nil,'',FromData[t],FError);
+
         tmp:=TBISQL.From(FData,UnParen(FromData[t]),FOnGetData,FError);
 
         if tmp=nil then
