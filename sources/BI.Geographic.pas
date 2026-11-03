@@ -637,6 +637,8 @@ begin
 end;
 
 class function TGeo.LinkedTo(const AData: TDataItem): TDataItem;
+var Items : TDataArray;
+    tmp : TDataItem;
 begin
   result:=AData;
 
@@ -646,7 +648,17 @@ begin
        Exit
     else
     if TDataItemAccess(result).HasMaster then
-       result:=result.Master
+    begin
+      tmp:=result.Master;
+
+      if Items.Exists(tmp) then  // <-- is circular reference? break it !
+         break
+      else
+      begin
+        Items.Add(tmp);
+        result:=tmp;
+      end;
+    end
     else
        break;
   end;
