@@ -885,6 +885,8 @@ begin
   {$IFDEF TEEPRO}
   AddMarksTip;
   {$ENDIF}
+
+  RequestAlign;
 end;
 
 function TBITChart.NewSeries(const AClass:TChartSeriesClass):TChartSeries;
