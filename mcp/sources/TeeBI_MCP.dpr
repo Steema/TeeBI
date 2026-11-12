@@ -21,9 +21,11 @@ begin
     if (ParamStr(I) = '--data-dir') or (ParamStr(I) = '-d') then
     begin
       Inc(I);
+
       if I <= ParamCount then
         DataDir := ParamStr(I);
     end;
+
     Inc(I);
   end;
 
@@ -32,10 +34,9 @@ begin
     // Check common locations
     if TDirectory.Exists('..\..\sampledata') then
       DataDir := TPath.GetFullPath('..\..\sampledata')
-    else if TDirectory.Exists('sampledata') then
-      DataDir := TPath.GetFullPath('sampledata')
-    else if TDirectory.Exists('C:\GitHub\BI\sampledata') then
-      DataDir := 'C:\GitHub\BI\sampledata';
+    else
+    if TDirectory.Exists('sampledata') then
+        DataDir := TPath.GetFullPath('sampledata')
   end;
 
   Server := TBI_MCPServer.Create(DataDir);

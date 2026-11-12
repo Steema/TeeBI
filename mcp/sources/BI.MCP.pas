@@ -497,49 +497,6 @@ begin
     OwnerData.Free;
   end;
 end;
-      QueryResult := TBISQL.From(Table, SQLStr);
-    except
-      on E: Exception do
-        Exit('{"error": "SQL execution error: ' + E.Message + '", "sql": "' + SQLStr + '"}');
-    end;
-
-    if QueryResult = nil then
-      Exit('{"error": "Query returned no data", "sql": "' + SQLStr + '"}');
-
-    try
-      ElapsedMs := Round((Now - T1) * 86400000.0);
-      QueryResult.Load;
-
-      if FormatType = 'csv' then
-      begin
-        result := TBICSVExport.AsString(QueryResult);
-      end
-      else if FormatType = 'html' then
-      begin
-        result := TBIHTMLExport.AsString(QueryResult);
-      end
-      else
-      begin
-        Res := TJSONObject.Create;
-        try
-          Res.AddPair('dataset', DatasetName);
-          Res.AddPair('sql', SQLStr);
-          Res.AddPair('elapsed_ms', TJSONNumber.Create(ElapsedMs));
-          Res.AddPair('row_count', TJSONNumber.Create(QueryResult.Count));
-          Res.AddPair('column_count', TJSONNumber.Create(QueryResult.Items.Count));
-          Res.AddPair('rows', DatasetToJSONArray(QueryResult, 100));
-          result := Res.Format(2);
-        finally
-          Res.Free;
-        end;
-      end;
-    finally
-      QueryResult.Free;
-    end;
-  finally
-    OwnerData.Free;
-  end;
-end;
 
 function TBI_MCPServer.ParseNaturalLanguage(const ATable: TDataItem; const Prompt: String;
   out Explanation: String): String;
