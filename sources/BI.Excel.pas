@@ -537,7 +537,7 @@ begin
     end;
   end
   else
-     Raise EExcelException.Create('Cannot import from Excel file. Excel not installed: '+AFileName)
+     Raise EExcelException.Create('Cannot export data to Excel file. Microsoft Excel is not installed: '+AFileName)
 end;
 
 initialization
@@ -549,3 +549,4 @@ finalization
   TBIExporters.UnRegisterClass(TBIExcelExport);
   TBIFileImporters.UnRegisterClass(TBIExcel);
 end.
+
