@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "teebi": {
+      "command": "..\\TeeBI_MCP.exe",
+      "args": ["--data-dir", "..\\..\\sampledata"]
+    }
+  }
+}

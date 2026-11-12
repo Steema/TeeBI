@@ -1,0 +1,11 @@
+{
+  "name": "teebi",
+  "displayName": "TeeBI Analytics",
+  "version": "1.0.0",
+  "description": "High-speed in-memory data analytics, multidimensional queries, natural language querying, and charting with TeeBI.",
+  "suggestedPrompts": [
+    "List all available TeeBI datasets and inspect the schema for Restaurants",
+    "Run a natural language query on TechProducts to find the top selling items",
+    "Generate a bar chart showing restaurants by borough"
+  ]
+}
