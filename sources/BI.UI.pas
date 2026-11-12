@@ -403,20 +403,6 @@ end;
 
 function TDataColorizer.ValidRange: Boolean;
 
-  function ValueAt(const AData:TDataItem; const AIndex:TLoopInteger):Double;
-  begin
-    case AData.Kind of
-        dkInt32: result:=AData.Int32Data[AIndex];
-        dkInt64: result:=AData.Int64Data[AIndex];
-       dkSingle: result:=AData.SingleData[AIndex];
-       dkDouble: result:=AData.DoubleData[AIndex];
-     dkExtended: result:=AData.ExtendedData[AIndex];
-     dkDateTime: result:=AData.DateTimeData[AIndex];
-    else
-      result:=0;
-    end;
-  end;
-
   function FirstNotMissing(const AData:TDataItem):TInteger;
   begin
     result:=0;
@@ -429,7 +415,7 @@ function TDataColorizer.ValidRange: Boolean;
   var t : TLoopInteger;
       tmp : Double;
   begin
-    AMin:=ValueAt(AData,First);
+    AMin:=AData.NumberAt(First);
     AMax:=AMin;
 
     t:=First;
@@ -438,7 +424,7 @@ function TDataColorizer.ValidRange: Boolean;
     begin
       if not AData.Missing[t] then
       begin
-        tmp:=ValueAt(AData,t);
+        tmp:=AData.NumberAt(t);
 
         if tmp<AMin then
            AMin:=tmp

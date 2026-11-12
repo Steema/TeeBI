@@ -489,6 +489,7 @@ type
     function IsChildOf(const AParent:TDataItem):Boolean;
     procedure Load(const Children:Boolean); overload; virtual;
     procedure Load; overload; inline;
+    function NumberAt(const AIndex:TInteger):Double;
     procedure ReCalculate(const Parallel:Boolean=False); virtual;
     procedure Resize(const Size:TInteger);
     function SameData(const A,B:TInteger):Boolean;
@@ -1055,6 +1056,20 @@ begin
 
     if Parent<>nil then
        Parent.Notify(AEvent);
+  end;
+end;
+
+function TDataItem.NumberAt(const AIndex: TInteger): Double;
+begin
+  case Kind of
+      dkInt32: result:=Int32Data[AIndex];
+      dkInt64: result:=Int64Data[AIndex];
+     dkSingle: result:=SingleData[AIndex];
+     dkDouble: result:=DoubleData[AIndex];
+   dkExtended: result:=ExtendedData[AIndex];
+   dkDateTime: result:=DateTimeData[AIndex];
+  else
+    result:=0;
   end;
 end;
 
