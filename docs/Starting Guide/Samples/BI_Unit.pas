@@ -23,7 +23,7 @@ uses
   BI.Persist, BI.DataSource, BI.DataSet, BI.Summary, BI.Expression,
   BI.Web,
 
-  BI.Excel, BI.CSV, BI.JSON, BI.XMLData, BI.HTML,
+  BI.Excel, BI.Excel.XLSX, BI.CSV, BI.JSON, BI.XMLData, BI.HTML,
 
   {.$DEFINE TEST_TMS}   // <-- Use TMS FlexCel components to export to Excel
 
@@ -753,6 +753,34 @@ begin
   end;
 end;
 
+// Export any TDataItem to Office Open Spreadsheet format XLSX
+procedure ExportToOpenSpreadsheet;
+var tmp : TDataItem;
+    tmpFile : String;
+begin
+  tmp:=AverageByColor_and_YearOfDate; // SumByColorSummary;
+  try
+    tmpFile:=TPath.Combine(TPath.GetTempPath,'test_open.xlsx');
+
+    if TFile.Exists(tmpFile) then
+       TFile.Delete(tmpFile);
+
+    TBIExcelExport.Engine:=TBIXLSXEngine;
+    try
+      TBIExcelExport.SaveToFile(tmp,tmpFile);
+    finally
+      TBIExcelExport.Engine:=TBIExcelEngine;
+    end;
+
+    // Show exported XLSX file:
+    {$IFDEF MSWINDOWS}
+    ShellExecute(0,'open',PChar(tmpFile),nil,nil,SW_SHOWNORMAL);
+    {$ENDIF}
+  finally
+    tmp.Free;
+  end;
+end;
+
 procedure TFormTests.FillNodes(const Items:TTreeNodes);
 var tmp : TTreeNode;
 begin
@@ -818,6 +846,8 @@ begin
     if (not (TBIExcelExport.Engine=TBIExcelEngine)) or
        TBIExcelEngine.IsExcelInstalled then
          Items.AddChildObject(tmp,'Microsoft Excel',@ExportToExcel);
+
+    Items.AddChildObject(tmp,'Office Open Spreadsheet',@ExportToOpenSpreadsheet);
 
   tmp:=Items.AddChild(nil,'Apache');
     Items.AddChildObject(tmp,'Select a,b',@SelectApacheAB);
