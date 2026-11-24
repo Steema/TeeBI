@@ -732,11 +732,12 @@ begin
         if Items.Count<3 then
            Exit;
 
-        V.Major:=StrToInt(Items[0]);
-        V.Minor:=StrToInt(Items[1]);
-        V.URL:=Items[2];
-
-        result:=True;
+        if TryStrToInt(Items[0],V.Major) then
+           if TryStrToInt(Items[1],V.Minor) then
+           begin
+             V.URL:=Items[2];
+             result:=True;
+           end;
       end;
     except
       on E:Exception do
