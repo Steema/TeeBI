@@ -83,7 +83,7 @@ uses
   FMX.Graphics, FMX.Surfaces,
   {$ENDIF}
 
-  System.SysUtils;
+  System.SysUtils, BI.Html;
 
 class function TBIWebCommonChart.ChartFromCursor(var ACursor: TDataCursor;
                     const Params : TStrings;
@@ -239,12 +239,26 @@ end;
 
 procedure TBIWebCommonChart.DoExport(const AExtension,AContent:String);
 var w,h : Integer;
+    tmp : TStream;
 begin
   GetWidthHeight(Params,w,h);
-  Context.ResponseStream:=ChartToStream(Cursor,Params,AExtension,w,h);
 
-  if Context.ResponseStream<>nil then
-     Context.ContentType:=AContent;
+  tmp:=ChartToStream(Cursor,Params,AExtension,w,h);
+
+  if Context.ContentText='' then
+  begin
+    Context.ResponseStream:=tmp;
+
+    if Context.ResponseStream<>nil then
+       Context.ContentType:=AContent;
+  end
+  else
+  try
+    Context.ContentText:=Context.ContentText+
+       '<img src="data:image/png;base64,' + TBIHtmlHelper.Base64(tmp) + '" alt="Chart"/>';
+  finally
+    tmp.Free;
+  end;
 end;
 
 {$IFDEF TEEPRO}
