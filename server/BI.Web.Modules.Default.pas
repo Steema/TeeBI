@@ -32,12 +32,6 @@ type
     procedure DataLink(const Sender:TBIExport; const AData:TDataItem;
                              const AIndex:TInteger; var Text:String);
 
-    procedure DoAddHistory(const AContext: TWebContext;
-                           const Msec:Int64;
-                           const Command:String;
-                           const Tag:String='';
-                           const Success:Boolean=True);
-
     class function GetCSS(const AName:String):String; static;
 
     class function GetFilter(const AData:TDataItem; const AFilter:String):TExpression; static;
@@ -66,6 +60,13 @@ type
     function Root(const AContext: TWebContext):String;
 
     function TotalsOf(const Params:TStrings; const ACursor:TDataCursor):TDataItem;
+
+  protected
+    procedure DoAddHistory(const AContext: TWebContext;
+                           const Msec:Int64;
+                           const Command:String;
+                           const Tag:String='';
+                           const Success:Boolean=True);
 
   public
     Data : TAllData;
@@ -425,10 +426,7 @@ begin
     if tmpS='' then
        ReturnAllData
     else
-    begin
-      ProcessSingleData(tmpS,'',AContext,Format,Params);
-      Exit;
-    end;
+       ProcessSingleData(tmpS,'',AContext,Format,Params);
   end;
 
   SetContentType(AContext,Format);
