@@ -46,11 +46,20 @@ type
     procedure Leave;
 
     procedure TrySave;
+
+    class procedure DebugMsg(const AMessage:String); static;
   end;
 
 implementation
 
 uses
+  {$IFDEF MSWINDOWS}
+  Windows,
+  {$ENDIF}
+  {$IFDEF LINUX}
+  {$IFDEF FPC}SystemLog{$ELSE}Posix.Base{$ENDIF},
+  {$ENDIF}
+
   System.SysUtils, System.IOUtils,
   BI.Persist;
 
@@ -65,6 +74,29 @@ Constructor TWebLogs.Create;
 begin
   inherited Create;
   Lock:=TCriticalSection.Create;
+end;
+
+{$IFDEF LINUX}
+const
+  LOG_USER = 1 shl 3;
+  LOG_DEBUG = 7;
+
+procedure syslog(priority: Integer; format: MarshaledAString); cdecl; varargs;
+  external libc name 'syslog';
+{$ENDIF}
+
+class procedure TWebLogs.DebugMsg(const AMessage: String);
+{$IFDEF LINUX}
+var M:TMarshaller;
+{$ENDIF}
+begin
+  {$IFDEF MSWINDOWS}
+  OutputDebugString(PChar(AMessage));
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+  syslog(LOG_USER or LOG_DEBUG, '%s', M.AsUtf8(AMessage).ToPointer);
+  {$ENDIF}
 end;
 
 Destructor TWebLogs.Destroy;
