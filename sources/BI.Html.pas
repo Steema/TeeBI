@@ -88,6 +88,7 @@ type
   class var
     TableClass:String;
 
+    class function Base64(const AStream:TStream):String; static;
     class function Color(const AColor:TColor):String; static;
     class function Combo(const AName:String; const Texts,Values:TStringArray): String; static;
     class function Escape(const S:String):String; static;
@@ -862,6 +863,19 @@ class function TBIHtmlHelper.Escape(const S:String):String;
 begin
   result:=StringReplace(S,'"','&quot;',[rfReplaceAll]);
   result:=StringReplace(result,'+','%2B',[rfReplaceAll]);
+end;
+
+class function TBIHtmlHelper.Base64(const AStream: TStream): String;
+begin
+  {$IFDEF HAS_NETENCODING}
+  if AStream is TMemoryStream then
+     result:=
+
+     TBase64Encoding.Create(0).EncodeBytesToString(
+             TMemoryStream(AStream).Memory, AStream.Size)
+  else
+  {$ENDIF}
+     result:=''; // error
 end;
 
 class function TBIHtmlHelper.Color(const AColor: TColor): String;
