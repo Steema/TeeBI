@@ -1718,7 +1718,11 @@ begin
   else
   case Col.Kind of
      dkInt32 : begin
+
                  Val(Value,tmp,ValError);
+
+                 if Col.Count<=ARow then
+                    Col.Resize(ARow+1);
 
                  if ValError=0 then
                     Col.Int32Data[ARow]:=tmp
