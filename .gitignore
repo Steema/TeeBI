@@ -63,3 +63,4 @@ demos/delphi/vcl/Query/Summary/__recovery/
 sources/vcl/__recovery/
 server/IIS/VCL/Win32/
 server/Linux/Linux64/
+server/fmx/Linux64/Debug/BI_FMX_Web
