@@ -49,6 +49,7 @@ type
     procedure ImportCSV;
     procedure ImportDatabase;
     procedure ImportExcel;
+    procedure ImportExcel_XLSX;
     procedure ImportHTML;
     procedure ImportJSON;
     procedure ImportXML;
@@ -63,8 +64,8 @@ implementation
 {$R *.dfm}
 
 uses
-  BI.CSV, BI.JSON, BI.XMLData, BI.Excel, BI.DB,
-  BI.DataSource, BI.HTML,
+  BI.CSV, BI.JSON, BI.XMLData, BI.Excel, BI.Excel.XLSX,
+  BI.DB, BI.DataSource, BI.HTML,
   FindSampleData;
 
 { TByCode }
@@ -179,6 +180,33 @@ begin
   end;
 end;
 
+procedure TByCode.ImportExcel_XLSX;
+var Excel : TBIExcelXLSX;
+begin
+  Excel:=TBIExcelXLSX.Create;
+  try
+//    Excel.HeaderCount:=2; // <-- Number of Rows that contain column headers
+
+    // Excel.Range:='A1:B14'; // <-- Optional, define portion of Excel sheet
+
+    // Excel.WorkSheet:='Another Sheet'; // <-- Optional, select a single sheet to import
+
+    BIGrid1.Data:=CreateData('Excel Book1', Excel.ImportFile(BISamplesFolder+'\Other\Excel Book1.xlsx'));
+
+    // Other methods:
+    {
+      Data:=Excel.Import('c:\myexcel',True); // <-- recursive import of Excel files
+      Data:=Excel.ImportURL('http://acme.com/myexcel.xlsx');
+      Data:=Excel.ImportFile('mysheet.xls');
+
+      // Class method
+      Data:=TBIExcelXLSX.FromFile('mysheet.xls');
+    }
+  finally
+    Excel.Free;
+  end;
+end;
+
 procedure TByCode.ImportJSON;
 var JSON : TBIJSON;
 begin
@@ -254,8 +282,11 @@ begin
            PageExamples.ActivePage:=TabHTML;
            ImportHTML;
          end;
+
+      5: ImportExcel;
+
     else
-      ImportExcel;
+      ImportExcel_XLSX;
     end;
 
     // Show new data structure at data viewer

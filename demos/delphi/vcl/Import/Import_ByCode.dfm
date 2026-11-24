@@ -10,11 +10,9 @@ object ByCode: TByCode
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
   Position = poOwnerFormCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 120
@@ -77,7 +75,8 @@ object ByCode: TByCode
         'XML'
         'Database'
         'HTML'
-        'Excel')
+        'Excel xls'
+        'Excel xlsx')
       TabOrder = 0
       OnClick = LBFormatClick
     end
@@ -92,10 +91,6 @@ object ByCode: TByCode
     TabOrder = 2
     object TabBIGrid: TTabSheet
       Caption = 'Data'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object BIGrid1: TBIGrid
         Left = 0
         Top = 0
@@ -111,18 +106,10 @@ object ByCode: TByCode
     object TabStructure: TTabSheet
       Caption = 'Structure'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSource: TTabSheet
       Caption = 'Source Samples'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object PageExamples: TPageControl
         Left = 0
         Top = 0
@@ -133,10 +120,6 @@ object ByCode: TByCode
         TabOrder = 0
         object TabCSV: TTabSheet
           Caption = 'CSV'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoCSV: TMemo
             Left = 0
             Top = 0
@@ -154,10 +137,6 @@ object ByCode: TByCode
         object TabJSON: TTabSheet
           Caption = 'JSON'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoJSON: TMemo
             Left = 0
             Top = 0
@@ -196,10 +175,6 @@ object ByCode: TByCode
         object TabXML: TTabSheet
           Caption = 'XML'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoXML: TMemo
             Left = 0
             Top = 0
@@ -229,10 +204,6 @@ object ByCode: TByCode
         object TabDatabase: TTabSheet
           Caption = 'Database'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object DBGrid1: TDBGrid
             Left = 0
             Top = 0
@@ -251,10 +222,6 @@ object ByCode: TByCode
         object TabHTML: TTabSheet
           Caption = 'HTML'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoHTML: TMemo
             Left = 0
             Top = 0
