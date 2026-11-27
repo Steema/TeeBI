@@ -19,7 +19,7 @@ uses
   {$ENDIF}
 
   {$IFDEF TEEPRO}
-  FMXTee.Themes, FMXBI.PDF, FMXTee.Canvas.Javascript,
+  FMXTee.Themes, FMXBI.PDF, FMXTee.Canvas.Javascript, FMXTee.Canvas.SVG,
   {$ENDIF}
 
   FMXTee.Series, FMXBI.Chart,
@@ -65,7 +65,10 @@ type
     function DoExportChart(const AFormat:String):Boolean;
 
     {$IFDEF TEEPRO}
+    function GetBIChart:TBIChart;
+
     procedure ExportChartHTML5;
+    procedure ExportChartSVG;
     {$ENDIF}
 
     class procedure GetWidthHeight(const Params:TStrings; out AWidth,AHeight:Integer); static;
@@ -262,36 +265,61 @@ begin
 end;
 
 {$IFDEF TEEPRO}
-procedure TBIWebCommonChart.ExportChartHTML5;
+function TBIWebCommonChart.GetBIChart:TBIChart;
 var w,h : Integer;
-    tmp : TBIChart;
-    tmpJS : TJavascriptExportFormat;
 begin
   GetWidthHeight(Params,w,h);
 
-  tmp:=ChartFromCursor(Cursor,Params,w,h,False);
-  try
-    tmp.Chart.Title.Caption:=Params.Values['title'];
+  result:=ChartFromCursor(Cursor,Params,w,h,False);
 
+  result.Chart.Title.Caption:=Params.Values['title'];
+
+  result.Chart.Color:=clNone; //{$IFDEF FMX}TAlphaColors.White{$ELSE}clWhite{$ENDIF};
+  result.Chart.View3DOptions.FontZoom:=StrToIntDef(Params.Values['fontzoom'],100); // %
+end;
+
+procedure TBIWebCommonChart.ExportChartHTML5;
+var tmp : TBIChart;
+    tmpJS : TJavascriptExportFormat;
+begin
+  tmp:=GetBIChart;
+  try
     // Avoid "TeeChart" title in html5 javascript chart
     if tmp.Chart.Title.Caption='' then
        tmp.Chart.Title.Caption:=' ';
-
-    tmp.Chart.Color:=clNone; //{$IFDEF FMX}TAlphaColors.White{$ELSE}clWhite{$ENDIF};
 
     tmpJS:=TJavascriptExportFormat.Create;
     try
       // DEBUG using local js:
       //tmpJS.SourceScriptPath:='file:///C:\Root\Teechartjscript\src';
 
-      tmp.Chart.View3DOptions.FontZoom:=StrToIntDef(Params.Values['fontzoom'],100); // %
-
       tmpJS.Minify:=True;
       tmpJS.Panel:=tmp.Chart;
 
       Context.ContentText:=tmpJS.JScript.Text;
+      Context.ContentType:='Content-Type: text/javascript; charset=utf-8';
     finally
       tmpJS.Free;
+    end;
+  finally
+    tmp.Free;
+  end;
+end;
+
+procedure TBIWebCommonChart.ExportChartSVG;
+var tmp : TBIChart;
+    tmpSVG : TSVGExportFormat;
+begin
+  tmp:=GetBIChart;
+  try
+    tmpSVG:=TSVGExportFormat.Create;
+    try
+      tmpSVG.Panel:=tmp.Chart;
+
+      Context.ContentText:=tmpSVG.SVG.Text;
+      Context.ContentType:='image/svg+xml';
+    finally
+      tmpSVG.Free;
     end;
   finally
     tmp.Free;
@@ -312,6 +340,9 @@ begin
   {$IFDEF TEEPRO}
   if SameText(AFormat,'.HTML5') then
      ExportChartHTML5
+  else
+  if SameText(AFormat,'.SVG') then
+     ExportChartSVG
   else
   {$ENDIF}
      result:=False;
