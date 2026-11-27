@@ -37,7 +37,7 @@ uses
 
   {$IFDEF TEEPRO}
   VCLTee.TeeJPEG, VCLTee.TeePNG, VCLTee.TeeThemes, VCLBI.PDF,
-  VCLTee.TeeJavascript,
+  VCLTee.TeeJavascript, VCLTee.TeeSVGCanvas, VCLTee.TeeSkia,
   {$ENDIF}
 
   {$ENDIF}
@@ -69,6 +69,11 @@ type
 
     procedure ExportChartHTML5;
     procedure ExportChartSVG;
+
+    {$IFNDEF FMX}
+    procedure ExportChartWebP;
+    {$ENDIF}
+
     {$ENDIF}
 
     class procedure GetWidthHeight(const Params:TStrings; out AWidth,AHeight:Integer); static;
@@ -316,6 +321,8 @@ begin
     try
       tmpSVG.Panel:=tmp.Chart;
 
+      tmpSVG.Headless:=True;
+
       Context.ContentText:=tmpSVG.SVG.Text;
       Context.ContentType:='image/svg+xml';
     finally
@@ -325,6 +332,35 @@ begin
     tmp.Free;
   end;
 end;
+
+{$IFNDEF FMX}
+procedure TBIWebCommonChart.ExportChartWebP;
+var tmp : TBIChart;
+    tmpWebP : TWebPExportFormat;
+    tmpM : TMemoryStream;
+begin
+  tmp:=GetBIChart;
+  try
+    tmpWebP:=TWebPExportFormat.Create;
+    try
+      tmpWebP.Panel:=tmp.Chart;
+
+      tmpM:=TMemoryStream.Create;
+
+      tmpWebP.SaveToStream(tmpM);
+
+      Context.ResponseStream:=tmpM;
+
+      Context.ContentType:='image/webp';
+    finally
+      tmpWebP.Free;
+    end;
+  finally
+    tmp.Free;
+  end;
+end;
+{$ENDIF}
+
 {$ENDIF}
 
 function TBIWebCommonChart.DoExportChart(const AFormat:String):Boolean;
@@ -344,6 +380,11 @@ begin
   if SameText(AFormat,'.SVG') then
      ExportChartSVG
   else
+  {$IFNDEF FMX}
+  if SameText(AFormat,'.WEBP') then
+     ExportChartWebP
+  else
+  {$ENDIF}
   {$ENDIF}
      result:=False;
 end;
