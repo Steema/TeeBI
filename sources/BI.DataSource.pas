@@ -519,9 +519,38 @@ begin
 end;
 
 function GetFilesFrom(const Folder,IncludePattern,ExcludePattern:String; Recursive:Boolean):TStringDynArray;
+type
+  TMaskArray=Array of TMask;
+
+  function MatchesAll(const Masks:TMaskArray; const S:String):Boolean;
+  var t : Integer;
+  begin
+    for t:=0 to High(Masks) do
+        if not Masks[t].Matches(S) then
+        begin
+          result:=False;
+          Exit;
+        end;
+
+    result:=True;
+  end;
+
+  function MatchesAny(const Masks:TMaskArray; const S:String):Boolean;
+  var t : Integer;
+  begin
+    for t:=0 to High(Masks) do
+        if Masks[t].Matches(S) then
+        begin
+          result:=True;
+          Exit;
+        end;
+
+    result:=False;
+  end;
+
 var
   tmpInclude,
-  tmpExclude : TMask;
+  tmpExclude : TMaskArray;
 
   // From IOUtils (private)
   procedure Find(var AResult:TStringDynArray; const Folder:String);
@@ -541,8 +570,8 @@ var
               Find(AResult,TPath.Combine(Folder, SearchRec.Name));
          end
          else
-         if ((tmpInclude=nil) or tmpInclude.Matches(SearchRec.Name)) and
-            ((tmpExclude=nil) or (not tmpExclude.Matches(SearchRec.Name))) then
+         if ((tmpInclude=nil) or MatchesAll(tmpInclude,SearchRec.Name)) and
+            ((tmpExclude=nil) or (not MatchesAny(tmpExclude,SearchRec.Name))) then
          begin
            L:=Length(AResult);
            SetLength(AResult,L+1);
@@ -555,23 +584,42 @@ var
     end;
   end;
 
+  function ParseMasks(S:String):TMaskArray;
+  var t : Integer;
+      tmp : TArray<String>;
+  begin
+    tmp:=S.Split([';']);
+
+    SetLength(result,Length(tmp));
+
+    for t:=0 to High(tmp) do
+        result[t]:=TMask.Create(tmp[t]);
+  end;
+
+  procedure FreeMasks(const AMasks:TMaskArray);
+  var t : Integer;
+  begin
+    for t:=0 to High(AMasks) do
+        AMasks[t].Free;
+  end;
+
 begin
   if IncludePattern='' then
      tmpInclude:=nil
   else
-     tmpInclude:=TMask.Create(IncludePattern);
+     tmpInclude:=ParseMasks(IncludePattern);
 
   if ExcludePattern='' then
      tmpExclude:=nil
   else
-     tmpExclude:=TMask.Create(ExcludePattern);
+     tmpExclude:=ParseMasks(ExcludePattern);
 
   result:=nil;
   try
     Find(result,Folder);
   finally
-    tmpExclude.Free;
-    tmpInclude.Free;
+    FreeMasks(tmpExclude);
+    FreeMasks(tmpInclude);
   end;
 end;
 
@@ -741,13 +789,21 @@ end;
 
 // Pending: Compare with alternative GetFileSize, TFileStream, etc
 class function TBIFileSource.GetFileSize(const FileName:String):Int64;
+(* DEPRECATED
 var
   {$IFDEF MSWINDOWS}
   tmp : TWin32FileAttributeData;
   {$ELSE}
   f : TFileStream;
   {$ENDIF}
+*)
 begin
+  if TFile.Exists(FileName) then
+     Result := TFile.GetSize(FileName)
+  else
+     Result := -1;
+
+  (* OLD:
   // Alternative way (Windows only):
   {$IFDEF MSWINDOWS}
   if GetFileAttributesEx(PChar(Pointer(FileName)), GetFileExInfoStandard, @tmp) then
@@ -770,11 +826,12 @@ begin
   except
     on EInOutError do
     begin
-      result:=-1; // raise ?
+      result:=-1; // raise;
     end;
   end;
   {$ENDIF}
   {$ENDIF}
+  *)
 end;
 
 // Returns data item with all files from folder that pass the
