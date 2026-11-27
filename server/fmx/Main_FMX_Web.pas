@@ -489,10 +489,21 @@ procedure TBIWebMain.FormCreate(Sender: TObject);
     Server.OnStatus:=ServerStatus;
   end;
 
+  procedure SetDataToModules;
+  var t : Integer;
+  begin
+    TDefaultModule(BIWeb.DefaultModule).Data:=Data;
+
+    for t:=Low(BIWeb.ModuleInstances) to High(BIWeb.ModuleInstances) do
+        if BIWeb.ModuleInstances[t] is TDefaultModule then
+           TDefaultModule(BIWeb.ModuleInstances[t]).Data:=Data;
+  end;
+
   procedure CreateBIWeb;
   begin
     BIWeb:=TBIWebCommon.Create;
-    TDefaultModule(BIWeb.DefaultModule).Data:=Data;
+
+    SetDataToModules;
 
     BIWeb.Logs.History:=History;
     BIWeb.Logs.AddHistory:=AddHistory;

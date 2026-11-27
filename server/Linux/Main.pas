@@ -202,6 +202,18 @@ begin
 end;
 
 procedure TBIWebMain.Show;
+
+  procedure SetDataToModules;
+  var t : Integer;
+  begin
+    TDefaultModule(BIWeb.DefaultModule).Data:=Data;
+
+    for t:=Low(BIWeb.ModuleInstances) to High(BIWeb.ModuleInstances) do
+        if BIWeb.ModuleInstances[t] is TDefaultModule then
+           TDefaultModule(BIWeb.ModuleInstances[t]).Data:=Data;
+  end;
+
+
 var S : String;
 begin
   if CheckDefaultStores then
@@ -224,7 +236,8 @@ begin
   end;
 
   BIWeb:=TBIWebCommon.Create;
-  TDefaultModule(BIWeb.DefaultModule).Data:=Data;
+
+  SetDataToModules;
 
   BIWeb.Logs.History:=History;
   BIWeb.Logs.AddHistory:=AddHistory;

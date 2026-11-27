@@ -51,7 +51,6 @@ object BIWebMain: TBIWebMain
       Size.PlatformDefault = False
       TabOrder = 0
       Text = 'Data Manager...'
-      TextSettings.Trimming = None
       OnClick = Button1Click
     end
     object Label2: TLabel
@@ -134,7 +133,6 @@ object BIWebMain: TBIWebMain
       CustomIcon = <
         item
         end>
-      TextSettings.Trimming = None
       IsSelected = True
       Size.Width = 63.000000000000000000
       Size.Height = 26.000000000000000000
@@ -160,7 +158,6 @@ object BIWebMain: TBIWebMain
       CustomIcon = <
         item
         end>
-      TextSettings.Trimming = None
       IsSelected = False
       Size.Width = 58.000000000000000000
       Size.Height = 26.000000000000000000
@@ -194,7 +191,6 @@ object BIWebMain: TBIWebMain
       CustomIcon = <
         item
         end>
-      TextSettings.Trimming = None
       IsSelected = False
       Size.Width = 63.000000000000000000
       Size.Height = 26.000000000000000000
@@ -223,7 +219,6 @@ object BIWebMain: TBIWebMain
           CustomIcon = <
             item
             end>
-          TextSettings.Trimming = None
           IsSelected = False
           Size.Width = 59.000000000000000000
           Size.Height = 26.000000000000000000
@@ -252,7 +247,6 @@ object BIWebMain: TBIWebMain
             Size.PlatformDefault = False
             TabOrder = 0
             Text = 'Check for updates'
-            TextSettings.Trimming = None
             OnClick = Button2Click
           end
           object LVersion: TLabel
@@ -269,7 +263,6 @@ object BIWebMain: TBIWebMain
           CustomIcon = <
             item
             end>
-          TextSettings.Trimming = None
           IsSelected = False
           Size.Width = 65.000000000000000000
           Size.Height = 26.000000000000000000
@@ -287,7 +280,6 @@ object BIWebMain: TBIWebMain
             Size.PlatformDefault = False
             TabOrder = 1
             Text = '&Status...'
-            TextSettings.Trimming = None
             OnClick = BStatusClick
           end
           object Label3: TLabel
@@ -313,7 +305,6 @@ object BIWebMain: TBIWebMain
           CustomIcon = <
             item
             end>
-          TextSettings.Trimming = None
           IsSelected = True
           Size.Width = 61.000000000000000000
           Size.Height = 26.000000000000000000
@@ -421,7 +412,6 @@ object BIWebMain: TBIWebMain
       CustomIcon = <
         item
         end>
-      TextSettings.Trimming = None
       IsSelected = False
       Size.Width = 73.000000000000000000
       Size.Height = 26.000000000000000000
