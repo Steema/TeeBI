@@ -781,7 +781,10 @@ begin
        tmp:=Text
     else
     if (not AData.AsTable) and (AData.Kind=TDataKind.dkUnknown) then
-       tmp:=TStore.OriginOf(AData,Data.Store)+'|'+Text
+       if Data=nil then // <--- Assert Data<>nil !!
+          tmp:=Text
+       else
+          tmp:=TStore.OriginOf(AData,Data.Store)+'|'+Text
     else
     if TDataAccess(AData).HasMaster then
     begin
