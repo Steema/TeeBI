@@ -380,7 +380,10 @@ end;
 
 function TDefaultModule.Root(const AContext: TWebContext):String;
 begin
-  result:='Welcome to TeeBI'+TBIHtmlHelper.Return+TBIHtmlHelper.Return+
+  if Data=nil then
+     result:=''
+  else
+     result:='Welcome to TeeBI'+TBIHtmlHelper.Return+TBIHtmlHelper.Return+
                    TBIHtmlHelper.InitForm+
                    'Choose data:'+
                    TBIHtmlHelper.Combo('data',Data.GetDataArray,nil)+TBIHtmlHelper.Return+
